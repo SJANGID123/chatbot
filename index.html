@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPad Web AI IDE Workspace</title>
+    <style>
+        :root {
+            --bg-main: #121214;
+            --bg-sidebar: #1a1a1e;
+            --bg-editor: #1e1e24;
+            --border: #2d2d34;
+            --text-main: #e2e2e9;
+            --text-muted: #8b8b98;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); display: flex; flex-direction: column; hheight: 100vh; height: 100dvh; overflow: hidden; }
+
+        /* Configuration Topbar */
+        header { background: var(--bg-sidebar); border-bottom: 1px solid var(--border); padding: 10px 20px; display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: space-between; z-index: 10; }
+        .config-group { display: flex; align-items: center; gap: 10px; }
+        label { font-size: 12px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; }
+        input, select { background: var(--bg-main); border: 1px solid var(--border); color: var(--text-main); padding: 6px 12px; border-radius: 6px; font-size: 14px; outline: none; }
+        input:focus, select:focus { border-color: var(--accent); }
+
+        /* Main Workspace Layout */
+        .workspace { display: flex; flex: 1; overflow: hidden; position: relative; }
+
+        /* Left Pane: Chat Client */
+        .chat-pane { width: 45%; border-right: 1px solid var(--border); display: flex; flex-direction: column; background: var(--bg-main); }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .message { padding: 12px 16px; border-radius: 8px; max-width: 85%; font-size: 15px; line-height: 1.5; word-break: break-word; }
+        .message.user { background: var(--accent); align-self: flex-end; color: white; }
+        .message.assistant { background: var(--bg-sidebar); border: 1px solid var(--border); align-self: flex-start; }
+        .message pre { background: #000; padding: 10px; border-radius: 6px; overflow-x: auto; font-family: monospace; font-size: 13px; margin-top: 8px; color: #a9ffaf; }
+        
+        .chat-input-area { padding: 15px; border-top: 1px solid var(--border); background: var(--bg-sidebar); display: flex; gap: 10px; }
+        textarea { flex: 1; background: var(--bg-main); border: 1px solid var(--border); color: var(--text-main); border-radius: 8px; padding: 10px; font-size: 14px; resize: none; height: 50px; outline: none; }
+        button { background: var(--accent); color: white; border: none; padding: 0 18px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+        button:hover { background: var(--accent-hover); }
+
+        /* Right Pane: File Tree & Code Editor */
+        .editor-pane { width: 55%; display: flex; flex-direction: column; background: var(--bg-editor); }
+        .editor-header { background: var(--bg-sidebar); border-bottom: 1px solid var(--border); padding: 8px 15px; display: flex; justify-content: space-between; align-items: center; }
+        .file-tabs { display: flex; gap: 5px; overflow-x: auto; }
+        .tab { padding: 6px 12px; background: var(--bg-main); border: 1px solid var(--border); border-bottom: none; border-radius: 4px 4px 0 0; font-size: 13px; cursor: pointer; }
+        .tab.active { background: var(--bg-editor); font-weight: bold; border-top: 2px solid var(--accent); }
+        
+        .editor-container { flex: 1; display: flex; overflow: hidden; }
+        
+        /* Mini File Tree Explorer */
+        .file-tree { width: 180px; background: var(--bg-sidebar); border-right: 1px solid var(--border); padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+        .file-item { padding: 6px 8px; border-radius: 4px; font-size: 13px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .file-item:hover { background: var(--bg-main); }
+        .file-item.active { background: var(--border); font-weight: bold; }
+        .delete-btn { color: #ef4444; font-size: 11px; padding: 2px 5px; cursor: pointer; }
+
+        /* Code Input Canvas */
+        .code-textarea { flex: 1; background: var(--bg-editor); color: #a9b7c6; border: none; resize: none; padding: 20px; font-family: 'Courier New', Courier, monospace; font-size: 15px; outline: none; line-height: 1.4; }
+
+        /* Responsive design for iPad multi-window / portrait split */
+        @media (max-width: 768px) {
+            .workspace { flex-direction: column; }
+            .chat-pane, .editor-pane { width: 100%; height: 50%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Configuration Topbar Header -->
+    <header>
+        <div class="config-group">
+            <label for="provider">Provider:</label>
+            <select id="provider" onchange="toggleProviderOptions()">
+                <option value="openrouter">OpenRouter (Free Tier)</option>
+                <option value="gemini">Google Gemini API</option>
+            </select>
+        </div>
+
+        <div class="config-group">
+            <label for="apiKey">API Key:</label>
+            <type="password" id="apiKey" placeholder="Paste your API key here" style="width: 220px;" oninput="saveSettings()">
+        </div>
+
+        <div class="config-group">
+            <label for="modelSelect">Coding Model:</label>
+            <select id="modelSelect" onchange="saveSettings()"></select>
+        </div>
+
+        <div class="config-group">
+            <button onclick="createNewFile()" style="background: #10b981; padding: 6px 12px; font-size: 12px;">+ New File</button>
+        </div>
+    </header>
+
+    <!-- Main Workspace Container -->
+    <div class="workspace">
+        
+        <!-- Left Section: Chat Platform -->
+        <div class="chat-pane">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message assistant">
+                    <strong>Workspace Active:</strong> Hello! I have access to your local files on the right. Ask me to write code, design algorithms, or create new structure files. I'll display instructions and code snippets ready for deployment!
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <textarea id="chatInput" placeholder="Ask AI to code something... (e.g., 'Write a python script to parse csv data')"></textarea>
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+
+        <!-- Right Section: Files and Code Canvas -->
+        <div class="editor-pane">
+            <div class="editor-header">
+                <div class="file-tabs" id="fileTabs">
+                    <div class="tab active" id="currentTabName">Untitled.txt</div>
+                </div>
+                <button onclick="saveCurrentFileContent()" style="background: #6366f1; padding: 4px 10px; font-size: 12px;">Save File</button>
+            </div>
+            
+            <div class="editor-container">
+                <!-- File System Sidebar -->
+                <div class="file-tree" id="fileTree">
+                    <div style="font-size: 11px; color: var(--text-muted); font-weight: bold; margin-bottom: 5px;">PROJECT FILES</div>
+                    <!-- Dynamic File Items go here -->
+                </div>
+                <!-- Main Editor Area -->
+                <textarea class="code-textarea" id="editor" spellcheck="false" placeholder="// Write or generate your code here..."></textarea>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Best free & fast coding models list as of July 2026
+        const modelsConfig = {
+            openrouter: [
+                { id: "qwen/qwen3-coder:free", name: "Qwen 3 Coder (Free - Highly Recommended)" },
+                { id: "openai/gpt-oss-120b:free", name: "OpenAI gpt-oss-120b (Free Reasoning)" },
+                { id: "cohere/north-mini-code:free", name: "Cohere North Mini Code (Free Agentic)" },
+                { id: "openrouter/free", name: "OpenRouter Free Router (Auto-select)" }
+            ],
+            gemini: [
+                { id: "gemini-1.5-flash", name: "Gemini 1.5 Flash (Free Tier Engine)" },
+                { id: "gemini-1.5-pro", name: "Gemini 1.5 Pro (Deep Engineering Context)" }
+            ]
+        };
+
+        // Simulated local virtual file system architecture
+        let files = JSON.parse(localStorage.getItem('ide_files')) || {
+            "main.py": "# Welcome to your virtual Python file workspace\ndef main():\n    print('Hello iPad Developer')\n\nif __name__ == '__main__':\n    main()",
+            "index.js": "// Write modern web logic here\nconsole.log('JavaScript Engine Ready');"
+        };
+        let activeFile = Object.keys(files)[0] || "Untitled.txt";
+        if (!files[activeFile]) files[activeFile] = "";
+
+        // UI Initialization Hooks
+        window.onload = function() {
+            loadSavedSettings();
+            toggleProviderOptions();
+            renderFileTree();
+            switchToFile(activeFile);
+        };
+
+        function toggleProviderOptions() {
+            const provider = document.getElementById("provider").value;
+            const modelSelect = document.getElementById("modelSelect");
+            modelSelect.innerHTML = "";
+            
+            modelsConfig[provider].forEach(model => {
+                let opt = document.createElement("option");
+                opt.value = model.id;
+                opt.innerText = model.name;
+                modelSelect.appendChild(opt);
+            });
+            
+            const savedModel = localStorage.getItem(`saved_model_${provider}`);
+            if (savedModel) modelSelect.value = savedModel;
+            saveSettings();
+        }
+
+        function saveSettings() {
+            const provider = document.getElementById("provider").value;
+            localStorage.setItem("saved_provider", provider);
+            localStorage.setItem(`saved_key_${provider}`, document.getElementById("apiKey").value);
+            localStorage.setItem(`saved_model_${provider}`, document.getElementById("modelSelect").value);
+        }
+
+        function loadSavedSettings() {
+            const prov = localStorage.getItem("saved_provider") || "openrouter";
+            document.getElementById("provider").value = prov;
+            toggleProviderOptions();
+            document.getElementById("apiKey").value = localStorage.getItem(`saved_key_${prov}`) || "";
+        }
+
+        // Virtual File Management Functions
+        function renderFileTree() {
+            const tree = document.getElementById("fileTree");
+            // Clear existing except header
+            tree.innerHTML = '<div style="font-size: 11px; color: var(--text-muted); font-weight: bold; margin-bottom: 5px;">PROJECT FILES</div>';
+            
+            Object.keys(files).forEach(filename => {
+                const div = document.createElement("div");
+                div.className = `file-item ${filename === activeFile ? 'active' : ''}`;
+                div.onclick = () => switchToFile(filename);
+                
+                const nameSpan = document.createElement("span");
+                nameSpan.innerText = filename;
+                div.appendChild(nameSpan);
+
+                const delBtn = document.createElement("span");
+                delBtn.className = "delete-btn";
+                delBtn.innerText = "✕";
+                delBtn.onclick = (e) => { e.stopPropagation(); deleteFile(filename); };
+                div.appendChild(delBtn);
+
+                tree.appendChild(div);
+            });
+            localStorage.setItem('ide_files', JSON.stringify(files));
+        }
+
+        function switchToFile(filename) {
+            saveCurrentFileContent();
+            activeFile = filename;
+            document.getElementById("currentTabName").innerText = filename;
+            document.getElementById("editor").value = files[filename] || "";
+            renderFileTree();
+        }
+
+        function saveCurrentFileContent() {
+            if (activeFile) {
+                files[activeFile] = document.getElementById("editor").value;
+                localStorage.setItem('ide_files', JSON.stringify(files));
+            }
+        }
+
+        function createNewFile() {
+            const name = prompt("Enter file name (e.g., app.py, style.css):", "script.js");
+            if (name && name.trim() !== "") {
+                files[name.trim()] = "";
+                switchToFile(name.trim());
+            }
+        }
+
+        function deleteFile(name) {
+            if (confirm(`Are you sure you want to delete ${name}?`)) {
+                delete files[name];
+                const remaining = Object.keys(files);
+                activeFile = remaining.length > 0 ? remaining[0] : "";
+                if (!activeFile) { files["Untitled.txt"] = ""; activeFile = "Untitled.txt"; }
+                switchToFile(activeFile);
+            }
+        }
+
+        // Core API Inference Engineering Loop
+        async function sendMessage() {
+            const inputEl = document.getElementById("chatInput");
+            const userText = inputEl.value.trim();
+            if (!userText) return;
+
+            const provider = document.getElementById("provider").value;
+            const apiKey = document.getElementById("apiKey").value.trim();
+            const model = document.getElementById("modelSelect").value;
+
+            if (!apiKey) {
+                alert("Please drop your API key into the top configuration bar first.");
+                return;
+            }
+
+            // Append user text visually
+            appendMessage("user", userText);
+            inputEl.value = "";
+
+            // Inject file structure metadata context directly into systemic prompt window
+            const contextPayload = `
+Current Active Project File Stack:
+${Object.keys(files).map(name => `--- FILE: ${name} ---\n${files[name]}`).join('\n\n')}
+
+Active Focused File: ${activeFile}
+User Question: ${userText}
+
+Instruction: Write clean code blocks. If you write code, provide your reasoning, then output the script inside clean standard markdown code fences (\`\`\`lang ... \`\`\`).
+            `;
+
+            appendMessage("assistant", "Thinking and analyzing code base...");
+            const lastMsgEl = document.getElementById("chatMessages").lastElementChild;
+
+            try {
+                let textResult = "";
+                
+                if (provider === "openrouter") {
+                    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+                        method: "POST",
+                        headers: {
+                            "Authorization": `Bearer ${apiKey}`,
+                            "Content-Type": "application/json",
+                            "HTTP-Referer": "https://localhost", 
+                            "X-Title": "iPad Local IDE"
+                        },
+                        body: JSON.stringify({
+                            model: model,
+                            messages: [{ role: "user", content: contextPayload }]
+                        })
+                    });
+                    const data = await response.json();
+                    if(data.choices) {
+                        textResult = data.choices[0].message.content;
+                    } else {
+                        throw new Error(data.error?.message || "Inference error from OpenRouter");
+                    }
+                } else if (provider === "gemini") {
+                    // Standard Google AI API endpoint compatibility structural conversion
+                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: contextPayload }] }]
+                        })
+                    });
+                    const data = await response.json();
+                    if(data.candidates) {
+                        textResult = data.candidates[0].content.parts[0].text;
+                    } else {
+                        throw new Error(data.error?.message || "Inference error from Google Gemini API");
+                    }
+                }
+
+                // Format outputs nicely
+                lastMsgEl.innerHTML = formatAIResponse(textResult);
+                document.getElementById("chatMessages").scrollTop = document.getElementById("chatMessages").scrollHeight;
+
+            } catch (err) {
+                lastMsgEl.innerHTML = `<span style="color:#ef4444;"><strong>Error Encountered:</strong> ${err.message}</span>`;
+            }
+        }
+
+        function appendMessage(sender, text) {
+            const chatContainer = document.getElementById("chatMessages");
+            const div = document.createElement("div");
+            div.className = `message ${sender}`;
+            div.innerText = text;
+            chatContainer.appendChild(div);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function formatAIResponse(text) {
+            // Very primitive markdown converter for code blocks so it looks pretty on screen
+            let html = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            const codeBlockRegex = /```(?:[a-zA-Z]+)?\n([\s\S]*?)```/g;
+            html = html.replace(codeBlockRegex, (match, code) => {
+                return `<pre><code>${code.trim()}</code></pre>`;
+            });
+            return html.replace(/\n/g, "<br>");
+        }
+    </script>
+</body>
+</html>
