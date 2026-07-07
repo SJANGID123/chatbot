@@ -1,4 +1,128 @@
-    <script>
+<pre id="code-block" class="hidden">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;AI Indian Stock Pulse (Waterfall Consensus)&lt;/title&gt;
+    &lt;!-- Tailwind CSS for mobile, tablet, and iPad layouts --&gt;
+    &lt;script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"&gt;&lt;/script&gt;
+    &lt;style&gt;
+        .loader { border-top-color: #06b6d4; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body class="bg-slate-950 text-slate-100 font-sans min-h-screen pb-12"&gt;
+
+    &lt;!-- Sticky Header --&gt;
+    &lt;header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-50 shadow-md backdrop-blur-md bg-opacity-95"&gt;
+        &lt;div class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4"&gt;
+            &lt;div class="flex items-center space-x-2"&gt;
+                &lt;span class="text-2xl"&gt;🇮🇳&lt;/span&gt;
+                &lt;h1 class="text-xl font-black tracking-wider text-cyan-400"&gt;AI STOCK PULSE&lt;/h1&gt;
+            &lt;/div&gt;
+            &lt;div class="flex space-x-2 bg-slate-950 p-1 rounded-xl border border-slate-800 w-full sm:w-auto justify-center"&gt;
+                &lt;button id="tab-analysis-btn" onclick="switchTab('analysis')" class="flex-1 sm:flex-none px-4 py-2 text-xs font-bold rounded-lg transition bg-cyan-500 text-slate-950"&gt;🇮🇳 NSE/BSE Pulse&lt;/button&gt;
+                &lt;button id="tab-penny-btn" onclick="switchTab('penny')" class="flex-1 sm:flex-none px-4 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white"&gt;🚀 Penny Finder&lt;/button&gt;
+                &lt;button id="tab-keys-btn" onclick="switchTab('keys')" class="flex-1 sm:flex-none px-4 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white"&gt;⚙️ Keys&lt;/button&gt;
+            </div>
+        &lt;/div&gt;
+    &lt;/header&gt;
+
+    &lt;main class="max-w-5xl mx-auto px-4 mt-6"&gt;
+
+        &lt;!-- SETUP WARNING BANNER --&gt;
+        &lt;div id="setup-warning" class="hidden bg-amber-950/40 border border-amber-500/30 text-amber-200 p-4 rounded-xl mb-6 text-xs sm:text-sm flex justify-between items-center"&gt;
+            &lt;span&gt;⚠️ &lt;strong&gt;Setup Required:&lt;/strong&gt; Configure your Keys (Gemini and Serper) to initiate scans.&lt;/span&gt;
+            &lt;button onclick="switchTab('keys')" class="bg-amber-500 text-slate-950 px-3 py-1 rounded-md font-bold text-xs"&gt;Set Keys&lt;/button&gt;
+        &lt;/div&gt;
+
+        &lt;!-- TAB 1: PORTFOLIO HOLD / SELL ANALYSIS --&gt;
+        &lt;section id="tab-analysis" class="space-y-6"&gt;
+            &lt;div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl"&gt;
+                &lt;h2 class="text-lg font-bold mb-1 text-slate-200"&gt;Waterfall Consensus Engine&lt;/h2&gt;
+                &lt;p class="text-xs text-slate-400 mb-4"&gt;Queries Gemini first, then cascades safely across OpenRouter models one-by-one to protect against rate limits. Optimized for Indian symbols.&lt;/p&gt;
+                &lt;div class="flex flex-col sm:flex-row gap-2"&gt;
+                    &lt;input id="ticker-input" type="text" placeholder="e.g., RELIANCE, TCS, ZOMATO" class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3.5 uppercase font-bold tracking-wider focus:outline-none focus:border-cyan-400 text-white"&gt;
+                    &lt;button onclick="runMultiModelAnalysis()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 px-8 font-black rounded-xl transition shadow-lg shadow-cyan-500/10 py-3.5 sm:py-0"&gt;RUN ANALYSIS&lt;/button&gt;
+                </div>
+            &lt;/div&gt;
+
+            &lt;!-- Loader Box --&gt;
+            &lt;div id="analysis-loader" class="hidden bg-slate-900 p-8 rounded-2xl border border-slate-800 text-center"&gt;
+                &lt;div class="loader ease-linear rounded-full border-4 border-slate-950 h-12 w-12 mb-4 mx-auto"&gt;&lt;/div&gt;
+                &lt;p class="text-sm font-medium text-cyan-400 animate-pulse"&gt;Gathering live Indian market telemetry &amp; firing sequential models...&lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;!-- Analysis Output Splitter Screen --&gt;
+            &lt;div id="analysis-output-box" class="hidden space-y-6"&gt;
+                &lt;!-- Consensus Summary Badge Box --&gt;
+                &lt;div class="bg-gradient-to-br from-slate-900 to-slate-950 p-6 rounded-2xl border-2 border-cyan-500/30 shadow-2xl"&gt;
+                    &lt;h3 class="text-xs uppercase font-black tracking-widest text-cyan-400 mb-2"&gt;🇮🇳 Aggregated Indian Market Verdict&lt;/h3&gt;
+                    &lt;div id="consensus-verdict-target"&gt;&lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;!-- Individual Model Breakdowns --&gt;
+                &lt;h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider pl-1"&gt;Model Telemetry Chain&lt;/h3&gt;
+                &lt;div id="model-responses-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"&gt;&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/section&gt;
+
+        &lt;!-- TAB 2: PENNY STOCK DISCOVERY --&gt;
+        &lt;section id="tab-penny" class="hidden space-y-6"&gt;
+            &lt;div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl text-center"&gt;
+                &lt;div class="inline-flex bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full text-xs font-semibold mb-3 border border-amber-500/20"&gt;🔥 Indian Breakout Matrix&lt;/div&gt;
+                &lt;h2 class="text-xl font-black mb-2"&gt;High-Yield Short Term Penny Finder&lt;/h2&gt;
+                &lt;p class="text-sm text-slate-400 max-w-md mx-auto mb-6"&gt;Scours live Indian breakout stocks under ₹50. Passes findings down the logic waterfall to highlight maximum 1-2 week potential gains.&lt;/p&gt;
+                &lt;button onclick="runMultiModelPennyScanner()" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-8 py-4 rounded-xl transition shadow-lg"&gt;DISCOVER BEST PENNY PICK&lt;/button&gt;
+            &lt;/div&gt;
+
+            &lt;!-- Penny Loader --&gt;
+            &lt;div id="penny-loader" class="hidden bg-slate-900 p-8 rounded-2xl border border-slate-800 text-center"&gt;
+                &lt;div class="loader ease-linear rounded-full border-4 border-slate-950 h-12 w-12 mb-4 mx-auto"&gt;&lt;/div&gt;
+                &lt;p class="text-sm font-medium text-amber-400 animate-pulse"&gt;Analyzing high-volume breakouts sequentially...&lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;!-- Penny Output Grid --&gt;
+            &lt;div id="penny-output-box" class="hidden space-y-6"&gt;
+                &lt;div class="bg-gradient-to-br from-slate-900 to-slate-950 p-6 rounded-2xl border-2 border-amber-500/30 shadow-2xl"&gt;
+                    &lt;h3 class="text-xs uppercase font-black tracking-widest text-amber-400 mb-2"&gt;🏆 Selected Indian Breakout Target&lt;/h3&gt;
+                    &lt;div id="penny-consensus-target"&gt;&lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div id="penny-responses-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"&gt;&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/section&gt;
+
+        &lt;!-- TAB 3: KEY CONFIGURATION MANAGER --&gt;
+        &lt;section id="tab-keys" class="hidden space-y-6"&gt;
+            &lt;div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl"&gt;
+                &lt;h2 class="text-lg font-bold text-cyan-400 mb-1"&gt;Local Browser Storage Settings&lt;/h2&gt;
+                &lt;p class="text-xs text-slate-400 mb-6">Keys save inside this specific device's browser instance memory. Secure for GitHub public hosting.&lt;/p&gt;
+                
+                &lt;div class="space-y-4"&gt;
+                    &lt;div&gt;
+                        &lt;label class="block text-xs font-bold uppercase text-slate-400 mb-1"&gt;Gemini API Key&lt;/label&gt;
+                        &lt;input id="key-gemini" type="password" placeholder="AI Studio Key..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400"&gt;
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                        &lt;label class="block text-xs font-bold uppercase text-slate-400 mb-1"&gt;OpenRouter API Key (Optional Fallback)&lt;/label&gt;
+                        &lt;input id="key-openrouter" type="password" placeholder="sk-or-v1-..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400"&gt;
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                        &lt;label class="block text-xs font-bold uppercase text-slate-400 mb-1"&gt;Serper.dev Search Key&lt;/label&gt;
+                        &lt;input id="key-serper" type="password" placeholder="Get a free key from serper.dev..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400"&gt;
+                    &lt;/div&gt;
+                    
+                    &lt;div class="pt-4 flex gap-2"&gt;
+                        &lt;button onclick="saveKeys()" class="flex-1 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black py-3.5 rounded-xl transition text-sm"&gt;Save Keys Locally&lt;/button&gt;
+                        &lt;button onclick="clearKeys()" class="bg-slate-800 hover:bg-slate-700 text-rose-400 font-bold px-5 rounded-xl transition text-sm"&gt;Reset&lt;/button&gt;
+                    </div>
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/section&gt;
+    &lt;/main&gt;
+
+    &lt;script&gt;
         function init() {
             const g = localStorage.getItem('IND_GEMINI_KEY');
             const s = localStorage.getItem('IND_SERPER_KEY');
@@ -51,7 +175,10 @@
             });
         }
 
-        // SMART SEARCH ENGINE WITH AUTOMATIC STRIPPED FALLBACKS
+        function sleep(ms) {
+            return new Promise(resolve =&gt; setTimeout(resolve, ms));
+        }
+
         async function fetchIndianMarketData(searchQuery) {
             const key = localStorage.getItem('IND_SERPER_KEY');
             if(!key) return "Error: Missing Serper API Key.";
@@ -64,28 +191,20 @@
                         body: JSON.stringify({ q: query, gl: "in", hl: "en" })
                     });
                     const data = await res.json();
-                    if (data.organic && data.organic.length > 0) {
-                        return data.organic.slice(0, 5).map(item => `Title: ${item.title}\nInfo: ${item.snippet}`).join("\n\n");
+                    if (data.organic && data.organic.length &gt; 0) {
+                        return data.organic.slice(0, 5).map(item =&gt; `Title: ${item.title}\nInfo: ${item.snippet}`).join("\n\n");
                     }
                 } catch (e) { console.error(e); }
                 return null;
             }
 
-            // Try primary query
             let results = await makeRequest(searchQuery);
-            
-            // Fallback 1: If primary returns nothing, try a guaranteed broader phrase
             if (!results) {
-                console.log("Primary search yielded nothing. Firing Fallback 1...");
                 results = await makeRequest("top breakout stocks nse under 50 rs moneycontrol");
             }
-            
-            // Fallback 2: Ultimate high-volume list catchall
             if (!results) {
-                console.log("Fallback 1 failed. Firing Fallback 2...");
                 results = await makeRequest("nse top gainers under 50");
             }
-
             return results || "Error: No live web context could be scraped from the market engines.";
         }
 
@@ -120,10 +239,10 @@
         function updateModelGrid(element, modelName, content) {
             let cleanHtml = parseSimpleMarkdown(content);
             element.innerHTML += `
-                <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-md">
-                    <div class="text-xs text-cyan-400 font-bold mb-2 tracking-wide border-b border-slate-800 pb-1">${modelName}</div>
-                    <div class="text-xs text-slate-300 leading-relaxed">${cleanHtml}</div>
-                </div>
+                &lt;div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-md"&gt;
+                    &lt;div class="text-xs text-cyan-400 font-bold mb-2 tracking-wide border-b border-slate-800 pb-1"&gt;${modelName}&lt;/div&gt;
+                    &lt;div class="text-xs text-slate-300 leading-relaxed"&gt;${cleanHtml}&lt;/div&gt;
+                &lt;/div&gt;
             `;
         }
 
@@ -177,8 +296,7 @@
             if(oKey) {
                 for(let model of orModels) {
                     try {
-                        // Tiny delay to breathe between sequential items
-                        await new Promise(r => setTimeout(r, 600));
+                        await sleep(800);
                         const res = await fetchOpenRouter(model.id, prompt, oKey);
                         updateModelGrid(grid, model.name, res);
                         if (res.toUpperCase().includes("VERDICT: BUY")) buys++;
@@ -192,19 +310,19 @@
 
             let finalDecision = "STAY / HOLD";
             let colorClass = "bg-amber-500/10 text-amber-400 border-amber-500/30";
-            if (buys > sells && buys >= stays) { finalDecision = "BUY / ACCUMULATE"; colorClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"; }
-            else if (sells > buys && sells >= stays) { finalDecision = "SELL / LIQUIDATE"; colorClass = "bg-rose-500/10 text-rose-400 border-rose-500/30"; }
+            if (buys &gt; sells && buys &gt;= stays) { finalDecision = "BUY / ACCUMULATE"; colorClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"; }
+            else if (sells &gt; buys && sells &gt;= stays) { finalDecision = "SELL / LIQUIDATE"; colorClass = "bg-rose-500/10 text-rose-400 border-rose-500/30"; }
 
             consensusTarget.innerHTML = `
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-2">
-                    <div>
-                        <div class="text-3xl font-black tracking-tight text-white">${ticker}</div>
-                        <div class="text-xs text-slate-400 mt-1">Waterfall Matrix: ${buys} Buy, ${sells} Sell, ${stays} Hold</div>
-                    </div>
-                    <div class="px-6 py-3 rounded-xl border text-center font-black tracking-wider text-sm ${colorClass}">
+                &lt;div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-2"&gt;
+                    &lt;div&gt;
+                        &lt;div class="text-3xl font-black tracking-tight text-white"&gt;${ticker}&lt;/div&gt;
+                        &lt;div class="text-xs text-slate-400 mt-1"&gt;Waterfall Matrix: ${buys} Buy, ${sells} Sell, ${stays} Hold&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class="px-6 py-3 rounded-xl border text-center font-black tracking-wider text-sm ${colorClass}"&gt;
                         ${finalDecision}
-                    </div>
-                </div>
+                    &lt;/div&gt;
+                &lt;/div&gt;
             `;
 
             loader.classList.add('hidden');
@@ -221,8 +339,7 @@
             outputBox.classList.add('hidden');
             grid.innerHTML = "";
 
-            // Better targeted initial search query
-            const liveContext = await fetchIndianMarketData("breakout stocks under 50 rs nse high volume");
+            const liveContext = await fetchIndianMarketData("breakout stocks under 50 rs nse high volume potential profit");
 
             const prompt = `
             Review this live web data tracking low price high volume breakouts under ₹50:
@@ -260,7 +377,7 @@
 
                 for(let model of orModels) {
                     try {
-                        await new Promise(r => setTimeout(r, 600));
+                        await sleep(800);
                         const res = await fetchOpenRouter(model.id, prompt, oKey);
                         updateModelGrid(grid, model.name, res);
                         if(targetStock === "N/A" && res.includes("TICKER:")) {
@@ -275,15 +392,15 @@
             if (targetStock === "N/A" || targetStock === "") targetStock = "Scan Complete";
 
             consensusTarget.innerHTML = `
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                    <div>
-                        <div class="text-3xl font-black tracking-tight text-amber-400">${targetStock}</div>
-                        <p class="text-xs text-slate-400 mt-1">Highest volatility target extracted via waterfall parameters.</p>
-                    </div>
-                    <div class="bg-amber-500/10 text-amber-400 border border-amber-500/30 px-4 py-2 rounded-xl text-xs font-bold">
+                &lt;div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"&gt;
+                    &lt;div&gt;
+                        &lt;div class="text-3xl font-black tracking-tight text-amber-400"&gt;${targetStock}&lt;/div&gt;
+                        &lt;p class="text-xs text-slate-400 mt-1"&gt;Highest volatility target extracted via waterfall parameters.&lt;/p&gt;
+                    &lt;/div&gt;
+                    &lt;div class="bg-amber-500/10 text-amber-400 border border-amber-500/30 px-4 py-2 rounded-xl text-xs font-bold"&gt;
                         ⏱️ Horizon: 1-2 Weeks
-                    </div>
-                </div>
+                    &lt;/div&gt;
+                &lt;/div&gt;
             `;
 
             loader.classList.add('hidden');
@@ -302,4 +419,7 @@
                 .replace(/^\* (.*)$/gim, '<li class="ml-2 list-disc text-slate-300">$1</li>')
                 .replace(/\n/g, '<br>');
         }
-    </script>
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
