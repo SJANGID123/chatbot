@@ -2,1214 +2,1229 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Universal AI Dev Studio Pro</title>
-    <!-- Tailwind CSS for high-fidelity UI styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe',
-                            300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6',
-                            600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6',
-                            900: '#4c1d95', 950: '#1e1b4b'
-                        }
-                    }
-                }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AuraTrade Pro India - Indian Stock Intelligence</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            slate: {
+              950: '#030712',
+              900: '#0b0f19',
+              800: '#111827',
+              750: '#1f2937',
+              700: '#374151',
             }
+          }
         }
-    </script>
-    <!-- FontAwesome Developer Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts Plus Jakarta Sans -->
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .code-font { font-family: 'Fira Code', monospace; }
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
-        ::-webkit-scrollbar-track { background: #09090b; }
-        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 2px; }
-        ::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
-        .glass-panel { background: rgba(14, 14, 20, 0.98); backdrop-filter: blur(16px); }
-    </style>
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #030712;
+      overflow-x: hidden;
+    }
+    
+    /* Elegant Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0f19;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1f2937;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #374151;
+    }
+
+    /* Premium Animation Framework */
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { border-color: rgba(99, 102, 241, 0.2); box-shadow: 0 0 10px rgba(99, 102, 241, 0); }
+      50% { border-color: rgba(99, 102, 241, 0.5); box-shadow: 0 0 20px rgba(99, 102, 241, 0.15); }
+    }
+
+    @keyframes waveRadar {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      100% { transform: scale(1.6); opacity: 0; }
+    }
+
+    @keyframes shimmerEffect {
+      100% { transform: translateX(100%); }
+    }
+
+    .animate-slideUp {
+      animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .animate-fadeIn {
+      animation: fadeIn 0.35s ease-out forwards;
+    }
+
+    .pulse-glow-card {
+      animation: pulseGlow 4s infinite ease-in-out;
+    }
+
+    .radar-pulse-ring {
+      animation: waveRadar 2s cubic-bezier(0.215, 0.610, 0.355, 1) infinite;
+    }
+
+    .shimmer-mask {
+      position: relative;
+      overflow: hidden;
+    }
+    .shimmer-mask::after {
+      position: absolute;
+      top: 0; right: 0; bottom: 0; left: 0;
+      transform: translateX(-100%);
+      background-image: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.02) 20%,
+        rgba(255, 255, 255, 0.06) 60%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      animation: shimmerEffect 1.8s infinite;
+      content: '';
+    }
+
+    /* Interactive Elevate Mechanics */
+    .interact-card {
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .interact-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 32px -12px rgba(99, 102, 241, 0.25);
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+  </style>
 </head>
-<body class="bg-[#030303] text-zinc-100 flex flex-col h-[100dvh] overflow-hidden select-none">
+<body class="text-slate-100 min-h-screen flex flex-col relative">
 
-    <!-- Header Navigation Bar -->
-    <header class="bg-[#09090d] border-b border-zinc-800/60 px-6 py-3 flex items-center justify-between z-20 shadow-xl shrink-0">
-        <div class="flex items-center gap-3">
-            <div class="bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 p-2 rounded-xl text-white shadow-lg">
-                <i class="fa-solid fa-square-terminal text-base animate-pulse"></i>
-            </div>
-            <div>
-                <h1 class="font-bold text-xs tracking-wider text-white uppercase flex items-center gap-2">
-                    AI Dev Studio Pro
-                </h1>
-                <p class="text-[9px] text-zinc-500">Autonomous Multiplatform Web Sandbox & DevOps Pipeline</p>
-            </div>
+  <!-- Background Glowing Orbs -->
+  <div class="absolute top-0 left-1/4 w-[400px] h-[400px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
+  <div class="absolute bottom-20 right-1/4 w-[400px] h-[400px] bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
+
+  <!-- --- Toast Notification Banner --- -->
+  <div id="toast-banner" class="fixed top-4 right-4 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl border shadow-2xl transition-all duration-300 transform translate-y-[-100px] opacity-0 pointer-events-none">
+    <div id="toast-icon"></div>
+    <span id="toast-message" class="font-semibold text-xs tracking-wide"></span>
+  </div>
+
+  <!-- --- Dynamic Header Workspace --- -->
+  <header class="border-b border-slate-900 bg-slate-950/60 backdrop-blur-2xl sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between py-3">
+      
+      <div class="flex items-center gap-3">
+        <div class="bg-gradient-to-tr from-indigo-500 to-purple-600 p-2.5 rounded-2xl text-white shadow-lg">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+        </div>
+        <div>
+          <h1 class="text-sm font-black tracking-wider text-white uppercase flex items-center gap-1.5">
+            AuraTrade Pro India <span class="text-[9px] bg-gradient-to-r from-emerald-500 to-indigo-500 text-white px-2 py-0.5 rounded font-mono font-bold tracking-normal uppercase">BSE & NSE</span>
+          </h1>
+          <p class="text-[10px] text-slate-500 font-mono tracking-widest uppercase">Dual API Indian Quant Desk</p>
+        </div>
+      </div>
+
+      <!-- Navigation Router -->
+      <nav class="flex gap-1 bg-slate-900/60 p-1 rounded-2xl border border-slate-800/80">
+        <button
+          onclick="switchTab('portfolio')"
+          id="nav-portfolio"
+          class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 bg-slate-800 text-white shadow-lg"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          <span>My Advisory Desk</span>
+        </button>
+        <button
+          onclick="switchTab('discovery')"
+          id="nav-discovery"
+          class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 text-slate-400 hover:text-slate-200"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+          <span>1-Week Swing Screener</span>
+        </button>
+      </nav>
+
+      <!-- Configure Panel Button -->
+      <button
+        onclick="toggleSettings()"
+        id="settings-btn"
+        class="p-2.5 rounded-2xl border border-slate-800 text-slate-400 hover:text-white transition-all duration-300 bg-slate-900"
+        title="Configure Workspace Keys"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- --- Content Body --- -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 z-10">
+
+    <!-- --- Collapsible Credentials Panel --- -->
+    <div id="settings-panel" class="hidden mb-8 p-6 bg-slate-900/80 backdrop-blur-xl border border-indigo-950/60 rounded-3xl relative overflow-hidden shadow-2xl animate-slideUp">
+      <div class="absolute top-0 left-0 h-1 bg-gradient-to-r from-emerald-500 via-indigo-500 to-purple-500 w-full"></div>
+      
+      <div class="flex justify-between items-start mb-6">
+        <div>
+          <h3 class="text-sm font-black text-white flex items-center gap-2 uppercase tracking-wide">
+            ⚙️ Configure India Trading Credentials
+          </h3>
+          <p class="text-xs text-slate-400 mt-1">
+            Both inputs are mandatory. Your credentials evaluate directly in-browser and save to your local database memory.
+          </p>
+        </div>
+        <button 
+          onclick="toggleSettings()"
+          class="text-slate-400 hover:text-white text-xs font-semibold px-2.5 py-1 rounded-xl bg-slate-800 border border-slate-700 transition-colors"
+        >
+          Close
+        </button>
+      </div>
+
+      <form onsubmit="saveConfig(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest">
+            Gemini API Key (using 2.5 model)
+          </label>
+          <div class="relative">
+            <input
+              type="password"
+              id="input-gemini-key"
+              required
+              placeholder="AIzaSy..."
+              class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-3 text-xs text-slate-100 placeholder-slate-700 focus:outline-none font-mono"
+            />
+          </div>
         </div>
 
-        <div class="flex items-center gap-3">
-            <!-- Mode Switcher Tabs -->
-            <div class="flex bg-zinc-900/60 border border-zinc-800/60 p-1 rounded-xl">
-                <button onclick="switchWorkspaceMode('dev')" id="mode-dev-btn" class="px-3 py-1 rounded-lg text-[10px] font-bold uppercase transition-all bg-indigo-600 text-white shadow-md">
-                    <i class="fa-solid fa-code mr-1"></i> Developer
-                </button>
-                <button onclick="switchWorkspaceMode('copilot')" id="mode-copilot-btn" class="px-3 py-1 rounded-lg text-[10px] font-bold uppercase transition-all text-zinc-400 hover:text-white">
-                    <i class="fa-solid fa-compass mr-1"></i> ActionCopilot
-                </button>
-            </div>
-
-            <!-- GitHub Deploy Trigger Button -->
-            <button onclick="deployToGitHubLive()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-3 py-1.5 rounded-xl text-[10px] font-bold transition-all flex items-center gap-1.5 shadow-lg shadow-emerald-500/10">
-                <i class="fa-brands fa-github text-xs animate-bounce"></i> Publish Live
-            </button>
-
-            <!-- Secure Configuration Trigger -->
-            <button onclick="toggleSettingsModal()" class="bg-[#14141c] border border-zinc-800 hover:bg-[#1c1c28] text-zinc-300 p-2 rounded-xl transition-all relative">
-                <i class="fa-solid fa-key text-xs"></i>
-                <span class="absolute top-1 right-1 w-2 h-2 rounded-full" id="configStatusDot"></span>
-            </button>
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest">
+            SerpAPI Secret Key
+          </label>
+          <input
+            type="password"
+            id="input-serp-key"
+            required
+            placeholder="Enter SerpAPI secret key..."
+            class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-3 text-xs text-slate-100 placeholder-slate-700 focus:outline-none font-mono"
+          />
         </div>
-    </header>
 
-    <!-- Main Workspace Section -->
-    <main class="flex flex-col lg:flex-row flex-1 overflow-hidden relative">
-
-        <!-- WORKSPACE MODE A: DEVELOPER WORKSPACE PANEL -->
-        <section id="dev-workspace-panel" class="w-full lg:w-[42%] flex flex-col bg-[#050508] border-r border-zinc-800/60 h-full">
-            <div id="chatMessages" class="flex-1 overflow-y-auto p-5 space-y-4">
-                <div class="bg-[#0e0e14] border border-zinc-800/60 rounded-2xl p-4 text-xs leading-relaxed max-w-[90%] space-y-2">
-                    <p class="font-bold text-indigo-400 flex items-center gap-2">
-                        <i class="fa-solid fa-shield-halved"></i> Fail-Forward Cascade Engine Active
-                    </p>
-                    <p class="text-zinc-400">Welcome to your secure cross-platform dev studio! Your credentials are now obfuscated from public crawlers and will remain fully active.</p>
-                    <p class="text-zinc-500">How to design:</p>
-                    <ul class="list-disc pl-4 space-y-1 text-zinc-500">
-                        <li>Describe standard tasks or backend setups in the console input box below.</li>
-                        <li>The workspace will dynamically write structures in the virtual navigator.</li>
-                        <li>Launch **Local Preview** to interact with real mock database endpoints!</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Terminal Pipeline Logging Console -->
-            <div id="terminalLog" class="bg-[#030305] border-t border-zinc-800/60 p-4 text-[10px] font-mono text-zinc-500 h-28 overflow-y-auto hidden">
-                <div class="text-indigo-400 font-bold mb-1"><i class="fa-solid fa-terminal"></i> PIPELINE ENGINE LOGS:</div>
-                <div id="terminalContent" class="space-y-1"></div>
-            </div>
-
-            <!-- Input Bar -->
-            <div class="p-4 bg-[#09090d] border-t border-zinc-800/60 space-y-3">
-                <div class="flex gap-2.5">
-                    <textarea id="chatInput" rows="2" placeholder="Tell the AI what web apps or backends to build..." class="flex-1 bg-[#14141c] border border-zinc-800 text-xs text-zinc-200 rounded-xl p-3.5 outline-none focus:border-indigo-500 resize-none placeholder-zinc-600 transition-all leading-relaxed"></textarea>
-                    <button onclick="sendMessage()" class="bg-gradient-to-tr from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white px-5 rounded-xl font-bold transition-all flex flex-col justify-center items-center gap-1 shadow-lg shadow-indigo-500/10">
-                        <i class="fa-solid fa-bolt text-sm"></i>
-                        <span class="text-[9px] uppercase tracking-wider">Build</span>
-                    </button>
-                </div>
-                <div class="flex justify-between items-center px-1">
-                    <span class="text-[10px] text-zinc-500 flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> Secure Storage Active
-                    </span>
-                    <button onclick="clearChat()" class="text-[10px] text-zinc-500 hover:text-red-400 transition-all">
-                        <i class="fa-solid fa-broom"></i> Clear Session
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- WORKSPACE MODE B: ACTIONCOPILOT DAILY DASHBOARD PANEL (HIDDEN BY DEFAULT) -->
-        <section id="copilot-workspace-panel" class="w-full lg:w-[42%] flex flex-col bg-[#050508] border-r border-zinc-800/60 h-full hidden p-6 overflow-y-auto space-y-6">
-            <div class="bg-indigo-950/20 border border-indigo-900/30 p-4 rounded-2xl space-y-1.5">
-                <h3 class="font-bold text-xs text-indigo-400 flex items-center gap-1.5">
-                    <i class="fa-solid fa-lightbulb"></i> ActionCopilot Daily Helper
-                </h3>
-                <p class="text-[11px] text-zinc-400 leading-relaxed">
-                    Deconstruct daily goals into easy micro-steps, or log financial ledger items and habits on the fly without complex forms.
-                </p>
-            </div>
-
-            <!-- Predefined tasks quick-prompts -->
-            <div class="space-y-2">
-                <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest block">Quick Actions</span>
-                <div class="grid grid-cols-1 gap-2">
-                    <button onclick="setActionPrompt('Deconstruct creating a complete login system using index.html')" class="bg-zinc-900/40 hover:bg-zinc-850/60 border border-zinc-800/60 p-3 rounded-xl text-left text-xs transition-all flex items-center gap-2 text-zinc-300">
-                        <i class="fa-solid fa-brain-circuit text-purple-400"></i>
-                        <span>Deconstruct: "Create Login System"</span>
-                    </button>
-                    <button onclick="setActionPrompt('spent 350 rupees on dinner today')" class="bg-zinc-900/40 hover:bg-zinc-850/60 border border-zinc-800/60 p-3 rounded-xl text-left text-xs transition-all flex items-center gap-2 text-zinc-300">
-                        <i class="fa-solid fa-wallet text-emerald-400"></i>
-                        <span>Log Budget: "Spent 350 on dinner"</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Command interface -->
-            <div class="space-y-3 flex-1 flex flex-col justify-end">
-                <div class="flex items-center justify-between px-1">
-                    <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest font-mono">Action Input Deck</span>
-                    <button onclick="toggleVoiceSpeechSystem()" id="micBtn" class="bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-zinc-400 hover:text-rose-400 px-3 py-1.5 rounded-xl text-[10px] font-bold flex items-center gap-1">
-                        <i class="fa-solid fa-microphone text-xs" id="micIcon"></i> Voice Mic
-                    </button>
-                </div>
-
-                <textarea id="copilotInput" class="w-full h-32 bg-[#09090d] border border-zinc-800 rounded-2xl p-4 text-xs text-zinc-200 outline-none focus:border-indigo-500 transition-all resize-none leading-relaxed" placeholder="Type or speak tasks..."></textarea>
-
-                <button onclick="processCopilotCommand()" class="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white font-bold text-xs py-3.5 rounded-2xl shadow-xl transition-all">
-                    Process Action Command
-                </button>
-            </div>
-        </section>
-
-        <!-- RIGHT SIDEBAR: IDE Code Canvas, Tree, & Previewer -->
-        <section class="w-full lg:w-[58%] flex flex-col bg-[#09090d] h-full">
-            
-            <!-- Code Tab controls -->
-            <div class="bg-[#121218] border-b border-zinc-800/60 px-4 py-2 flex items-center justify-between shrink-0">
-                <div class="flex items-center gap-2 overflow-x-auto" id="fileTabs">
-                    <!-- Loaded dynamically -->
-                </div>
-
-                <div class="flex items-center gap-2 shrink-0">
-                    <button onclick="createNewFile()" class="bg-[#181824] hover:bg-[#202032] border border-zinc-800 text-zinc-300 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all">
-                        <i class="fa-solid fa-file-circle-plus text-emerald-500"></i> New File
-                    </button>
-                    <button onclick="togglePreviewTab()" id="previewToggleBtn" class="bg-[#181824] hover:bg-[#202032] border border-zinc-800 text-zinc-300 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all">
-                        <i class="fa-solid fa-circle-play text-indigo-400"></i> Run Local Preview
-                    </button>
-                    <button onclick="saveCurrentFileContent(true)" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-1.5 rounded-lg text-xs font-bold transition-all shadow-md">
-                        <i class="fa-solid fa-floppy-disk mr-1"></i> Save
-                    </button>
-                </div>
-            </div>
-
-            <!-- Visual layout content -->
-            <div class="flex flex-1 overflow-hidden relative">
-                
-                <!-- Project tree navigator -->
-                <div class="w-[180px] bg-[#050508] border-r border-zinc-800/60 p-3 flex flex-col justify-between shrink-0">
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between px-1">
-                            <span class="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Project Files</span>
-                            <i class="fa-regular fa-folder-open text-zinc-600"></i>
-                        </div>
-                        <div id="fileTree" class="space-y-1">
-                            <!-- Populated dynamically -->
-                        </div>
-                    </div>
-
-                    <button onclick="resetWorkspace()" class="w-full bg-red-950/10 hover:bg-red-950/30 text-red-400 border border-red-900/20 py-1.5 rounded-lg text-[9px] font-bold transition-all uppercase tracking-wider">
-                        Reset Local Project
-                    </button>
-                </div>
-
-                <!-- Sandbox browser frame -->
-                <div id="previewWrapper" class="absolute inset-0 bg-white hidden flex flex-col z-10">
-                    <div class="bg-gray-100 px-4 py-2 flex items-center justify-between border-b border-gray-300 text-gray-800 text-xs shrink-0">
-                        <div class="flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-red-400 inline-block"></span>
-                            <span class="w-2.5 h-2.5 rounded-full bg-yellow-400 inline-block"></span>
-                            <span class="w-2.5 h-2.5 rounded-full bg-green-400 inline-block"></span>
-                            <span class="ml-2 text-zinc-500 font-mono select-all">local-sandbox://viewer</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <button onclick="launchSandboxFrame()" class="text-zinc-500 hover:text-black font-semibold mr-2">
-                                <i class="fa-solid fa-rotate-right mr-1"></i> Refresh
-                            </button>
-                            <button onclick="togglePreviewTab()" class="text-zinc-500 hover:text-red-500">
-                                <i class="fa-solid fa-square-xmark text-lg"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <iframe id="sandboxFrame" class="w-full flex-1 border-none bg-white"></iframe>
-                </div>
-
-                <!-- Main Text Editor -->
-                <div id="editorWrapper" class="flex-1 flex flex-col h-full bg-[#111116] relative">
-                    <textarea id="editor" spellcheck="false" class="flex-1 bg-[#111116] text-zinc-300 p-6 code-font text-xs outline-none resize-none leading-relaxed" placeholder="// Ready to engineer clean programs..."></textarea>
-                </div>
-
-                <!-- ActionCopilot Dashboard Panel (Displayed inside editor frame when copilot tab active) -->
-                <div id="copilotDashboardWrapper" class="absolute inset-0 bg-[#09090d] p-6 overflow-y-auto hidden space-y-6">
-                    <div class="flex justify-between items-center border-b border-zinc-800/60 pb-3">
-                        <span class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Dynamic Copilot Workboard</span>
-                        <div class="flex gap-2">
-                            <button onclick="switchCopilotTab('tasks')" id="subtab-tasks-btn" class="bg-indigo-600 text-white text-[10px] font-bold px-3 py-1 rounded-lg">CHECKLISTS</button>
-                            <button onclick="switchCopilotTab('fin')" id="subtab-fin-btn" class="text-zinc-400 hover:text-white text-[10px] font-bold px-3 py-1 rounded-lg">FINANCES & HABITS</button>
-                        </div>
-                    </div>
-
-                    <div id="copilotInteractivePanel">
-                        <!-- Rendered dynamically -->
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-    </main>
-
-    <!-- SECURE SETTINGS PANEL & DEPLOY KEYS -->
-    <div id="settingsModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden glass-panel transition-all duration-300">
-        <div class="bg-[#111116] border border-zinc-850 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl">
-            <div class="px-6 py-4 border-b border-zinc-800/60 flex items-center justify-between bg-[#151520]">
-                <h3 class="font-bold text-gray-200 flex items-center gap-2 text-sm uppercase tracking-wide">
-                    <i class="fa-solid fa-sliders text-indigo-500"></i> Secure Keys & DevOps Config
-                </h3>
-                <button onclick="toggleSettingsModal()" class="text-gray-400 hover:text-white">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-            
-            <div class="p-6 space-y-5">
-                <div class="bg-indigo-950/20 border border-indigo-900/30 p-4 rounded-xl text-xs text-indigo-300 leading-relaxed space-y-1.5">
-                    <p class="font-bold"><i class="fa-solid fa-lock mr-1"></i> Key Protection Active:</p>
-                    <p>Enter your keys below if you want to override the default hardcoded keys with your own. Stored inside your device browser cache securely.</p>
-                </div>
-
-                <!-- API Keys Vault -->
-                <div class="space-y-3">
-                    <div class="space-y-1">
-                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Google Gemini API Key</label>
-                        <input type="password" id="vaultGeminiKey" placeholder="Paste your APIzaSy..." class="w-full bg-[#161622] border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-zinc-200 outline-none font-mono">
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">OpenRouter API Key</label>
-                        <input type="password" id="vaultOpenRouterKey" placeholder="Paste your sk-or-v1-..." class="w-full bg-[#161622] border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-zinc-200 outline-none font-mono">
-                    </div>
-                </div>
-
-                <!-- GitHub Target Settings -->
-                <div class="grid grid-cols-2 gap-3 border-t border-zinc-800/60 pt-4">
-                    <div class="space-y-1">
-                        <label class="text-[10px] font-bold text-gray-400 uppercase">GitHub Owner</label>
-                        <input type="text" id="githubOwner" value="SJANGID123" class="w-full bg-[#161622] border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-zinc-200 outline-none">
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-[10px] font-bold text-gray-400 uppercase">Repo Target</label>
-                        <input type="text" id="githubRepo" value="chatbot" class="w-full bg-[#161622] border border-zinc-800 rounded-xl px-3.5 py-2 text-xs text-zinc-200 outline-none">
-                    </div>
-                </div>
-
-                <!-- GitHub Personal Access Token -->
-                <div class="space-y-1.5">
-                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">GitHub Personal Access Token (PAT)</label>
-                    <div class="relative">
-                        <input type="password" id="vaultGithubToken" placeholder="github_pat_..." class="w-full bg-[#161622] border border-zinc-850 rounded-xl pl-10 pr-4 py-2.5 text-xs text-zinc-200 outline-none focus:border-indigo-500 font-mono">
-                        <i class="fa-solid fa-fingerprint absolute left-3.5 top-3.5 text-gray-500 text-xs"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="px-6 py-4 border-t border-zinc-800/60 bg-[#0c0c12] flex items-center justify-end gap-3">
-                <button onclick="toggleSettingsModal()" class="text-xs text-gray-400 hover:text-white px-4 py-2">Close</button>
-                <button onclick="saveDeployParameters()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2 rounded-xl text-xs font-bold transition-all">Save Config</button>
-            </div>
+        <div class="md:col-span-2 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-t border-slate-800/80 pt-5 mt-2">
+          <span class="text-[10px] text-slate-500 max-w-lg">
+            🛡️ Safe Execution Protocol: The AllOrigins proxy handles SerpAPI requests securely inside GitHub Pages to guarantee CORS error prevention.
+          </span>
+          <button
+            type="submit"
+            class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-6 py-3 rounded-xl transition-all shadow-lg active:scale-95"
+          >
+            Save Configuration
+          </button>
         </div>
+      </form>
     </div>
 
-    <!-- TOAST ALERT PANEL -->
-    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-indigo-600 border border-indigo-400/20 text-white font-bold text-xs px-5 py-3 rounded-full shadow-2xl z-50 transition-all duration-300 opacity-0 translate-y-3 pointer-events-none"></div>
+    <!-- --- TAB 1: PORTFOLIO SCREEN --- -->
+    <div id="tab-portfolio-content" class="space-y-6">
+      
+      <!-- Metrics overview -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div class="bg-slate-900/40 backdrop-blur-xl border border-slate-800/80 rounded-2xl p-5 shadow-lg flex items-center justify-between interact-card">
+          <div>
+            <p class="text-[10px] text-slate-500 uppercase font-extrabold tracking-widest font-mono">NSE/BSE Assets</p>
+            <h3 id="stat-positions" class="text-3xl font-black text-white mt-1">0 Positions</h3>
+          </div>
+          <div class="bg-slate-850 p-3 rounded-2xl border border-slate-800 text-indigo-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          </div>
+        </div>
 
-    <script>
-        const codeFenceStr = '`'.repeat(3);
+        <div class="bg-slate-900/40 backdrop-blur-xl border border-slate-800/80 rounded-2xl p-5 shadow-lg flex items-center justify-between interact-card">
+          <div>
+            <p class="text-[10px] text-slate-500 uppercase font-extrabold tracking-widest font-mono">My Portfolio Capital</p>
+            <h3 id="stat-capital" class="text-2xl font-black text-white mt-1 font-mono">₹0.00</h3>
+          </div>
+          <div class="bg-emerald-500/10 p-3 rounded-2xl border border-emerald-500/20 text-emerald-400 text-lg font-black font-mono">₹</div>
+        </div>
 
-        // De-obfuscate keys programmatically to bypass scanners safely
-        const getGeminiKey = () => "AIzaSy" + "BU8XWgP_" + "7CUi8tnega1Eun1jkwcoSN-Ug";
-        const getOpenRouterKey = () => "sk-or-v1-" + "0ad9332b9637" + "49d0944ce8861cf72a9e84f13cbfd765168b4065612e8067b06c";
+        <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-4 shadow-lg flex flex-col justify-center">
+          <button
+            onclick="toggleAddStockForm()"
+            class="bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold py-3.5 px-4 rounded-2xl flex items-center justify-center gap-2 text-xs uppercase tracking-wider transition-all shadow-lg hover:shadow-indigo-500/20"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <span>Register Ticker Symbol</span>
+          </button>
+        </div>
+      </div>
 
-        // Core codebase blueprint state
-        const sampleWorkspaceBlueprint = {
-            "index.html": `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Project Engine</title>
-    <script src="https://cdn.tailwindcss.com"><\/script>
-</head>
-<body class="bg-slate-950 text-white min-h-screen flex flex-col justify-center items-center">
-    <div class="max-w-md w-full text-center space-y-4 p-8 bg-slate-900 rounded-3xl border border-slate-800 shadow-2xl">
-        <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400">Dev Studio Live</h1>
-        <p class="text-slate-400 text-sm">Write to the AI on the left pane of your workspace interface to generate complex, beautifully styled pages and apps instantly!</p>
-        <button onclick="alert('System Live')" class="bg-indigo-600 hover:bg-indigo-500 px-6 py-2.5 rounded-2xl text-xs font-bold tracking-wider transition-all">LAUNCH CLIENT</button>
+      <!-- Add stock form container -->
+      <div id="add-stock-container" class="hidden bg-slate-900 border border-indigo-950/80 p-6 rounded-3xl shadow-2xl space-y-4 animate-slideUp">
+        <div class="flex justify-between items-center">
+          <h3 class="text-xs font-black text-white uppercase tracking-wider">➕ Register New Position</h3>
+          <button onclick="toggleAddStockForm()" class="text-slate-400 hover:text-white text-xs font-bold hover:underline">
+            [Cancel]
+          </button>
+        </div>
+
+        <form onsubmit="registerStock(event)" class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-wider">NSE/BSE Symbol</label>
+            <input
+              type="text"
+              id="input-symbol"
+              required
+              placeholder="e.g. RELIANCE, TCS"
+              class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-700 focus:outline-none font-mono font-bold"
+            />
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-wider">Company Name</label>
+            <input
+              type="text"
+              id="input-name"
+              required
+              placeholder="e.g. Tata Motors"
+              class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-700 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-wider">Shares Owned</label>
+            <input
+              type="number"
+              id="input-shares"
+              required
+              step="any"
+              placeholder="e.g. 15"
+              class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-700 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-wider">Average buy price (₹)</label>
+            <input
+              type="number"
+              id="input-buyprice"
+              required
+              step="any"
+              placeholder="e.g. 1250.00"
+              class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-700 focus:outline-none font-mono"
+            />
+          </div>
+          <div class="sm:col-span-4 flex justify-end gap-2 mt-2">
+            <button
+              type="submit"
+              class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-6 py-3 rounded-xl transition-all shadow-md active:scale-95"
+            >
+              Confirm & Save Position
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Portfolio Split Desk -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Left Column: Asset selection desk -->
+        <div class="lg:col-span-1">
+          <div class="bg-slate-900/40 backdrop-blur-xl border border-slate-800/85 rounded-3xl p-5 shadow-lg">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-850 pb-3">
+              <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active Indian Assets</h3>
+              <span id="badge-position-count" class="text-[9px] bg-slate-850 px-2.5 py-1 rounded-full text-indigo-400 font-mono font-bold">
+                0 Positions
+              </span>
+            </div>
+
+            <div id="portfolio-list" class="space-y-3 max-h-[500px] overflow-y-auto pr-1">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Quantitative strategy panel -->
+        <div class="lg:col-span-2">
+          <div id="advisory-desk-content">
+            <!-- Dynamically populated with welcome state, loading, or full AI research dashboard -->
+          </div>
+        </div>
+
+      </div>
+
     </div>
-</body>
-</html>`,
-            "style.css": "/* Custom stylesheet workspace asset */",
-            "app.js": "// Client logic entry point"
-        };
 
-        let files = JSON.parse(localStorage.getItem('workspace_files')) || {...sampleWorkspaceBlueprint};
-        let activeFile = Object.keys(files)[0] || "index.html";
-        let activeWorkspaceMode = "dev";
-        let activeCopilotSubtab = "tasks";
+    <!-- --- TAB 2: DISCOVERY / MOMENTUM SCREEN --- -->
+    <div id="tab-discovery-content" class="hidden space-y-6">
+      
+      <!-- Discovery Scanner Overview -->
+      <div class="p-6 bg-slate-900/40 border border-slate-800 rounded-3xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative overflow-hidden shadow-xl">
+        <div class="absolute top-0 left-0 h-full w-1.5 bg-indigo-500"></div>
+        <div>
+          <h2 class="text-xs font-black text-white uppercase tracking-wider flex items-center gap-2">
+            🎯 Short-Term 1-Week Breakout momentum engine
+          </h2>
+          <p class="text-xs text-slate-400 mt-1 max-w-2xl leading-relaxed">
+            Runs an exhaustive Google search for breakout stock setups on the NSE/BSE. Gemini 2.5 then cross-references historical trend context to highlight the absolute highest-conviction trade for a 1-week profit window.
+          </p>
+        </div>
 
-        // ActionCopilot local state database
-        let copilotData = JSON.parse(localStorage.getItem('action_copilot_database')) || {
-            goals: [
-                {
-                    id: 1,
-                    title: "Configure My Secure Workspace Settings",
-                    steps: [
-                        { id: 101, text: "Click Key Icon on Top Right", done: false },
-                        { id: 102, text: "Verify that default keys are obfuscated and active!", done: false },
-                        { id: 103, text: "Begin generating hands-free files securely!", done: false }
-                    ]
-                }
-            ],
-            expenses: [],
-            habits: []
-        };
+        <button
+          onclick="scanIndianBreakoutSwings()"
+          id="btn-scan-breakouts"
+          class="shrink-0 bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-800 text-white font-bold px-6 py-3.5 rounded-2xl text-xs uppercase tracking-widest transition-all shadow-lg hover:shadow-indigo-500/20 flex items-center gap-2 active:scale-95 duration-200"
+        >
+          <svg id="scan-icon-sparkle" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+          <svg id="scan-icon-loader" class="hidden animate-spin" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="6.34" y1="17.66" x2="8.46" y2="15.54"/><line x1="15.54" y1="8.46" x2="17.66" y2="6.34"/></svg>
+          <span id="scan-btn-text">Discover Breakouts (₹)</span>
+        </button>
+      </div>
 
-        let isRecording = false;
-        let recognition = null;
+      <!-- Discovery Container populated via JS -->
+      <div id="discovery-desk-content"></div>
 
-        window.onload = function() {
-            loadSavedConfig();
-            renderFileTree();
-            switchToFile(activeFile);
-            renderCopilotPanel();
-        };
+    </div>
 
-        function toggleSettingsModal() {
-            document.getElementById("settingsModal").classList.toggle("hidden");
+  </main>
+
+  <!-- --- Global Footer --- -->
+  <footer class="border-t border-slate-900 mt-auto bg-slate-950 py-6 z-10 text-center">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <p class="text-[11px] text-slate-600 font-mono">
+        © 2026 AuraTrade Pro India. Grounded with SerpAPI & Gemini 2.5 Flash.
+      </p>
+      <p class="text-[10px] text-slate-500 font-medium font-mono flex items-center gap-1.5">
+        <span>🇮🇳 Designed in Indian Rupees (INR)</span>
+      </p>
+    </div>
+  </footer>
+
+  <!-- --- CORE VANILLA JS REACTIVE CONTROLLER --- -->
+  <script>
+    // --- Global Application State ---
+    const state = {
+      activeTab: 'portfolio',
+      geminiKey: localStorage.getItem('auraindia_gemini_key') || '',
+      serpKey: localStorage.getItem('auraindia_serp_key') || '',
+      portfolio: [],
+      analysisCache: {},
+      analysisResult: null,
+      discoveryResults: null,
+      isAnalyzing: false,
+      analyzingSymbol: null,
+      isScanning: false,
+      isAddingStock: false,
+      showSettings: false
+    };
+
+    // --- Bootstrapping Function ---
+    window.onload = function() {
+      // Default blue chip positions
+      const defaultPortfolio = [
+        { id: '1', symbol: 'RELIANCE', name: 'Reliance Industries Ltd.', shares: 10, buyPrice: 2450.00 },
+        { id: '2', symbol: 'TCS', name: 'Tata Consultancy Services Ltd.', shares: 5, buyPrice: 3820.50 }
+      ];
+
+      // Safe parse
+      state.portfolio = safeJsonParse('auraindia_portfolio', defaultPortfolio);
+      state.analysisCache = safeJsonParse('auraindia_analysis_cache', {});
+      state.discoveryResults = safeJsonParse('auraindia_discovery_results', null);
+
+      // Prepopulate config input tags
+      document.getElementById('input-gemini-key').value = state.geminiKey;
+      document.getElementById('input-serp-key').value = state.serpKey;
+
+      if (!state.geminiKey || !state.serpKey) {
+        state.showSettings = true;
+        document.getElementById('settings-panel').classList.remove('hidden');
+      }
+
+      // Initial Render
+      render();
+    };
+
+    // --- Safety Parsers ---
+    function safeJsonParse(key, defaultValue) {
+      try {
+        const item = localStorage.getItem(key);
+        if (!item) return defaultValue;
+        return JSON.parse(item);
+      } catch (err) {
+        console.error("Local storage corruption parsed. Defaulting safely.", err);
+        return defaultValue;
+      }
+    }
+
+    // --- Reactive Toast Engine ---
+    function showToast(message, type = 'success') {
+      const banner = document.getElementById('toast-banner');
+      const text = document.getElementById('toast-message');
+      const icon = document.getElementById('toast-icon');
+
+      text.innerText = message;
+      if (type === 'error') {
+        banner.className = "fixed top-4 right-4 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl border shadow-2xl transition-all duration-300 transform translate-y-0 opacity-100 bg-slate-900 border-rose-800 text-rose-400";
+        icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
+      } else {
+        banner.className = "fixed top-4 right-4 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl border shadow-2xl transition-all duration-300 transform translate-y-0 opacity-100 bg-slate-900 border-indigo-500 text-indigo-400 shadow-indigo-500/10";
+        icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
+      }
+
+      setTimeout(() => {
+        banner.style.transform = 'translateY(-100px)';
+        banner.style.opacity = '0';
+      }, 4000);
+    }
+
+    // --- Navigation Routing Controls ---
+    function switchTab(tabId) {
+      state.activeTab = tabId;
+      
+      const navPort = document.getElementById('nav-portfolio');
+      const navDisc = document.getElementById('nav-discovery');
+      const contentPort = document.getElementById('tab-portfolio-content');
+      const contentDisc = document.getElementById('tab-discovery-content');
+
+      if (tabId === 'portfolio') {
+        navPort.className = "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 bg-slate-800 text-white shadow-lg";
+        navDisc.className = "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 text-slate-400 hover:text-slate-200";
+        contentPort.classList.remove('hidden');
+        contentDisc.classList.add('hidden');
+      } else {
+        navPort.className = "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 text-slate-400 hover:text-slate-200";
+        navDisc.className = "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 bg-slate-800 text-white shadow-lg";
+        contentPort.classList.add('hidden');
+        contentDisc.classList.remove('hidden');
+      }
+      render();
+    }
+
+    // --- Toggle Drawers ---
+    function toggleSettings() {
+      state.showSettings = !state.showSettings;
+      const panel = document.getElementById('settings-panel');
+      const btn = document.getElementById('settings-btn');
+      if (state.showSettings) {
+        panel.classList.remove('hidden');
+        btn.className = "p-2.5 rounded-2xl border transition-all duration-300 bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-500/25";
+      } else {
+        panel.classList.add('hidden');
+        btn.className = "p-2.5 rounded-2xl border border-slate-800 text-slate-400 hover:text-white transition-all duration-300 bg-slate-900";
+      }
+    }
+
+    function toggleAddStockForm() {
+      state.isAddingStock = !state.isAddingStock;
+      const form = document.getElementById('add-stock-container');
+      if (state.isAddingStock) {
+        form.classList.remove('hidden');
+      } else {
+        form.classList.add('hidden');
+      }
+    }
+
+    // --- Save Credentials ---
+    function saveConfig(e) {
+      e.preventDefault();
+      state.geminiKey = document.getElementById('input-gemini-key').value.trim();
+      state.serpKey = document.getElementById('input-serp-key').value.trim();
+
+      localStorage.setItem('auraindia_gemini_key', state.geminiKey);
+      localStorage.setItem('auraindia_serp_key', state.serpKey);
+      
+      showToast('Configurations successfully saved locally.');
+      state.showSettings = false;
+      document.getElementById('settings-panel').classList.add('hidden');
+      render();
+    }
+
+    // --- Register manual assets ---
+    function registerStock(e) {
+      e.preventDefault();
+      const symbol = document.getElementById('input-symbol').value.toUpperCase().trim();
+      const name = document.getElementById('input-name').value.trim();
+      const shares = parseFloat(document.getElementById('input-shares').value);
+      const buyPrice = parseFloat(document.getElementById('input-buyprice').value);
+
+      if (!symbol || !name || isNaN(shares) || isNaN(buyPrice)) {
+        showToast('Please correctly enter all asset values.', 'error');
+        return;
+      }
+
+      const position = {
+        id: Date.now().toString(),
+        symbol,
+        name,
+        shares,
+        buyPrice
+      };
+
+      state.portfolio.push(position);
+      localStorage.setItem('auraindia_portfolio', JSON.stringify(state.portfolio));
+
+      // Reset form fields
+      document.getElementById('input-symbol').value = '';
+      document.getElementById('input-name').value = '';
+      document.getElementById('input-shares').value = '';
+      document.getElementById('input-buyprice').value = '';
+
+      state.isAddingStock = false;
+      document.getElementById('add-stock-container').classList.add('hidden');
+      
+      showToast(`Position ${symbol} registered in portfolio.`);
+      render();
+    }
+
+    // --- Remove Positions ---
+    function removeStock(id, symbol) {
+      state.portfolio = state.portfolio.filter(item => item.id !== id);
+      localStorage.setItem('auraindia_portfolio', JSON.stringify(state.portfolio));
+
+      delete state.analysisCache[symbol];
+      localStorage.setItem('auraindia_analysis_cache', JSON.stringify(state.analysisCache));
+
+      if (state.analysisResult && state.analysisResult.symbol === symbol) {
+        state.analysisResult = null;
+      }
+
+      showToast(`Removed asset ${symbol} from tracker.`);
+      render();
+    }
+
+    // --- Network Requests wrapper with Exponential backoff ---
+    async function fetchWithBackoff(url, options, retries = 5, delay = 1000) {
+      try {
+        const response = await fetch(url, options);
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error(`HTTP ${response.status}: ${text || response.statusText}`);
         }
-
-        // Configuration memory controllers
-        function saveDeployParameters() {
-            const token = document.getElementById("vaultGithubToken").value.trim();
-            const owner = document.getElementById("githubOwner").value.trim();
-            const repo = document.getElementById("githubRepo").value.trim();
-            const gemini = document.getElementById("vaultGeminiKey").value.trim();
-            const openrouter = document.getElementById("vaultOpenRouterKey").value.trim();
-
-            localStorage.setItem("gh_pat_token", token);
-            localStorage.setItem("gh_owner", owner);
-            localStorage.setItem("gh_repo", repo);
-            localStorage.setItem("vault_gemini_key", gemini);
-            localStorage.setItem("vault_openrouter_key", openrouter);
-
-            toggleSettingsModal();
-            updateConfigVisualStatus();
-            triggerAlertToast("Parameters Saved Safely!");
-        }
-
-        function loadSavedConfig() {
-            document.getElementById("vaultGithubToken").value = localStorage.getItem("gh_pat_token") || "";
-            document.getElementById("githubOwner").value = localStorage.getItem("gh_owner") || "SJANGID123";
-            document.getElementById("githubRepo").value = localStorage.getItem("gh_repo") || "chatbot";
-            document.getElementById("vaultGeminiKey").value = localStorage.getItem("vault_gemini_key") || getGeminiKey();
-            document.getElementById("vaultOpenRouterKey").value = localStorage.getItem("vault_openrouter_key") || getOpenRouterKey();
-            updateConfigVisualStatus();
-        }
-
-        function updateConfigVisualStatus() {
-            const gemini = localStorage.getItem("vault_gemini_key") || getGeminiKey();
-            const openrouter = localStorage.getItem("vault_openrouter_key") || getOpenRouterKey();
-            const dot = document.getElementById("configStatusDot");
-            
-            if(gemini || openrouter) {
-                dot.className = "absolute top-1 right-1 w-2 h-2 bg-emerald-500 rounded-full";
-            } else {
-                dot.className = "absolute top-1 right-1 w-2 h-2 bg-rose-500 rounded-full animate-pulse";
-            }
-        }
-
-        // Mode Navigation Switches
-        function switchWorkspaceMode(mode) {
-            activeWorkspaceMode = mode;
-            
-            const devBtn = document.getElementById("mode-dev-btn");
-            const copilotBtn = document.getElementById("mode-copilot-btn");
-            const devPanel = document.getElementById("dev-workspace-panel");
-            const copilotPanel = document.getElementById("copilot-workspace-panel");
-            const editorWrapper = document.getElementById("editorWrapper");
-            const copilotDashboard = document.getElementById("copilotDashboardWrapper");
-
-            if(mode === "dev") {
-                devBtn.className = "px-3 py-1 rounded-lg text-[10px] font-bold uppercase transition-all bg-indigo-600 text-white shadow-md";
-                copilotBtn.className = "px-3 py-1 rounded-lg text-[10px] font-bold uppercase transition-all text-zinc-400 hover:text-white";
-                
-                devPanel.classList.remove("hidden");
-                copilotPanel.classList.add("hidden");
-                editorWrapper.classList.remove("hidden");
-                copilotDashboard.classList.add("hidden");
-            } else {
-                copilotBtn.className = "px-3 py-1 rounded-lg text-[10px] font-bold uppercase transition-all bg-indigo-600 text-white shadow-md";
-                devBtn.className = "px-3 py-1 rounded-lg text-[10px] font-bold uppercase transition-all text-zinc-400 hover:text-white";
-                
-                copilotPanel.classList.remove("hidden");
-                devPanel.classList.add("hidden");
-                editorWrapper.classList.add("hidden");
-                copilotDashboard.classList.remove("hidden");
-                renderCopilotPanel();
-            }
-        }
-
-        // Virtual Filesystem Drivers
-        function renderFileTree() {
-            const tree = document.getElementById("fileTree");
-            tree.innerHTML = "";
-
-            Object.keys(files).forEach(name => {
-                const isSelected = name === activeFile;
-                const fileItem = document.createElement("div");
-                fileItem.className = `group flex items-center justify-between px-3 py-2 rounded-xl text-xs cursor-pointer transition-all ${isSelected ? 'bg-indigo-600/10 text-indigo-400 font-bold border border-indigo-500/10' : 'text-zinc-400 hover:bg-[#151520] hover:text-zinc-200'}`;
-                fileItem.onclick = () => switchToFile(name);
-
-                const labelDiv = document.createElement("div");
-                labelDiv.className = "flex items-center gap-2 overflow-hidden truncate";
-                
-                let icon = '<i class="fa-regular fa-file-code"></i>';
-                if (name.endsWith(".html")) icon = '<i class="fa-brands fa-html5 text-orange-500"></i>';
-                else if (name.endsWith(".css")) icon = '<i class="fa-brands fa-css3-alt text-blue-400"></i>';
-                else if (name.endsWith(".js")) icon = '<i class="fa-brands fa-js-square text-yellow-500"></i>';
-
-                labelDiv.innerHTML = `${icon} <span class="truncate">${name}</span>`;
-                fileItem.appendChild(labelDiv);
-
-                const trash = document.createElement("button");
-                trash.className = "opacity-0 group-hover:opacity-100 text-zinc-500 hover:text-red-400 px-1 transition-all";
-                trash.innerHTML = '<i class="fa-solid fa-trash-can text-[10px]"></i>';
-                trash.onclick = (e) => { e.stopPropagation(); deleteFile(name); };
-                fileItem.appendChild(trash);
-
-                tree.appendChild(fileItem);
-            });
-
-            // File tabs header render
-            const tabsContainer = document.getElementById("fileTabs");
-            tabsContainer.innerHTML = "";
-            Object.keys(files).forEach(name => {
-                const tab = document.createElement("div");
-                tab.className = `px-3.5 py-1.5 text-xs rounded-lg cursor-pointer transition-all whitespace-nowrap ${name === activeFile ? 'bg-[#181824] text-indigo-400 font-bold border-t-2 border-indigo-500' : 'bg-[#0b0b0f] text-zinc-500 hover:text-zinc-300'}`;
-                tab.innerText = name;
-                tab.onclick = () => switchToFile(name);
-                tabsContainer.appendChild(tab);
-            });
-
-            localStorage.setItem('workspace_files', JSON.stringify(files));
-        }
-
-        function switchToFile(name) {
-            saveCurrentFileContent(false);
-            activeFile = name;
-            document.getElementById("editor").value = files[name] || "";
-            renderFileTree();
-        }
-
-        function saveCurrentFileContent(notify = false) {
-            if (activeFile) {
-                files[activeFile] = document.getElementById("editor").value;
-                localStorage.setItem('workspace_files', JSON.stringify(files));
-                if (notify) triggerAlertToast("Project File Saved Locally!");
-            }
-        }
-
-        function createNewFile() {
-            const name = prompt("Enter new filename:", "untitled.html");
-            if (name && name.trim()) {
-                const cleanName = name.trim();
-                files[cleanName] = "";
-                switchToFile(cleanName);
-            }
-        }
-
-        function deleteFile(name) {
-            if (confirm(`Delete file "${name}" from local workspace?`)) {
-                delete files[name];
-                const rem = Object.keys(files);
-                activeFile = rem.length > 0 ? rem[0] : "";
-                if (!activeFile) {
-                    files["index.html"] = "";
-                    activeFile = "index.html";
-                }
-                switchToFile(activeFile);
-            }
-        }
-
-        function resetWorkspace() {
-            if (confirm("Reset current project workspace back to clean state? All unsaved work will be lost.")) {
-                files = {...sampleWorkspaceBlueprint};
-                activeFile = "index.html";
-                switchToFile(activeFile);
-            }
-        }
-
-        // Native Sandbox Rendering Engine with full DB proxy interception injection
-        function togglePreviewTab() {
-            const preview = document.getElementById("previewWrapper");
-            const btn = document.getElementById("previewToggleBtn");
-            const isHidden = preview.classList.contains("hidden");
-
-            if (isHidden) {
-                saveCurrentFileContent(false);
-                preview.classList.remove("hidden");
-                btn.className = "bg-rose-600/10 hover:bg-rose-600/20 text-rose-400 border border-rose-500/20 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all";
-                btn.innerHTML = '<i class="fa-solid fa-square-xmark"></i> Stop Sandbox';
-                launchSandboxFrame();
-            } else {
-                preview.classList.add("hidden");
-                btn.className = "bg-[#181824] hover:bg-[#202032] border border-zinc-800 text-zinc-300 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all";
-                btn.innerHTML = '<i class="fa-solid fa-circle-play text-indigo-400"></i> Run Local Preview';
-            }
-        }
-
-        function launchSandboxFrame() {
-            const iframe = document.getElementById("sandboxFrame");
-            let htmlCode = files["index.html"] || "<h1>No index.html file present in directory root</h1>";
-            
-            // Build the dynamic client-side database mock interceptor
-            const dbProxyScript = `
-                <script>
-                (function() {
-                    console.log("Full-Stack LocalStorage Database proxy active.");
-                    const _getDB = () => JSON.parse(localStorage.getItem('sandbox_mock_db')) || {};
-                    const _saveDB = (db) => localStorage.setItem('sandbox_mock_db', JSON.stringify(db));
-
-                    const originalFetch = window.fetch;
-                    window.fetch = async function(resource, config) {
-                        const url = typeof resource === 'string' ? resource : resource.url;
-                        
-                        if (url.startsWith('/api/') || url.includes('/api/')) {
-                            const path = url.split('/api/')[1];
-                            const method = (config && config.method) ? config.method.toUpperCase() : 'GET';
-                            const db = _getDB();
-                            const segments = path.split('/');
-                            const collection = segments[0];
-                            const id = segments[1];
-
-                            if (!db[collection]) db[collection] = [];
-
-                            let status = 200;
-                            let body = {};
-
-                            if (method === 'GET') {
-                                if (id) {
-                                    const item = db[collection].find(i => i.id == id);
-                                    body = item || { error: "Record not found" };
-                                    status = item ? 200 : 404;
-                                } else {
-                                    body = db[collection];
-                                }
-                            } else if (method === 'POST') {
-                                const payload = JSON.parse(config.body || '{}');
-                                payload.id = Date.now();
-                                db[collection].push(payload);
-                                _saveDB(db);
-                                body = payload;
-                                status = 201;
-                            } else if (method === 'PUT') {
-                                const payload = JSON.parse(config.body || '{}');
-                                const index = db[collection].findIndex(i => i.id == id);
-                                if (index !== -1) {
-                                    db[collection][index] = { ...db[collection][index], ...payload };
-                                    _saveDB(db);
-                                    body = db[collection][index];
-                                } else {
-                                    status = 404;
-                                    body = { error: "Record not found" };
-                                }
-                            } else if (method === 'DELETE') {
-                                const index = db[collection].findIndex(i => i.id == id);
-                                if (index !== -1) {
-                                    db[collection].splice(index, 1);
-                                    _saveDB(db);
-                                    body = { success: true };
-                                } else {
-                                    status = 404;
-                                    body = { error: "Record not found" };
-                                }
-                            }
-
-                            return new Response(JSON.stringify(body), {
-                                status: status,
-                                headers: { 'Content-Type': 'application/json' }
-                            });
-                        }
-                        return originalFetch.apply(this, arguments);
-                    };
-                })();
-                <\/script>
-            `;
-
-            // Inject the interceptor into the HTML output
-            if (htmlCode.includes("<head>")) {
-                htmlCode = htmlCode.replace("<head>", `<head>${dbProxyScript}`);
-            } else {
-                htmlCode = dbProxyScript + htmlCode;
-            }
-
-            // Auto inject all additional workspace CSS assets
-            if (htmlCode.includes("</head>")) {
-                let cssInjects = "";
-                Object.keys(files).forEach(file => {
-                    if (file.endsWith(".css") && file !== "style.css") {
-                        cssInjects += `<style>${files[file]}</style>`;
-                    }
-                });
-                if (files["style.css"]) {
-                    cssInjects += `<style>${files["style.css"]}</style>`;
-                }
-                htmlCode = htmlCode.replace("</head>", `${cssInjects}</head>`);
-            }
-
-            // Auto inject all additional workspace JS assets
-            if (htmlCode.includes("</body>")) {
-                let jsInjects = "";
-                Object.keys(files).forEach(file => {
-                    if (file.endsWith(".js") && file !== "app.js") {
-                        jsInjects += `<script>${files[file]}<\/script>`;
-                    }
-                });
-                if (files["app.js"]) {
-                    jsInjects += `<script>${files["app.js"]}<\/script>`;
-                }
-                htmlCode = htmlCode.replace("</body>", `${jsInjects}</body>`);
-            }
-
-            const frameBlob = new Blob([htmlCode], { type: "text/html" });
-            iframe.src = URL.createObjectURL(frameBlob);
-        }
-
-        // Gemini REST API runner with version and cascade failover protection
-        async function fetchGeminiAPI(model, payload, apiKey, version) {
-            const url = `https://generativelanguage.googleapis.com/${version}/models/${model}:generateContent?key=${apiKey}`;
-            const response = await fetch(url, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            });
-
-            const data = await response.json();
-            if (response.ok && data.candidates) {
-                return data;
-            } else if (data.error) {
-                throw new Error(data.error.message);
-            } else {
-                throw new Error("Invalid candidates response format.");
-            }
-        }
-
-        // Automated Developer Inference Loop with bulletproof ordered cascade failovers
-        async function sendMessage() {
-            const inputEl = document.getElementById("chatInput");
-            const userText = inputEl.value.trim();
-            if (!userText) return;
-
-            // Load credentials obfuscation bypassed safely
-            const geminiKey = localStorage.getItem("vault_gemini_key") || getGeminiKey();
-            const openRouterKey = localStorage.getItem("vault_openrouter_key") || getOpenRouterKey();
-
-            appendMessage("user", userText);
-            inputEl.value = "";
-
-            appendMessage("assistant", `Orchestrating prompt execution across failover pipelines...`);
-            const lastMsgEl = document.getElementById("chatMessages").lastElementChild;
-
-            const contextPayload = `
-You are an advanced AI Software Engineer running directly inside the user's workspace.
-Your current project directory contains the following file assets:
-
-${Object.keys(files).map(name => `--- FILE: ${name} ---\n${files[name]}`).join('\n\n')}
-
-Active Focused File: ${activeFile}
-
-GUIDELINES:
-If you want to create, modify, or append any project file inside the user's workspace on the right, you MUST write your output inside a standard Markdown block tagged exactly with the filename inside the language identifier, like this:
-
-${codeFenceStr}html:index.html
-Your code body here...
-${codeFenceStr}
-
-User task: ${userText}
-            `;
-
-            // Define ordered fallbacks (provider, model, API version/key)
-            const failoverPipeline = [
-                { provider: "gemini", model: "gemini-2.5-flash", version: "v1", key: geminiKey },
-                { provider: "gemini", model: "gemini-2.5-flash", version: "v1beta", key: geminiKey },
-                { provider: "gemini", model: "gemini-1.5-pro", version: "v1", key: geminiKey },
-                { provider: "gemini", model: "gemini-1.5-pro", version: "v1beta", key: geminiKey },
-                { provider: "openrouter", model: "qwen/qwen3-coder:free", key: openRouterKey },
-                { provider: "openrouter", model: "google/gemini-2.5-flash:free", key: openRouterKey }
-            ];
-
-            let textResult = "";
-            let pipelineWorked = false;
-
-            for (let i = 0; i < failoverPipeline.length; i++) {
-                const pipe = failoverPipeline[i];
-                if (!pipe.key) continue; // Skip if no key loaded
-
-                try {
-                    console.log(`Trying pipeline index ${i}: ${pipe.provider} - ${pipe.model}`);
-                    if (pipe.provider === "gemini") {
-                        const payload = {
-                            contents: [{ parts: [{ text: contextPayload }] }]
-                        };
-                        const data = await fetchGeminiAPI(pipe.model, payload, pipe.key, pipe.version);
-                        textResult = data.candidates[0].content.parts[0].text;
-                    } else if (pipe.provider === "openrouter") {
-                        textResult = await fetchOpenRouterAPI(pipe.model, contextPayload, pipe.key);
-                    }
-
-                    if (textResult) {
-                        pipelineWorked = true;
-                        break; // Success! Exit the failover loop
-                    }
-                } catch (err) {
-                    console.warn(`Pipeline node ${i} failed: ${err.message}. Trying next cascade...`);
-                    // Log failover warning in chat visually so they see it working
-                    lastMsgEl.innerHTML = `<span class="text-amber-500"><i class="fa-solid fa-triangle-exclamation"></i> Failover warning (${pipe.model} / ${pipe.provider}): ${err.message}. Trying next cascade...</span>`;
-                }
-            }
-
-            if (!pipelineWorked) {
-                lastMsgEl.innerHTML = `<span class="text-rose-500 font-semibold"><i class="fa-solid fa-circle-exclamation mr-1"></i> Core Critical Error:</span> All failover pipelines exhausted. Please check that your API keys are active inside the Settings modal.`;
-                return;
-            }
-
-            processProjectIntegrations(textResult);
-
-            lastMsgEl.innerHTML = formatAIResponse(textResult);
-            document.getElementById("chatMessages").scrollTop = document.getElementById("chatMessages").scrollHeight;
-        }
-
-        // Automatic file-block writing parser engine
-        function processProjectIntegrations(text) {
-            const pattern = '`{3}([a-zA-Z0-9_\\-\\+]+):([a-zA-Z0-9_\\-\\.]+)\\n([\\s\\S]*?)`{3}';
-            const regex = new RegExp(pattern, 'g');
-            let match;
-            let fileUpdated = false;
-
-            while ((match = regex.exec(text)) !== null) {
-                const filename = match[2].trim();
-                const codeBody = match[3];
-
-                if (filename) {
-                    files[filename] = codeBody;
-                    activeFile = filename;
-                    fileUpdated = true;
-                }
-            }
-
-            if (fileUpdated) {
-                triggerAlertToast("Files Written to Workspace!");
-                switchToFile(activeFile);
-            }
-        }
-
-        // ActionCopilot Voice Speech Recognition
-        function toggleVoiceSpeechSystem() {
-            window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if(!window.SpeechRecognition) {
-                alert("Speech recognition is not supported on this browser version.");
-                return;
-            }
-
-            if (!recognition) {
-                recognition = new SpeechRecognition();
-                recognition.continuous = false;
-                recognition.interimResults = false;
-                recognition.lang = "en-US";
-
-                recognition.onresult = (event) => {
-                    const text = event.results[0][0].transcript;
-                    document.getElementById("copilotInput").value = text;
-                };
-
-                recognition.onerror = () => stopVoiceSpeechSystem();
-                recognition.onend = () => stopVoiceSpeechSystem();
-            }
-
-            if (!isRecording) {
-                recognition.start();
-                isRecording = true;
-                document.getElementById("micBtn").className = "bg-rose-950 border border-rose-800 text-rose-300 px-3.5 py-1.5 rounded-xl text-[10px] font-bold flex items-center gap-1 animate-pulse";
-                document.getElementById("micIcon").className = "fa-solid fa-circle text-xs";
-                triggerAlertToast("Microphone recording...");
-            } else {
-                stopVoiceSpeechSystem();
-            }
-        }
-
-        function stopVoiceSpeechSystem() {
-            if (recognition && isRecording) recognition.stop();
-            isRecording = false;
-            document.getElementById("micBtn").className = "bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-zinc-400 hover:text-rose-400 px-3.5 py-1.5 rounded-xl text-[10px] font-semibold flex items-center gap-1";
-            document.getElementById("micIcon").className = "fa-solid fa-microphone text-xs";
-        }
-
-        function setActionPrompt(text) {
-            document.getElementById("copilotInput").value = text;
-        }
-
-        // ActionCopilot Data Logic
-        async function processCopilotCommand() {
-            const promptInput = document.getElementById("copilotInput").value.trim();
-            if (!promptInput) return;
-
-            const geminiKey = localStorage.getItem("vault_gemini_key") || getGeminiKey();
-            const openRouterKey = localStorage.getItem("vault_openrouter_key") || getOpenRouterKey();
-
-            const orchestratorSystemPrompt = `
-You are the ActionCopilot Master Orchestrator. 
-Your goal is to parse the user's unstructured request and classify it into one of three action schemes:
-1) "Deconstruct": If they want to break down a major daily goal into a micro-step checklist.
-2) "LogExpense": If they declare spending money (spent [amount] on [details]).
-3) "LogHabit": If they are logging habit completions.
-
-You MUST output your response as a valid, pure JSON object with the following schema. Return only JSON, no markdown fences:
+        return await response.json();
+      } catch (error) {
+        if (retries <= 1) throw error;
+        await new Promise(res => setTimeout(res, delay));
+        return fetchWithBackoff(url, options, retries - 1, delay * 2);
+      }
+    }
+
+    // --- CORS Free SerpAPI Scraper Gateway ---
+    async function makeSerpSearch(query) {
+      if (!state.serpKey) {
+        throw new Error("Missing SerpAPI workspace credentials.");
+      }
+      const target = `https://serpapi.com/search.json?q=${encodeURIComponent(query)}&api_key=${state.serpKey}`;
+      const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(target)}`;
+      return await fetchWithBackoff(proxy, { method: 'GET' });
+    }
+
+    // --- Execute Indian Advisory ---
+    async function executeIndianAdvisoryCheck(symbol, name, buyPrice, shares) {
+      if (!state.geminiKey || !state.serpKey) {
+        showToast('Both SerpAPI and Gemini credentials are required.', 'error');
+        state.showSettings = true;
+        document.getElementById('settings-panel').classList.remove('hidden');
+        return;
+      }
+
+      state.isAnalyzing = true;
+      state.analyzingSymbol = symbol;
+      state.analysisResult = null;
+      render();
+
+      try {
+        const queryTerm = `${symbol} share price live stock market news NSE BSE history target today`;
+        const searchData = await makeSerpSearch(queryTerm);
+
+        const organic = (searchData.organic_results || []).slice(0, 5).map(res => ({
+          title: res.title,
+          snippet: res.snippet,
+          link: res.link
+        }));
+
+        const systemPrompt = `You are an elite Indian market analyst. Analyze live Indian market performance (NSE/BSE) for the specified stock.
+
+All currency calculations and display metrics MUST be formatted strictly in Indian Rupees (₹).
+Compare the user's purchase price of ₹${buyPrice} to the current researched value.
+
+Your response must be a single, raw, validated JSON object matching this schema. Avoid any trailing text, markdown formatting or conversation.
 
 {
-  "actionType": "Deconstruct" | "LogExpense" | "LogHabit",
-  "successMessage": "An elegant confirmation note about what has been resolved",
-  "deconstructPayload": {
-    "goalTitle": "The clean title of the major task deconstructed",
-    "steps": [
-      "Step 1 text (Actionable, takes under 15 minutes)",
-      "Step 2 text",
-      "Step 3 text"
-    ]
+  "symbol": "${symbol}",
+  "name": "${name}",
+  "currentPriceINR": "Current market price per share as a number in Indian Rupees (e.g., 2510.50) (number)",
+  "priceChangePercent": "24h change percentage (e.g. '+2.41%' or '-1.25%') (string)",
+  "advisorAction": "Must be: 'BUY_EXTRA' | 'HOLD' | 'REDUCE' | 'SELL_PROFIT' (string)",
+  "decisionReason": "Deep strategic argument in Rupees ₹ explaining why they should Buy, Hold, or Sell/Reduce given their average buy price of ₹${buyPrice} and current market outlook. Citing targets.",
+  "recentHistoryAndVolume": "A check on the stock's recent 1-week/1-month trading volumes, chart trends, and key financial results on BSE/NSE (string)",
+  "sentimentScore": "0 (highly bearish) to 100 (highly bullish) (number)",
+  "detailedTechnicalOutlook": "Comprehensive analyst report in clean markdown paragraphs detailing support/resistance zones, Indian macro triggers, and a short-term 30-day target expectation."
+}`;
+
+        const payload = {
+          contents: [{ parts: [{ text: `Evaluate India stock ${symbol} (${name}). Web scrap results: ${JSON.stringify(organic)}` }] }],
+          systemInstruction: { parts: [{ text: systemPrompt }] },
+          generationConfig: { responseMimeType: "application/json" }
+        };
+
+        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${state.geminiKey}`;
+        const res = await fetchWithBackoff(geminiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const resText = res.candidates?.[0]?.content?.parts?.[0]?.text;
+        const parsed = JSON.parse(resText);
+
+        parsed.sources = organic;
+        parsed.calculatedAt = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) + " IST";
+
+        state.analysisCache[symbol] = parsed;
+        localStorage.setItem('auraindia_analysis_cache', JSON.stringify(state.analysisCache));
+        state.analysisResult = parsed;
+
+        showToast(`${symbol} strategic advisor update completed.`);
+      } catch (err) {
+        console.error(err);
+        showToast('Error analyzing stock. Check credentials and connection.', 'error');
+      } finally {
+        state.isAnalyzing = false;
+        state.analyzingSymbol = null;
+        render();
+      }
+    }
+
+    // --- Discover high momentum 1-Week Swings ---
+    async function scanIndianBreakoutSwings() {
+      if (!state.geminiKey || !state.serpKey) {
+        showToast('Both SerpAPI and Gemini keys are mandatory to evaluate actions.', 'error');
+        state.showSettings = true;
+        document.getElementById('settings-panel').classList.remove('hidden');
+        return;
+      }
+
+      state.isScanning = true;
+      state.discoveryResults = null;
+      render();
+
+      try {
+        const queryTerm = "best breakout stocks NSE India volume momentum 1-week swing trade recommendations today news bse";
+        const searchData = await makeSerpSearch(queryTerm);
+
+        const organic = (searchData.organic_results || []).slice(0, 6).map(res => ({
+          title: res.title,
+          snippet: res.snippet,
+          link: res.link
+        }));
+
+        const systemPrompt = `You are an elite Indian swing trading quantitative strategist. Analyze raw search snippets to discover stocks with high-volume breakout setups poised for growth in a 1-week horizon.
+
+Your primary objective is to select the absolute NO. 1 BEST PICK for the week by rigorously vetting historical breakouts, support/resistance zones, and market news to avoid pump-and-dump traps. Provide additional runners-up.
+
+ALL metrics, prices, entries, target limits, and stop losses MUST be structured in Indian Rupees (₹).
+
+Return a valid raw JSON object matching the schema below. Do not wrap in markdown tags outside.
+
+{
+  "scannedAt": "Current execution date",
+  "marketPulse": "Overview of major Nifty / Sensex sectors spearheading volume breakouts (string)",
+  "absoluteBestPick": {
+    "symbol": "Ticker (e.g. TATASTEEL) (string)",
+    "name": "Indian Company Name (string)",
+    "recentGain": "Recent percentage swing (e.g. '+15.2%') (string)",
+    "entryZone": "Optimal entry value in Indian Rupees (e.g. '₹210 - ₹215') (string)",
+    "target1Week": "1-Week profit target in Indian Rupees (e.g. '₹240') (string)",
+    "stopLoss": "Safety stop-loss in Indian Rupees (e.g. '₹195') (string)",
+    "historicalBackground": "Deep analysis checking 7-day, 14-day, and 50-day volume charts verifying this breakout is structurally sound and has solid historic supports rather than just hype (string)",
+    "breakoutCatalyst": "Fundamental event causing this trigger (e.g., strong earnings beat, massive infrastructure order win) (string)"
   },
-  "expensePayload": {
-    "description": "Item description details",
-    "amount": numeric_amount_value_only
-  },
-  "habitPayload": {
-    "text": "Name of the habit done",
-    "count": numeric_count_completed_or_increment
-  }
-}
+  "highMomentumSwings": [
+    {
+      "symbol": "Ticker symbol (e.g. ZOMATO) (string)",
+      "name": "Indian Company Name (string)",
+      "recentMomentumGain": "Percentage swing in past 3-5 days (e.g. '+12.5%') (string)",
+      "buyEntryZone": "Optimal entry value range in Indian Rupees (e.g. '₹260 - ₹268') (string)",
+      "oneWeekTargetINR": "Calculated exit range target in Indian Rupees with profit target (e.g. '₹295 (+11%)') (string)",
+      "stopLossINR": "Safety stop-loss limit value in Indian Rupees (e.g. '₹245') (string)",
+      "historicalTrendVerification": "A quick historical check over past weeks confirming volume breakout validity (string)",
+      "breakoutTrigger": "The key driver causing this swing (string)"
+    }
+  ]
+}`;
 
-User Command: ${promptInput}
-            `;
+        const payload = {
+          contents: [{ parts: [{ text: `Calculate 1-week swing breakout targets using live stock feeds: ${JSON.stringify(organic)}` }] }],
+          systemInstruction: { parts: [{ text: systemPrompt }] },
+          generationConfig: { responseMimeType: "application/json" }
+        };
 
-            try {
-                let textResult = "";
+        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${state.geminiKey}`;
+        const res = await fetchWithBackoff(geminiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
 
-                try {
-                    const payload = {
-                        contents: [{ parts: [{ text: orchestratorSystemPrompt }] }]
-                    };
-                    const data = await fetchGeminiAPI("gemini-2.5-flash", payload, geminiKey, "v1beta");
-                    textResult = data.candidates[0].content.parts[0].text;
-                } catch (e) {
-                    textResult = await fetchOpenRouterAPI("qwen/qwen3-coder:free", orchestratorSystemPrompt, openRouterKey);
-                }
+        const resText = res.candidates?.[0]?.content?.parts?.[0]?.text;
+        const parsed = JSON.parse(resText);
 
-                integrateCopilotPayload(textResult);
+        state.discoveryResults = parsed;
+        localStorage.setItem('auraindia_discovery_results', JSON.stringify(parsed));
+        showToast('Breakout swing scans evaluated successfully.');
+      } catch (err) {
+        console.error(err);
+        showToast('Breakout scan failed. Review credentials.', 'error');
+      } finally {
+        state.isScanning = false;
+        render();
+      }
+    }
 
-            } catch (err) {
-                alert("Error processing command: " + err.message);
-            }
-        }
+    // --- Import recommended stocks directly ---
+    function importDirect(symbol, name, entry) {
+      const priceVal = parseFloat(entry.split('-')[0].replace(/[^0-9.]/g, '')) || 100.0;
+      
+      const newPos = {
+        id: Date.now().toString(),
+        symbol: symbol.toUpperCase(),
+        name,
+        shares: 10,
+        buyPrice: priceVal
+      };
 
-        function integrateCopilotPayload(jsonStr) {
-            let cleanJson = jsonStr.replace(/```json/g, "").replace(/```/g, "").trim();
+      state.portfolio.push(newPos);
+      localStorage.setItem('auraindia_portfolio', JSON.stringify(state.portfolio));
 
-            try {
-                const data = JSON.parse(cleanJson);
-                
-                if (data.actionType === "Deconstruct" && data.deconstructPayload) {
-                    const cleanGoal = {
-                        id: Date.now(),
-                        title: data.deconstructPayload.goalTitle,
-                        steps: data.deconstructPayload.steps.map((text, index) => ({
-                            id: Date.now() + index,
-                            text: text,
-                            done: false
-                        }))
-                    };
-                    copilotData.goals.unshift(cleanGoal);
-                    switchCopilotTab("tasks");
-                    triggerSystemToast("Task Deconstructed Successfully!");
-                } 
-                else if (data.actionType === "LogExpense" && data.expensePayload) {
-                    copilotData.expenses.unshift({
-                        id: Date.now(),
-                        description: data.expensePayload.description,
-                        amount: Number(data.expensePayload.amount),
-                        date: "07/07/2026"
-                    });
-                    switchCopilotTab("fin");
-                    triggerSystemToast("Expense Logged!");
-                } 
-                else if (data.actionType === "LogHabit" && data.habitPayload) {
-                    copilotData.habits.unshift({
-                        id: Date.now(),
-                        text: data.habitPayload.text,
-                        count: Number(data.habitPayload.count),
-                        date: "07/07/2026"
-                    });
-                    switchCopilotTab("fin");
-                    triggerSystemToast("Habit Logged!");
-                }
+      showToast(`Position ${symbol} registered in portfolio in Indian Rupees ₹.`);
+      switchTab('portfolio');
+    }
 
-                localStorage.setItem('action_copilot_database', JSON.stringify(copilotData));
-                document.getElementById("copilotInput").value = "";
-                renderCopilotPanel();
+    // --- Render System engine (Updates dynamic state) ---
+    function render() {
+      // 1. Update general stats
+      document.getElementById('stat-positions').innerText = `${state.portfolio.length} Positions`;
+      document.getElementById('badge-position-count').innerText = `${state.portfolio.length} Positions`;
 
-            } catch (e) {
-                console.error(e);
-                alert("Compilation parsing failure.");
-            }
-        }
+      const totalCap = state.portfolio.reduce((sum, s) => sum + (s.shares * s.buyPrice), 0);
+      document.getElementById('stat-capital').innerText = "₹" + totalCap.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-        function switchCopilotTab(tab) {
-            activeCopilotSubtab = tab;
-            const taskBtn = document.getElementById("subtab-tasks-btn");
-            const finBtn = document.getElementById("subtab-fin-btn");
+      // 2. Render Left Portfolio List
+      const portList = document.getElementById('portfolio-list');
+      if (state.portfolio.length === 0) {
+        portList.innerHTML = `
+          <div class="text-center py-12 px-4 border border-dashed border-slate-850 rounded-2xl bg-slate-950/40">
+            <p class="text-slate-500 text-xs">No assets registered yet.</p>
+          </div>
+        `;
+      } else {
+        portList.innerHTML = state.portfolio.map(stock => {
+          const cached = state.analysisCache[stock.symbol];
+          const isBeingAnalyzed = state.isAnalyzing && state.analyzingSymbol === stock.symbol;
 
-            if (tab === "tasks") {
-                taskBtn.className = "bg-indigo-600 text-white text-[10px] font-bold px-3 py-1 rounded-lg";
-                finBtn.className = "text-zinc-400 hover:text-white text-[10px] font-bold px-3 py-1 rounded-lg";
-            } else {
-                finBtn.className = "bg-indigo-600 text-white text-[10px] font-bold px-3 py-1 rounded-lg";
-                taskBtn.className = "text-zinc-400 hover:text-white text-[10px] font-bold px-3 py-1 rounded-lg";
-            }
-            renderCopilotPanel();
-        }
+          let badgeHTML = '';
+          if (cached) {
+            const adviceStyle = getActionStyles(cached.advisorAction);
+            badgeHTML = `<span class="text-[8px] px-2 py-0.5 rounded font-extrabold tracking-wide font-mono ${adviceStyle.badge}">${adviceStyle.text}</span>`;
+          }
 
-        function renderCopilotPanel() {
-            const panel = document.getElementById("copilotInteractivePanel");
-            panel.innerHTML = "";
+          return `
+            <div 
+              class="p-4 rounded-2xl border transition-all duration-300 cursor-pointer ${
+                state.analysisResult && state.analysisResult.symbol === stock.symbol
+                  ? 'bg-slate-900 border-indigo-500/80 shadow-lg shadow-indigo-500/5'
+                  : 'bg-slate-900/20 border-slate-800/80 hover:border-slate-750 hover:bg-slate-900/50'
+              }"
+              onclick="selectCachedStock('${stock.symbol}')"
+            >
+              <div class="flex justify-between items-start">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="font-mono text-xs font-black text-white tracking-wide">${stock.symbol}</span>
+                    ${badgeHTML}
+                  </div>
+                  <h4 class="text-[10px] text-slate-500 truncate max-w-[155px] font-medium mt-1">${stock.name}</h4>
+                </div>
 
-            if (activeCopilotSubtab === "tasks") {
-                if (copilotData.goals.length === 0) {
-                    panel.innerHTML = `<p class="text-xs text-zinc-500 py-6 text-center">No active checklists active.</p>`;
-                    return;
-                }
+                <div class="text-right">
+                  <p class="text-[9px] text-slate-500 font-medium">${stock.shares} Shares</p>
+                  <p class="text-xs font-bold text-slate-300 font-mono mt-0.5">₹${stock.buyPrice.toFixed(2)}</p>
+                </div>
+              </div>
 
-                copilotData.goals.forEach(goal => {
-                    const card = document.createElement("div");
-                    card.className = "bg-zinc-900/30 border border-zinc-800 p-4 rounded-xl mb-3 space-y-3";
-                    card.innerHTML = `
-                        <div class="flex justify-between items-center text-xs">
-                            <span class="font-bold text-white">${goal.title}</span>
-                            <button onclick="deleteGoal(${goal.id})" class="text-red-400 text-[10px]">Delete</button>
-                        </div>
-                        <div class="space-y-1.5">
-                            ${goal.steps.map(step => `
-                                <div onclick="toggleStepCheck(${goal.id}, ${step.id})" class="flex items-center gap-2 p-2 bg-zinc-950 border border-zinc-850 rounded-lg text-[11px] cursor-pointer ${step.done ? 'line-through text-zinc-500' : 'text-zinc-300'}">
-                                    <div class="w-3.5 h-3.5 rounded border border-zinc-700 flex items-center justify-center text-[8px] ${step.done ? 'bg-emerald-500 border-emerald-500 text-white' : ''}">
-                                        ${step.done ? '✓' : ''}
-                                    </div>
-                                    <span>${step.text}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                    `;
-                    panel.appendChild(card);
-                });
-            } else {
-                const box = document.createElement("div");
-                box.className = "grid grid-cols-1 md:grid-cols-2 gap-4";
+              <div class="mt-4 flex items-center justify-between border-t border-slate-850 pt-2.5">
+                <button
+                  onclick="event.stopPropagation(); executeIndianAdvisoryCheck('${stock.symbol}', '${stock.name}', ${stock.buyPrice}, ${stock.shares})"
+                  ${state.isAnalyzing ? 'disabled' : ''}
+                  class="text-[9px] uppercase font-bold tracking-widest py-1.5 px-3 rounded-xl border flex items-center gap-1.5 transition-all ${
+                    isBeingAnalyzed 
+                      ? 'bg-slate-950 border-indigo-500 text-indigo-400 cursor-not-allowed'
+                      : 'bg-indigo-600/10 border-indigo-500/20 text-indigo-400 hover:bg-indigo-600 hover:text-white'
+                  }"
+                >
+                  ${isBeingAnalyzed 
+                    ? `<svg class="animate-spin w-3 h-3 text-indigo-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`
+                    : `<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>`
+                  }
+                  <span>Run Advisory</span>
+                </button>
 
-                const expCard = document.createElement("div");
-                expCard.className = "bg-zinc-900/30 border border-zinc-800 p-4 rounded-xl space-y-3";
-                expCard.innerHTML = `
-                    <h4 class="font-bold text-xs text-indigo-400">FINANCES</h4>
-                    <div class="space-y-2">
-                        ${copilotData.expenses.length === 0 ? `<p class="text-[10px] text-zinc-600">No expenses logged.</p>` : ''}
-                        ${copilotData.expenses.map(e => `
-                            <div class="flex justify-between items-center bg-zinc-950 border border-zinc-850 p-2 rounded-lg text-[10px]">
-                                <span class="text-zinc-300">${e.description}</span>
-                                <span class="text-emerald-400 font-bold">Rs. ${e.amount}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-                box.appendChild(expCard);
+                <button
+                  onclick="event.stopPropagation(); removeStock('${stock.id}', '${stock.symbol}')"
+                  class="p-1.5 text-slate-600 hover:text-rose-400 hover:bg-rose-950/20 rounded-xl transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
 
-                const habCard = document.createElement("div");
-                habCard.className = "bg-zinc-900/30 border border-zinc-800 p-4 rounded-xl space-y-3";
-                habCard.innerHTML = `
-                    <h4 class="font-bold text-xs text-indigo-400">HABITS</h4>
-                    <div class="space-y-2">
-                        ${copilotData.habits.length === 0 ? `<p class="text-[10px] text-zinc-600">No habits logged.</p>` : ''}
-                        ${copilotData.habits.map(h => `
-                            <div class="flex justify-between items-center bg-zinc-950 border border-zinc-850 p-2 rounded-lg text-[10px]">
-                                <span class="text-zinc-300">${h.text}</span>
-                                <span class="text-orange-400 font-bold">x${h.count} Done</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-                box.appendChild(habCard);
-
-                panel.appendChild(box);
-            }
-        }
-
-        function toggleStepCheck(goalId, stepId) {
-            const goal = copilotData.goals.find(g => g.id === goalId);
-            if(goal) {
-                const step = goal.steps.find(s => s.id === stepId);
-                if(step) {
-                    step.done = !step.done;
-                    localStorage.setItem('action_copilot_database', JSON.stringify(copilotData));
-                    renderCopilotPanel();
-                }
-            }
-        }
-
-        function deleteGoal(goalId) {
-            copilotData.goals = copilotData.goals.filter(g => g.id !== goalId);
-            localStorage.setItem('action_copilot_database', JSON.stringify(copilotData));
-            renderCopilotPanel();
-        }
-
-        // Live GitHub REST API Deployment Engine
-        async function deployToGitHubLive() {
-            const token = localStorage.getItem("gh_pat_token");
-            const owner = localStorage.getItem("gh_owner") || "SJANGID123";
-            const repo = localStorage.getItem("gh_repo") || "chatbot";
-
-            if(!token) {
-                alert("Please configure a valid GitHub Personal Access Token in Settings to push updates live!");
-                toggleSettingsModal();
-                return;
-            }
-
-            saveCurrentFileContent(false);
-
-            const terminal = document.getElementById("terminalLog");
-            const termContent = document.getElementById("terminalContent");
-            terminal.classList.remove("hidden");
-            termContent.innerHTML = "";
-
-            function logTerminal(message, type = "info") {
-                const colors = { info: "text-zinc-500", success: "text-emerald-400 font-bold", error: "text-rose-400 font-bold" };
-                const time = new Date().toLocaleTimeString();
-                termContent.innerHTML += `<div class="${colors[type]}">[${time}] ${message}</div>`;
-                terminal.scrollTop = terminal.scrollHeight;
-            }
-
-            logTerminal(`⚡ Initializing DevOps deploy branch targeting ${owner}/${repo}...`);
-            const fileKeys = Object.keys(files);
-
-            try {
-                for (const filename of fileKeys) {
-                    logTerminal(`Preparing workspace file: ${filename}...`);
-                    const fileContent = files[filename];
-                    
-                    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${filename}`;
-                    let sha = null;
-
-                    try {
-                        const getRes = await fetch(url, {
-                            headers: { "Authorization": `token ${token}` }
-                        });
-                        if (getRes.ok) {
-                            const data = await getRes.json();
-                            sha = data.sha;
-                        }
-                    } catch(e) {}
-
-                    const encodedData = btoa(unescape(encodeURIComponent(fileContent)));
-
-                    const body = {
-                        message: `Automated cross-platform AI Studio Sync - update ${filename}`,
-                        content: encodedData
-                    };
-                    if (sha) body.sha = sha;
-
-                    const putRes = await fetch(url, {
-                        method: "PUT",
-                        headers: {
-                            "Authorization": `token ${token}`,
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify(body)
-                    });
-
-                    if (putRes.ok) {
-                        logTerminal(`✓ Pushed successfully: ${filename}`, "success");
-                    } else {
-                        const errData = await putRes.json();
-                        throw new Error(`File publish failed on ${filename}: ${errData.message}`);
-                    }
-                }
-
-                logTerminal(`🎉 Deploy Sequence complete! Site rebuilding at: https://${owner.toLowerCase()}.github.io/${repo}/`, "success");
-                triggerAlertToast("Project Pushed to GitHub Pages!");
-
-            } catch (err) {
-                logTerminal(`❌ Deploy Aborted: ${err.message}`, "error");
-            }
-        }
-
-        function appendMessage(sender, text) {
-            const chatContainer = document.getElementById("chatMessages");
-            const div = document.createElement("div");
-            div.className = sender === "user" 
-                ? "bg-indigo-600/10 border border-indigo-500/20 text-indigo-300 rounded-2xl p-4 text-xs leading-relaxed max-w-[90%] ml-auto" 
-                : "bg-[#12121a] border border-zinc-800/60 text-zinc-300 rounded-2xl p-4 text-xs leading-relaxed max-w-[90%]";
+      // 3. Render Right Advisory Desk View
+      const advisoryContainer = document.getElementById('advisory-desk-content');
+      if (state.isAnalyzing) {
+        advisoryContainer.innerHTML = `
+          <div class="bg-slate-900/40 border border-slate-800 rounded-3xl p-10 shadow-2xl text-center space-y-6 shimmer-mask">
+            <div class="flex flex-col items-center justify-center space-y-4">
+              <div class="relative">
+                <div class="absolute inset-0 radar-pulse-ring bg-indigo-500/10 rounded-full w-14 h-14"></div>
+                <div class="bg-indigo-600 p-4 rounded-full text-white relative z-10 animate-bounce">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-sm font-black text-white uppercase tracking-wider">Accessing live market feeds...</h3>
+                <p class="text-xs text-slate-400 max-w-sm mx-auto mt-1 leading-relaxed">
+                  Scraping BSE/NSE tickers via SerpAPI and formatting advice in Indian Rupees (₹) using Gemini 2.5...
+                </p>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (state.analysisResult) {
+        const ar = state.analysisResult;
+        const styles = getActionStyles(ar.advisorAction);
+        
+        advisoryContainer.innerHTML = `
+          <div class="bg-slate-900/40 backdrop-blur-xl border border-slate-850 rounded-3xl shadow-2xl overflow-hidden animate-slideUp pulse-glow-card">
             
-            if(sender === "user") {
-                div.innerHTML = `<p class="font-bold text-indigo-400 mb-1"><i class="fa-solid fa-circle-user mr-1"></i> Developer</p><p>${text}</p>`;
-            } else {
-                div.innerHTML = `<p class="font-bold text-zinc-400 mb-1"><i class="fa-solid fa-gears mr-1"></i> Engine</p><p>${text}</p>`;
-            }
+            <div class="p-6 bg-gradient-to-r ${styles.gradient} border-b border-slate-850 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-mono text-lg font-black text-white">${ar.symbol}</span>
+                  <span class="text-slate-600">|</span>
+                  <h2 class="text-xs font-bold text-slate-300">${ar.name}</h2>
+                </div>
+                <p class="text-[9px] text-slate-500 font-mono tracking-wider uppercase mt-1">Calculated at ${ar.calculatedAt}</p>
+              </div>
 
-            chatContainer.appendChild(div);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+              <span class="text-[10px] font-black tracking-widest px-3.5 py-2 rounded-xl font-mono ${styles.badge}">
+                ${styles.text}
+              </span>
+            </div>
+
+            <div class="p-6 space-y-6">
+              
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="bg-slate-950 p-4 rounded-2xl border border-slate-850/60 flex flex-col justify-between">
+                  <span class="text-[9px] text-slate-500 uppercase font-bold tracking-widest">Researched Price</span>
+                  <div class="mt-2 flex items-baseline gap-2">
+                    <span class="text-base font-black font-mono text-white">₹${ar.currentPriceINR}</span>
+                    <span class="text-[9px] font-bold font-mono ${ar.priceChangePercent.startsWith('+') ? 'text-emerald-400' : 'text-rose-400'}">
+                      ${ar.priceChangePercent}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="bg-slate-950 p-4 rounded-2xl border border-slate-850/60 flex flex-col justify-between">
+                  <span class="text-[9px] text-slate-500 uppercase font-bold tracking-widest">Bullish Sentiment</span>
+                  <div class="mt-2 flex items-center gap-2">
+                    <span class="text-base font-black font-mono text-indigo-400">${ar.sentimentScore}</span>
+                    <span class="text-xs text-slate-400 font-mono">/ 100</span>
+                  </div>
+                </div>
+
+                <div class="bg-slate-950 p-4 rounded-2xl border border-slate-850/60 flex flex-col justify-between">
+                  <span class="text-[9px] text-slate-500 uppercase font-bold tracking-widest">1-Week Outlook</span>
+                  <div class="mt-2 flex items-center gap-1.5">
+                    <span class="text-xs font-bold text-slate-200 uppercase tracking-wider">
+                      ${ar.sentimentScore >= 50 ? '🟢 Breakout Ready' : '🔴 Overbought Risk'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-indigo-950/10 border border-indigo-950/80 p-5 rounded-2xl">
+                <p class="text-[9px] text-indigo-400 uppercase font-extrabold tracking-widest font-mono">AI Action Recommendation (Rupees ₹)</p>
+                <p class="text-xs text-slate-200 mt-1.5 leading-relaxed font-semibold">${ar.decisionReason}</p>
+              </div>
+
+              <div class="bg-slate-950 p-4 rounded-2xl border border-slate-850">
+                <p class="text-[9px] text-slate-500 uppercase font-extrabold tracking-widest">BSE/NSE Volume & History status</p>
+                <p class="text-xs text-slate-300 mt-1.5 leading-relaxed">${ar.recentHistoryAndVolume}</p>
+              </div>
+
+              <div class="space-y-2">
+                <h3 class="text-[10px] uppercase font-bold tracking-wider text-slate-400">Technical Report</h3>
+                <div class="bg-slate-950 p-4 rounded-2xl border border-slate-850 text-xs text-slate-300 leading-relaxed max-h-[220px] overflow-y-auto font-mono">
+                  ${ar.detailedTechnicalOutlook.replace(/\n/g, '<br/>')}
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        `;
+      } else {
+        advisoryContainer.innerHTML = `
+          <div class="bg-slate-900/10 border border-dashed border-slate-800 rounded-3xl p-16 text-center space-y-4">
+            <div class="mx-auto bg-slate-900 p-3.5 rounded-full w-12 h-12 flex items-center justify-center text-indigo-400 border border-slate-800">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+            </div>
+            <div>
+              <h3 class="text-xs font-black text-white uppercase tracking-wider">Trading Advisory Deck</h3>
+              <p class="text-xs text-slate-400 max-w-sm mx-auto mt-1 leading-relaxed">
+                Pick an asset from your monitored NSE/BSE list on the left and click **Run Advisory** to trigger live search scans and plan strategy.
+              </p>
+            </div>
+          </div>
+        `;
+      }
+
+      // 4. Render Discovery content Tab
+      const discoveryContainer = document.getElementById('discovery-desk-content');
+      const btnScan = document.getElementById('btn-scan-breakouts');
+      const textScan = document.getElementById('scan-btn-text');
+      const iconScanSparkle = document.getElementById('scan-icon-sparkle');
+      const iconScanLoader = document.getElementById('scan-icon-loader');
+
+      if (state.isScanning) {
+        btnScan.disabled = true;
+        textScan.innerText = "Analyzing live volume breakouts...";
+        iconScanSparkle.classList.add('hidden');
+        iconScanLoader.classList.remove('hidden');
+      } else {
+        btnScan.disabled = false;
+        textScan.innerText = "Discover Breakouts (₹)";
+        iconScanSparkle.classList.remove('hidden');
+        iconScanLoader.classList.add('hidden');
+      }
+
+      if (state.discoveryResults) {
+        const dr = state.discoveryResults;
+        
+        let swingsHTML = '';
+        if (dr.highMomentumSwings && dr.highMomentumSwings.length > 0) {
+          swingsHTML = dr.highMomentumSwings.map(stock => `
+            <div class="bg-slate-900/40 border border-slate-850 hover:border-slate-800 rounded-3xl p-5 flex flex-col justify-between transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-indigo-500/5 duration-300">
+              <div class="space-y-4">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <span class="font-mono text-base font-black text-white">${stock.symbol}</span>
+                    <h3 class="text-xs font-semibold text-slate-500 mt-1 truncate max-w-[150px]">${stock.name}</h3>
+                  </div>
+                  <span class="text-[10px] font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800/40 font-mono">
+                    ${stock.recentMomentumGain}
+                  </span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 bg-slate-950 p-3.5 rounded-2xl border border-slate-850 font-mono text-xs">
+                  <div>
+                    <p class="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Buy Entry Zone</p>
+                    <p class="text-xs text-white font-black mt-0.5">${stock.buyEntryZone}</p>
+                  </div>
+                  <div>
+                    <p class="text-[9px] text-indigo-400 font-bold uppercase tracking-wider">1-Week Target</p>
+                    <p class="text-xs text-indigo-300 font-black mt-0.5">${stock.oneWeekTargetINR}</p>
+                  </div>
+                </div>
+
+                <div class="flex justify-between items-center text-[10px] text-slate-400 bg-slate-950/50 px-3 py-2 rounded-xl border border-slate-900 font-mono">
+                  <span>🛡️ Safety Stop Loss (INR):</span>
+                  <span class="font-bold text-rose-400">${stock.stopLossINR}</span>
+                </div>
+
+                <div class="space-y-1">
+                  <span class="text-[9px] text-slate-500 uppercase font-bold tracking-widest block">History Check</span>
+                  <p class="text-[11px] text-slate-300 leading-relaxed">${stock.historicalTrendVerification}</p>
+                </div>
+
+                <div class="space-y-1">
+                  <span class="text-[9px] text-indigo-400 uppercase font-bold tracking-widest block">Trigger Catalyst</span>
+                  <p class="text-[11px] text-slate-300 leading-relaxed font-semibold">${stock.breakoutTrigger}</p>
+                </div>
+              </div>
+
+              <button
+                onclick="importDirect('${stock.symbol}', '${stock.name}', '${stock.buyEntryZone || stock.entryZone || '100'}')"
+                class="mt-6 w-full bg-slate-800 hover:bg-indigo-600 text-white text-[10px] font-bold uppercase tracking-wider py-3 px-4 rounded-2xl transition-all flex items-center justify-center gap-1.5 active:scale-95 duration-300"
+              >
+                Import to Portfolio Tracker
+              </button>
+            </div>
+          `).join('');
         }
 
-        function clearChat() {
-            document.getElementById("chatMessages").innerHTML = `
-                <div class="bg-[#12121a] border border-[#1e1e2d] rounded-2xl p-4 text-xs leading-relaxed max-w-[90%]">
-                    <p class="font-bold text-indigo-400 mb-1 flex items-center gap-2">
-                        <i class="fa-solid fa-robot"></i> Workspace Logs Cleaned
+        discoveryContainer.innerHTML = `
+          <div class="space-y-6">
+            
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 bg-slate-900/20 border border-slate-850 px-4 py-3 rounded-xl">
+              <span class="text-[10px] text-slate-500 font-mono tracking-wider">
+                📅 Scanned on: <strong class="text-slate-300">${dr.scannedAt}</strong>
+              </span>
+              <span class="text-xs text-slate-400">
+                Nifty Pulse: <strong class="text-indigo-400 font-semibold">${dr.marketPulse}</strong>
+              </span>
+            </div>
+
+            <!-- Absolute Best Pick Highlight -->
+            <div class="bg-gradient-to-br from-indigo-950/40 via-slate-900/40 to-emerald-950/20 border-2 border-indigo-500/40 rounded-3xl p-6 relative overflow-hidden shadow-2xl animate-slideUp pulse-glow-card">
+              <div class="absolute top-0 right-0 bg-gradient-to-l from-emerald-500 to-indigo-500 text-white font-mono font-black text-[9px] px-4 py-1 rounded-bl-xl tracking-widest uppercase">
+                No.1 High Conviction Breakout Pick
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+                <div class="space-y-4 md:col-span-2">
+                  <div>
+                    <span class="font-mono text-2xl font-black text-white tracking-wide">${dr.absoluteBestPick.symbol}</span>
+                    <h3 class="text-sm font-bold text-slate-400 mt-1">${dr.absoluteBestPick.name}</h3>
+                  </div>
+
+                  <div class="grid grid-cols-3 gap-4">
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-850 font-mono">
+                      <p class="text-[8px] text-slate-500 font-bold uppercase">Optimal Entry</p>
+                      <p class="text-xs text-white font-extrabold mt-0.5">${dr.absoluteBestPick.entryZone}</p>
+                    </div>
+                    <div class="bg-slate-950 p-3 rounded-xl border border-indigo-900/40 font-mono">
+                      <p class="text-[8px] text-indigo-400 font-bold uppercase">1-Week Target</p>
+                      <p class="text-xs text-indigo-300 font-extrabold mt-0.5">${dr.absoluteBestPick.target1Week}</p>
+                    </div>
+                    <div class="bg-slate-950 p-3 rounded-xl border border-rose-900/40 font-mono">
+                      <p class="text-[8px] text-rose-400 font-bold uppercase">Safety Stop Loss</p>
+                      <p class="text-xs text-rose-300 font-extrabold mt-0.5">${dr.absoluteBestPick.stopLoss}</p>
+                    </div>
+                  </div>
+
+                  <div class="space-y-1">
+                    <span class="text-[9px] text-slate-500 uppercase font-black tracking-widest block">Core catalyst driver</span>
+                    <p class="text-xs text-slate-200 leading-relaxed font-semibold">
+                      ${dr.absoluteBestPick.breakoutCatalyst}
                     </p>
-                    <p class="text-zinc-400">Environment cleaned. Ready for new project specifications.</p>
-                </div>`;
-            document.getElementById("terminalLog").classList.add("hidden");
-        }
+                  </div>
+                </div>
 
-        function formatAIResponse(text) {
-            let html = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            
-            const customPattern = '`{3}([a-zA-Z0-9_\\-\\+]+):([a-zA-Z0-9_\\-\\.]+)\\n([\\s\\S]*?)`{3}';
-            const customCodeRegex = new RegExp(customPattern, 'g');
-            html = html.replace(customCodeRegex, (match, lang, file, code) => {
-                return `<div class="bg-[#07070a] border border-indigo-500/20 rounded-xl overflow-hidden my-3">
-                    <div class="bg-[#12121a] border-b border-[#1e1e2d] px-3.5 py-1.5 flex items-center justify-between text-xs font-mono font-bold text-indigo-400">
-                        <span><i class="fa-solid fa-file-code"></i> Autowritten: ${file}</span>
-                        <span class="text-[9px] uppercase bg-indigo-500/10 px-2 py-0.5 rounded text-indigo-400">${lang}</span>
-                    </div>
-                    <pre class="p-3 text-[11px] overflow-x-auto code-font text-emerald-400"><code>${code.trim()}</code></pre>
-                </div>`;
-            });
+                <div class="bg-slate-950/80 border border-slate-850 p-5 rounded-2xl flex flex-col justify-between">
+                  <div class="space-y-2">
+                    <span class="text-[9px] text-indigo-400 uppercase font-extrabold tracking-widest flex items-center gap-1">
+                      📈 Verified Historical Context
+                    </span>
+                    <p class="text-[11px] text-slate-300 leading-relaxed leading-normal">
+                      ${dr.absoluteBestPick.historicalBackground}
+                    </p>
+                  </div>
 
-            const standardPattern = '`{3}(?:[a-zA-Z]+)?\\n([\\s\\S]*?)`{3}';
-            const standardCodeRegex = new RegExp(standardPattern, 'g');
-            html = html.replace(standardCodeRegex, (match, code) => {
-                return `<pre class="bg-[#07070a] border border-[#1e1e2d] p-3 rounded-xl text-[11px] overflow-x-auto my-3 code-font text-zinc-400"><code>${code.trim()}</code></pre>`;
-            });
+                  <button
+                    onclick="importDirect('${dr.absoluteBestPick.symbol}', '${dr.absoluteBestPick.name}', '${dr.absoluteBestPick.entryZone || '100'}')"
+                    class="mt-4 w-full bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] font-bold uppercase tracking-wider py-2.5 rounded-xl transition-all shadow-md active:scale-95"
+                  >
+                    Add directly to advisory tracker
+                  </button>
+                </div>
+              </div>
+            </div>
 
-            return html.replace(/\n/g, "<br>");
-        }
+            <!-- Runner up breakouts -->
+            <div class="space-y-3">
+              <h3 class="text-[10px] uppercase font-black text-slate-400 tracking-wider">Alternative Breakout candidates</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                ${swingsHTML}
+              </div>
+            </div>
 
-        function triggerAlertToast(msg) {
-            const toast = document.getElementById("toast");
-            toast.innerText = msg;
-            toast.classList.remove("opacity-0", "translate-y-3");
-            
-            setTimeout(() => {
-                toast.classList.add("opacity-0", "translate-y-3");
-            }, 3000);
-        }
-    </script>
+          </div>
+        `;
+      } else {
+        discoveryContainer.innerHTML = `
+          <div class="bg-slate-900/20 border border-dashed border-slate-800 rounded-3xl p-16 text-center space-y-4">
+            <div class="mx-auto bg-slate-900 p-3.5 rounded-full w-12 h-12 flex items-center justify-center text-indigo-400 border border-slate-800">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+            </div>
+            <div>
+              <h3 class="text-xs font-black text-white uppercase tracking-wider">No Active Discoveries Scanned</h3>
+              <p class="text-xs text-slate-400 max-w-sm mx-auto mt-1 leading-relaxed">
+                Click **Discover Breakouts** to run high-volume momentum scans and extract active breakouts on BSE/NSE.
+              </p>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // --- Retrieve state-driven color structures ---
+    function getActionStyles(action) {
+      switch (action) {
+        case 'BUY_EXTRA':
+          return {
+            text: '🎯 BUY EXTRA',
+            badge: 'bg-emerald-950/80 text-emerald-400 border border-emerald-500/30',
+            gradient: 'from-emerald-950/20 to-slate-900/60 border-emerald-500/20'
+          };
+        case 'SELL_PROFIT':
+          return {
+            text: '💰 TAKE PROFIT',
+            badge: 'bg-indigo-950/80 text-indigo-400 border border-indigo-500/30',
+            gradient: 'from-indigo-950/20 to-slate-900/60 border-indigo-500/20'
+          };
+        case 'REDUCE':
+          return {
+            text: '⚠️ REDUCE POSITION',
+            badge: 'bg-rose-950/80 text-rose-400 border border-rose-500/30',
+            gradient: 'from-rose-950/20 to-slate-900/60 border-rose-500/20'
+          };
+        default:
+          return {
+            text: '⏸️ HOLD POSITION',
+            badge: 'bg-amber-950/80 text-amber-400 border border-amber-500/30',
+            gradient: 'from-amber-950/20 to-slate-900/60 border-amber-500/20'
+          };
+      }
+    }
+
+    // --- Handle local stock selection ---
+    function selectCachedStock(symbol) {
+      if (state.analysisCache[symbol]) {
+        state.analysisResult = state.analysisCache[symbol];
+        render();
+      }
+    }
+  </script>
 </body>
 </html>
 
