@@ -3,91 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Stock Companion</title>
+    <title>AI Indian Stock Pulse (Multi-Model Consensus)</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
-        .loader { border-top-color: #3498db; animation: spin 1s linear infinite; }
+        .loader { border-top-color: #06b6d4; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-100 font-sans min-h-screen pb-12">
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen pb-12">
 
-    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50 shadow-md">
-        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 class="text-xl font-bold tracking-wide text-cyan-400">⚡ AI Stock Pulse</h1>
-            <div class="flex space-x-2 bg-slate-900 p-1 rounded-lg border border-slate-700">
-                <button id="tab-analysis-btn" onclick="switchTab('analysis')" class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md transition bg-cyan-500 text-slate-950">My Portfolio</button>
-                <button id="tab-penny-btn" onclick="switchTab('penny')" class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md transition text-slate-400 hover:text-white">🚀 Penny Finder</button>
-                <button id="tab-keys-btn" onclick="switchTab('keys')" class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md transition text-slate-400 hover:text-white">⚙️ Keys</button>
+    <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-50 shadow-md backdrop-blur-md bg-opacity-95">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-2">
+                <span class="text-2xl">🇮🇳</span>
+                <h1 class="text-xl font-black tracking-wider text-cyan-400">AI STOCK PULSE <span class="text-xs text-slate-500 font-normal">v2.0</span></h1>
+            </div>
+            <div class="flex space-x-2 bg-slate-950 p-1 rounded-xl border border-slate-800 w-full sm:w-auto justify-center">
+                <button id="tab-analysis-btn" onclick="switchTab('analysis')" class="flex-1 sm:flex-none px-4 py-2 text-xs font-bold rounded-lg transition bg-cyan-500 text-slate-950">🇮🇳 NSE/BSE Pulse</button>
+                <button id="tab-penny-btn" onclick="switchTab('penny')" class="flex-1 sm:flex-none px-4 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white">🚀 Penny Finder</button>
+                <button id="tab-keys-btn" onclick="switchTab('keys')" class="flex-1 sm:flex-none px-4 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white">⚙️ Keys</button>
             </div>
         </div>
     </header>
 
-    <main class="max-w-4xl mx-auto px-4 mt-6">
+    <main class="max-w-5xl mx-auto px-4 mt-6">
 
-        <div id="setup-warning" class="hidden bg-amber-950/40 border border-amber-500 text-amber-200 p-4 rounded-xl mb-6 text-sm flex justify-between items-center">
-            <span>⚠️ <strong>Setup Required:</strong> Please configure your API Keys in the Keys tab first.</span>
-            <button onclick="switchTab('keys')" class="bg-amber-500 text-slate-950 px-3 py-1 rounded-md font-bold text-xs">Go Set Keys</button>
+        <div id="setup-warning" class="hidden bg-amber-950/40 border border-amber-500/30 text-amber-200 p-4 rounded-xl mb-6 text-xs sm:text-sm flex justify-between items-center">
+            <span>⚠️ <strong>Setup Required:</strong> Configure your Keys (Gemini, Serper, OpenRouter) to initiate multi-model scans.</span>
+            <button onclick="switchTab('keys')" class="bg-amber-500 text-slate-950 px-3 py-1 rounded-md font-bold text-xs">Set Keys</button>
         </div>
 
         <section id="tab-analysis" class="space-y-6">
-            <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-xl">
-                <h2 class="text-lg font-semibold mb-2 text-slate-200">Analyze Ticker</h2>
-                <p class="text-xs text-slate-400 mb-4">Input any stock symbol to scan live web context and generate a strict consensus action.</p>
-                <div class="flex gap-2">
-                    <input id="ticker-input" type="text" placeholder="e.g. AAPL, TSLA, NVDA" class="flex-1 bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 uppercase font-bold tracking-wider focus:outline-none focus:border-cyan-400 text-white">
-                    <button onclick="runPortfolioAnalysis()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 px-6 font-bold rounded-xl transition shadow-lg shadow-cyan-500/10 active:scale-95">Scan</button>
+            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl">
+                <h2 class="text-lg font-bold mb-1 text-slate-200">One-Click Multi-AI Engine</h2>
+                <p class="text-xs text-slate-400 mb-4">Queries Gemini & OpenRouter simultaneously. Optimized for Indian markets (e.g., INFY, TATAMOTORS, RELIANCE).</p>
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <input id="ticker-input" type="text" placeholder="e.g., RELIANCE, TCS, ZOMATO" class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3.5 uppercase font-bold tracking-wider focus:outline-none focus:border-cyan-400 text-white">
+                    <button onclick="runMultiModelAnalysis()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 px-8 font-black rounded-xl transition shadow-lg shadow-cyan-500/10 py-3.5 sm:py-0">RUN ALL MODELS</button>
                 </div>
             </div>
 
-            <div id="analysis-output-box" class="hidden bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl relative overflow-hidden">
-                <div id="analysis-loader" class="hidden flex flex-col items-center justify-center py-8">
-                    <div class="loader ease-linear rounded-full border-4 border-t-4 border-slate-700 h-12 w-12 mb-4"></div>
-                    <p class="text-sm text-slate-400 animate-pulse">Running consensus engines (Gemini & Fallbacks)...</p>
+            <div id="analysis-loader" class="hidden bg-slate-900 p-8 rounded-2xl border border-slate-800 text-center">
+                <div class="loader ease-linear rounded-full border-4 border-slate-950 h-12 w-12 mb-4 mx-auto"></div>
+                <p class="text-sm font-medium text-cyan-400 animate-pulse">Gathering live Indian market telemetry & firing all AI models in parallel...</p>
+            </div>
+
+            <div id="analysis-output-box" class="hidden space-y-6">
+                <div class="bg-gradient-to-br from-slate-900 to-slate-950 p-6 rounded-2xl border-2 border-cyan-500/30 shadow-2xl">
+                    <h3 class="text-xs uppercase font-black tracking-widest text-cyan-400 mb-2">🇮🇳 Aggregated Indian Market Verdict</h3>
+                    <div id="consensus-verdict-target"></div>
                 </div>
-                <div id="analysis-content" class="prose prose-invert max-w-none text-slate-300"></div>
+
+                <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider pl-1">Individual Model Responses</h3>
+                <div id="model-responses-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
             </div>
         </section>
 
         <section id="tab-penny" class="hidden space-y-6">
-            <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl text-center">
-                <div class="inline-flex bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full text-xs font-semibold mb-3 border border-amber-500/20">🔥 1-2 Week High Volatility</div>
-                <h2 class="text-xl font-bold mb-2">Breakout Penny Stock Scanner</h2>
-                <p class="text-sm text-slate-400 max-w-md mx-auto mb-6">Uses SerpAPI to pull extreme-momentum spikes under $5, then filters them through active AI parameters.</p>
-                <button onclick="runPennyScanner()" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-8 py-3.5 rounded-xl transition shadow-lg shadow-amber-500/10 active:scale-95">Discover Best Pick</button>
+            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl text-center">
+                <div class="inline-flex bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full text-xs font-semibold mb-3 border border-amber-500/20">🔥 Indian Exchanges Breakout Matrix</div>
+                <h2 class="text-xl font-black mb-2">High-Yield Short Term Indian Penny Finder</h2>
+                <p class="text-sm text-slate-400 max-w-md mx-auto mb-6">Scours live NSE/BSE breakouts under ₹50, executing an aggregated filter across all models simultaneously to spot 1-2 week momentum setups.</p>
+                <button onclick="runMultiModelPennyScanner()" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-8 py-4 rounded-xl transition shadow-lg">DISCOVER CONSENSUS PENNY PICK</button>
             </div>
 
-            <div id="penny-output-box" class="hidden bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl relative overflow-hidden">
-                <div id="penny-loader" class="hidden flex flex-col items-center justify-center py-8">
-                    <div class="loader ease-linear rounded-full border-4 border-t-4 border-slate-700 h-12 w-12 mb-4"></div>
-                    <p class="text-sm text-slate-400 animate-pulse">Scanning news clusters and evaluating risk profiles...</p>
+            <div id="penny-loader" class="hidden bg-slate-900 p-8 rounded-2xl border border-slate-800 text-center">
+                <div class="loader ease-linear rounded-full border-4 border-slate-950 h-12 w-12 mb-4 mx-auto"></div>
+                <p class="text-sm font-medium text-amber-400 animate-pulse">Running full-spectrum parallel execution across free-tier pipelines...</p>
+            </div>
+
+            <div id="penny-output-box" class="hidden space-y-6">
+                <div class="bg-gradient-to-br from-slate-900 to-slate-950 p-6 rounded-2xl border-2 border-amber-500/30 shadow-2xl">
+                    <h3 class="text-xs uppercase font-black tracking-widest text-amber-400 mb-2">🏆 Selected Indian Breakout Target</h3>
+                    <div id="penny-consensus-target"></div>
                 </div>
-                <div id="penny-content" class="prose prose-invert max-w-none text-slate-300"></div>
+                <div id="penny-responses-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
             </div>
         </section>
 
         <section id="tab-keys" class="hidden space-y-6">
-            <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
-                <h2 class="text-lg font-bold text-cyan-400 mb-2">Browser Storage API Manager</h2>
-                <p class="text-xs text-slate-400 mb-6">Keys are saved locally in this device's browser vault. They are never sent to a server.</p>
+            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl">
+                <h2 class="text-lg font-bold text-cyan-400 mb-1">Local Browser Storage Settings</h2>
+                <p class="text-xs text-slate-400 mb-6">Keys save inside this specific device's browser instance memory. Perfect for GitHub Pages usage.</p>
                 
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Gemini API Key</label>
-                        <input id="key-gemini" type="password" placeholder="AI Studio Key..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-cyan-400 text-white">
+                        <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Gemini API Key</label>
+                        <input id="key-gemini" type="password" placeholder="AI Studio Key..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">OpenRouter Key (Optional Fallback)</label>
-                        <input id="key-openrouter" type="password" placeholder="sk-or-v1-..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-cyan-400 text-white">
+                        <label class="block text-xs font-bold uppercase text-slate-400 mb-1">OpenRouter API Key</label>
+                        <input id="key-openrouter" type="password" placeholder="sk-or-v1-..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">SerpAPI Search Key</label>
-                        <input id="key-serp" type="password" placeholder="SerpAPI Key..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-cyan-400 text-white">
+                        <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Serper.dev Search Key (CORS Free)</label>
+                        <input id="key-serper" type="password" placeholder="Get a free key from serper.dev..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400">
                     </div>
                     
                     <div class="pt-4 flex gap-2">
-                        <button onclick="saveKeysToStorage()" class="flex-1 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3 rounded-xl transition text-sm">Save Keys on Device</button>
-                        <button onclick="clearKeysFromStorage()" class="bg-slate-700 hover:bg-slate-600 text-rose-400 font-medium px-4 rounded-xl transition text-sm">Clear</button>
+                        <button onclick="saveKeys()" class="flex-1 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black py-3.5 rounded-xl transition text-sm">Save Cryptographically to Device</button>
+                        <button onclick="clearKeys()" class="bg-slate-800 hover:bg-slate-700 text-rose-400 font-bold px-5 rounded-xl transition text-sm">Reset</button>
                     </div>
                 </div>
             </div>
@@ -95,188 +110,267 @@
     </main>
 
     <script>
-        // Check local storage configurations on startup
-        function initializeApp() {
-            const gemini = localStorage.getItem('STOCKS_GEMINI_KEY');
-            const serp = localStorage.getItem('STOCKS_SERP_KEY');
+        // Start check up
+        function init() {
+            const g = localStorage.getItem('IND_GEMINI_KEY');
+            const s = localStorage.getItem('IND_SERPER_KEY');
+            const o = localStorage.getItem('IND_OPENROUTER_KEY');
             
-            // Populate config fields if they already exist
-            if(gemini) document.getElementById('key-gemini').value = gemini;
-            if(localStorage.getItem('STOCKS_OPENROUTER_KEY')) document.getElementById('key-openrouter').value = localStorage.getItem('STOCKS_OPENROUTER_KEY');
-            if(serp) document.getElementById('key-serp').value = serp;
+            if(g) document.getElementById('key-gemini').value = g;
+            if(o) document.getElementById('key-openrouter').value = o;
+            if(s) document.getElementById('key-serper').value = s;
 
-            if (!gemini || !serp) {
+            if (!g || !s) {
                 document.getElementById('setup-warning').classList.remove('hidden');
             } else {
                 document.getElementById('setup-warning').classList.add('hidden');
             }
         }
-        window.onload = initializeApp;
+        window.onload = init;
 
-        function saveKeysToStorage() {
-            localStorage.setItem('STOCKS_GEMINI_KEY', document.getElementById('key-gemini').value.trim());
-            localStorage.setItem('STOCKS_OPENROUTER_KEY', document.getElementById('key-openrouter').value.trim());
-            localStorage.setItem('STOCKS_SERP_KEY', document.getElementById('key-serp').value.trim());
-            alert('Saved successfully! Your credentials are bound encrypted locally inside this browser device storage.');
-            initializeApp();
+        function saveKeys() {
+            localStorage.setItem('IND_GEMINI_KEY', document.getElementById('key-gemini').value.trim());
+            localStorage.setItem('IND_OPENROUTER_KEY', document.getElementById('key-openrouter').value.trim());
+            localStorage.setItem('IND_SERPER_KEY', document.getElementById('key-serper').value.trim());
+            alert('Keys stored locally on this machine/tablet browser config layer.');
+            init();
             switchTab('analysis');
         }
 
-        function clearKeysFromStorage() {
-            if(confirm('Wipe credentials from this browser local partition?')) {
-                localStorage.removeItem('STOCKS_GEMINI_KEY');
-                localStorage.removeItem('STOCKS_OPENROUTER_KEY');
-                localStorage.removeItem('STOCKS_SERP_KEY');
+        function clearKeys() {
+            if(confirm('Wipe local device key cache?')) {
+                localStorage.removeItem('IND_GEMINI_KEY');
+                localStorage.removeItem('IND_OPENROUTER_KEY');
+                localStorage.removeItem('IND_SERPER_KEY');
                 document.getElementById('key-gemini').value = "";
                 document.getElementById('key-openrouter').value = "";
-                document.getElementById('key-serp').value = "";
-                initializeApp();
+                document.getElementById('key-serper').value = "";
+                init();
             }
         }
 
-        // Handle Responsive Tab Switching
         function switchTab(tab) {
-            const tabs = ['analysis', 'penny', 'keys'];
-            tabs.forEach(t => {
+            ['analysis', 'penny', 'keys'].forEach(t => {
                 const btn = document.getElementById(`tab-${t}-btn`);
-                const section = document.getElementById(`tab-${t}`);
-                
+                const sec = document.getElementById(`tab-${t}`);
                 if (t === tab) {
-                    btn.className = `px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md transition ${t === 'penny' ? 'bg-amber-500 text-slate-950' : 'bg-cyan-500 text-slate-950'}`;
-                    section.classList.remove('hidden');
+                    btn.className = `px-4 py-2 text-xs font-bold rounded-lg transition ${t === 'penny' ? 'bg-amber-500 text-slate-950' : 'bg-cyan-500 text-slate-950'}`;
+                    sec.classList.remove('hidden');
                 } else {
-                    btn.className = "px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md transition text-slate-400 hover:text-white";
-                    section.classList.add('hidden');
+                    btn.className = "px-4 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white";
+                    sec.classList.add('hidden');
                 }
             });
         }
 
-        // Live Search Handler via SerpAPI
-        async function fetchMarketContext(query) {
-            const serpKey = localStorage.getItem('STOCKS_SERP_KEY');
-            if(!serpKey) return "Missing Search Engine key context.";
+        // Live Search Query Engine utilizing Serper.dev (No CORS errors)
+        async function fetchIndianMarketData(searchQuery) {
+            const key = localStorage.getItem('IND_SERPER_KEY');
+            if(!key) return "No live data available without a search key.";
             try {
-                const url = `https://serpapi.com/search.json?q=${encodeURIComponent(query)}&api_key=${serpKey}`;
-                const res = await fetch(url);
+                const res = await fetch("https://google.serper.dev/search", {
+                    method: "POST",
+                    headers: { "X-API-KEY": key, "Content-Type": "application/json" },
+                    body: JSON.stringify({ q: searchQuery, gl: "in", hl: "en" })
+                });
                 const data = await res.json();
-                return data.organic_results?.slice(0, 5).map(r => `${r.title}: ${r.snippet}`).join("\n") || "No historical web data match.";
-            } catch {
-                return "Failed to grab search engine sentiment context.";
+                return data.organic?.slice(0, 6).map(item => `Title: ${item.title}\nSnippet: ${item.snippet}`).join("\n\n") || "No local market context found.";
+            } catch (e) {
+                return "Error accessing live telemetry context.";
             }
         }
 
-        // Run multi-model chain
-        async function executeAiPrompt(prompt) {
-            const geminiKey = localStorage.getItem('STOCKS_GEMINI_KEY');
-            const orKey = localStorage.getItem('STOCKS_OPENROUTER_KEY');
-
-            // 1. Try Gemini
-            if (geminiKey) {
-                try {
-                    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`;
-                    const res = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-                    });
-                    const data = await res.json();
-                    if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
-                        return data.candidates[0].content.parts[0].text;
-                    }
-                } catch (e) { console.log("Primary Gemini pipeline failed, jumping down to fallbacks...", e); }
-            }
-
-            // 2. Try OpenRouter Cascade Pool
-            const fallbacks = ["deepseek/deepseek-r1:free", "meta-llama/llama-3.3-70b-instruct:free", "google/gemma-3-27b-it:free"];
-            if (orKey) {
-                for (let model of fallbacks) {
-                    try {
-                        const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-                            method: "POST",
-                            headers: {
-                                "Authorization": `Bearer ${orKey}`,
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({ model: model, messages: [{ role: "user", content: prompt }] })
-                        });
-                        const data = await res.json();
-                        if (data.choices?.[0]?.message?.content) {
-                            return `*(Fallback Match Engine: ${model.split('/')[1]})*\n\n${data.choices[0].message.content}`;
-                        }
-                    } catch (e) { console.log(`Fallback ${model} rate-limited.`); }
-                }
-            }
-            return "❌ Error: All configured free model pipelines are currently rate-limited or keys are incorrect.";
+        // Parallel Endpoint Generators
+        async function fetchGemini(prompt, key) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`;
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+            });
+            const data = await res.json();
+            return data.candidates[0].content.parts[0].text;
         }
 
-        async function runPortfolioAnalysis() {
+        async function fetchOpenRouter(model, prompt, key) {
+            const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+                method: "POST",
+                headers: { "Authorization": `Bearer ${key}`, "Content-Type": "application/json" },
+                body: JSON.stringify({ model: model, messages: [{ role: "user", content: prompt }] })
+            });
+            const data = await res.json();
+            return data.choices[0].message.content;
+        }
+
+        // ONE CLICK MULTI MODEL SYSTEM PIPELINE
+        async function runMultiModelAnalysis() {
             const ticker = document.getElementById('ticker-input').value.trim().toUpperCase();
-            if(!ticker) return alert("Please type a ticker symbol.");
+            if(!ticker) return alert("Enter an Indian Ticker (e.g. TATAMOTORS)");
 
-            const box = document.getElementById('analysis-output-box');
             const loader = document.getElementById('analysis-loader');
-            const content = document.getElementById('analysis-content');
+            const outputBox = document.getElementById('analysis-output-box');
+            const consensusTarget = document.getElementById('consensus-verdict-target');
+            const grid = document.getElementById('model-responses-grid');
 
-            box.classList.remove('hidden');
             loader.classList.remove('hidden');
-            content.innerHTML = "";
+            outputBox.classList.add('hidden');
+            grid.innerHTML = "";
 
-            const webContext = await fetchMarketContext(`${ticker} stock simple evaluation news update trends`);
+            const liveContext = await fetchIndianMarketData(`${ticker} stock share price targets news india bse nse`);
+
+            const prompt = `
+            You are an Indian stock market analytics engine. Evaluate this live telemetry for ${ticker}:
+            "${liveContext}"
+
+            Provide your assessment using Indian terminology (Crores, Lakhs, INR, NSE/BSE).
+            You MUST answer in this format:
+            VERDICT: [BUY, SELL, or STAY]
+            REASON: [One simple, short sentence explaining why in plain English]
+            `;
+
+            const gKey = localStorage.getItem('IND_GEMINI_KEY');
+            const oKey = localStorage.getItem('IND_OPENROUTER_KEY');
+
+            // Define executing queues
+            const tasks = [];
+            const modelNames = [];
+
+            if(gKey) { tasks.push(fetchGemini(prompt, gKey)); modelNames.push("Gemini 2.5 Flash"); }
+            if(oKey) {
+                tasks.push(fetchOpenRouter("deepseek/deepseek-r1:free", prompt, oKey)); modelNames.push("DeepSeek R1 (Free)");
+                tasks.push(fetchOpenRouter("meta-llama/llama-3.3-70b-instruct:free", prompt, oKey)); modelNames.push("Llama 3.3 70B (Free)");
+                tasks.push(fetchOpenRouter("google/gemma-3-27b-it:free", prompt, oKey)); modelNames.push("Gemma 3 27B (Free)");
+            }
+
+            if(tasks.length === 0) {
+                loader.classList.add('hidden');
+                return alert("Please insert at least one LLM API key.");
+            }
+
+            // ONE CLICK PARALLEL PROMISE EXECUTION
+            const results = await Promise.allSettled(tasks);
             
-            const prompt = `
-            You are a blunt financial engine. Evaluate this context for ticker ${ticker}:
-            "${webContext}"
+            let buys = 0, sells = 0, stays = 0;
+            let combinedReasonText = "";
 
-            Your task is to return a clear verdict. Present your response exactly in this layout format:
-            # Ticker: ${ticker}
-            ## Action: [SELL, BUY, or STAY]
-            **Simple Reason:** [One short sentence explaining why in elementary simple English terms]
+            results.forEach((res, index) => {
+                const name = modelNames[index];
+                let content = res.status === "fulfilled" ? res.value : "❌ Connection Throttled / Model Error";
+                
+                // Track Vote Counts
+                if (content.toUpperCase().includes("VERDICT: BUY")) buys++;
+                else if (content.toUpperCase().includes("VERDICT: SELL")) sells++;
+                else if (content.toUpperCase().includes("VERDICT: STAY")) stays++;
+
+                // Clean data for card presentation
+                let cleanHtml = content.replace(/\n/g, "<br>").replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+                grid.innerHTML += `
+                    <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 shadow-md">
+                        <div class="text-xs text-cyan-400 font-bold mb-2 tracking-wide border-b border-slate-800 pb-1">${name}</div>
+                        <p class="text-xs text-slate-300 leading-relaxed">${cleanHtml}</p>
+                    </div>
+                `;
+            });
+
+            // Calculate Indian Consensus Matrix
+            let finalDecision = "STAY / HOLD";
+            let colorClass = "bg-amber-500/10 text-amber-400 border-amber-500/30";
+            if (buys >= sells && buys >= stays) { finalDecision = "BUY / ACCUMULATE"; colorClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"; }
+            else if (sells > buys && sells >= stays) { finalDecision = "SELL / LIQUIDATE"; colorClass = "bg-rose-500/10 text-rose-400 border-rose-500/30"; }
+
+            consensusTarget.innerHTML = `
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-2">
+                    <div>
+                        <div class="text-3xl font-black tracking-tight text-white">${ticker}</div>
+                        <div class="text-xs text-slate-400 mt-1">Consensus Poll: ${buys} Buy(s), ${sells} Sell(s), ${stays} Stay(s)</div>
+                    </div>
+                    <div class="px-6 py-3 rounded-xl border text-center font-black tracking-wider text-sm sm:text-base ${colorClass}">
+                        ${finalDecision}
+                    </div>
+                </div>
             `;
 
-            const finalReply = await executeAiPrompt(prompt);
             loader.classList.add('hidden');
-            content.innerHTML = parseSimpleMarkdown(finalReply);
+            outputBox.classList.remove('hidden');
         }
 
-        async function runPennyScanner() {
-            const box = document.getElementById('penny-output-box');
+        // ONE CLICK PENNY STOCK DISCOVERY CONVERTER 
+        async function runMultiModelPennyScanner() {
             const loader = document.getElementById('penny-loader');
-            const content = document.getElementById('penny-content');
+            const outputBox = document.getElementById('penny-output-box');
+            const consensusTarget = document.getElementById('penny-consensus-target');
+            const grid = document.getElementById('penny-responses-grid');
 
-            box.classList.remove('hidden');
             loader.classList.remove('hidden');
-            content.innerHTML = "";
+            outputBox.classList.add('hidden');
+            grid.innerHTML = "";
 
-            const webContext = await fetchMarketContext("top momentum moving target penny stocks under 5 dollars finance data");
+            const liveContext = await fetchIndianMarketData("top volume breakout penny stocks under 50 rs nse bse indicators short term profit stocks");
 
             const prompt = `
-            Review these market parameters:
-            "${webContext}"
+            Review this Indian stock market context listing top gaining/volume stocks under ₹50:
+            "${liveContext}"
 
-            Identify exactly ONE penny stock under $5 positioned for massive volatility and percentage profit inside a short-term 1-2 week setup.
-            Respond in this simple micro-layout:
-            # Recommended Pick: [SYMBOL]
-            * **Target Window:** 1-2 Weeks
-            * **Danger Level:** High
-            * **Why It Will Pop:** [One short, simple explanation sentence]
+            Extract ONE precise Indian ticker matching high-momentum targets over the next 1-2 weeks.
+            Format your response exactly as follows:
+            TICKER: [SYMBOL]
+            PROFIT TARGET: [Expected % Profit in 1-2 weeks]
+            CATALYST: [One sentence explaining why in plain English]
             `;
 
-            const finalReply = await executeAiPrompt(prompt);
-            loader.classList.add('hidden');
-            content.innerHTML = parseSimpleMarkdown(finalReply);
-        }
+            const gKey = localStorage.getItem('IND_GEMINI_KEY');
+            const oKey = localStorage.getItem('IND_OPENROUTER_KEY');
 
-        // Custom renderer wrapper
-        function parseSimpleMarkdown(text) {
-            return text
-                .replace(/^# (.*)$/gim, '<h1 class="text-2xl font-black text-white border-b border-slate-700 pb-2 mb-4">$1</h1>')
-                .replace(/^## Action: SELL(.*)$/gim, '<div class="bg-rose-500/10 text-rose-400 border border-rose-500/30 p-4 rounded-xl font-bold text-xl inline-block my-2">🔴 ACTION: SELL</div>')
-                .replace(/^## Action: BUY(.*)$/gim, '<div class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 p-4 rounded-xl font-bold text-xl inline-block my-2">🟢 ACTION: BUY</div>')
-                .replace(/^## Action: STAY(.*)$/gim, '<div class="bg-amber-500/10 text-amber-400 border border-amber-500/30 p-4 rounded-xl font-bold text-xl inline-block my-2">🟡 ACTION: STAY / HOLD</div>')
-                .replace(/^## (.*)$/gim, '<h2 class="text-lg font-bold text-cyan-400 mt-3">$1</h2>')
-                .replace(/\*\*(.*?)\*\//g, '<strong class="text-cyan-300">$1</strong>')
-                .replace(/^\* (.*)$/gim, '<li class="ml-4 list-disc text-slate-300">$1</li>')
-                .replace(/\n/g, '<br>');
+            const tasks = [];
+            const modelNames = [];
+
+            if(gKey) { tasks.push(fetchGemini(prompt, gKey)); modelNames.push("Gemini 2.5 Flash"); }
+            if(oKey) {
+                tasks.push(fetchOpenRouter("deepseek/deepseek-r1:free", prompt, oKey)); modelNames.push("DeepSeek R1 (Free)");
+                tasks.push(fetchOpenRouter("meta-llama/llama-3.3-70b-instruct:free", prompt, oKey)); modelNames.push("Llama 3.3 70B (Free)");
+            }
+
+            if(tasks.length === 0) {
+                loader.classList.add('hidden');
+                return alert("Please map your API tokens in the settings partition first.");
+            }
+
+            const results = await Promise.allSettled(tasks);
+            let targetStock = "SCANNING ERROR";
+
+            results.forEach((res, index) => {
+                const name = modelNames[index];
+                let content = res.status === "fulfilled" ? res.value : "❌ Rate Limited";
+                
+                // Simple parser to pull target ticker code out
+                if(targetStock === "SCANNING ERROR" && content.includes("TICKER:")) {
+                    const match = content.split("TICKER:")[1]?.split("\n")[0]?.trim();
+                    if(match) targetStock = match;
+                }
+
+                grid.innerHTML += `
+                    <div class="bg-slate-900 p-5 rounded-xl border border-slate-800">
+                        <div class="text-xs text-amber-400 font-bold mb-1 tracking-wide border-b border-slate-800 pb-1">${name}</div>
+                        <p class="text-xs text-slate-300 leading-relaxed">${content.replace(/\n/g, "<br>")}</p>
+                    </div>
+                `;
+            });
+
+            consensusTarget.innerHTML = `
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <div class="text-3xl font-black tracking-tight text-amber-400">${targetStock}</div>
+                        <p class="text-xs text-slate-400 mt-1">Aggregated target selected across active free model indices.</p>
+                    </div>
+                    <div class="bg-amber-500/10 text-amber-400 border border-amber-500/30 px-4 py-2 rounded-xl text-xs font-bold font-mono">
+                        ⏱️ Horizon: 1-2 Weeks
+                    </div>
+                </div>
+            `;
+
+            loader.classList.add('hidden');
+            outputBox.classList.remove('hidden');
         }
     </script>
 </body>
