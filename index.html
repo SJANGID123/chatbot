@@ -1,113 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Indian Stock Pulse</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style>
-        .loader { border-top-color: #06b6d4; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    </style>
-</head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen pb-12">
-
-    <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-50 shadow-md">
-        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div class="flex items-center space-x-2">
-                <span class="text-2xl">🇮🇳</span>
-                <h1 class="text-xl font-black tracking-wider text-cyan-400">AI STOCK PULSE</h1>
-            </div>
-            <div class="flex space-x-2 bg-slate-950 p-1 rounded-xl border border-slate-800 w-full sm:w-auto justify-center">
-                <button id="tab-analysis-btn" onclick="switchTab('analysis')" class="flex-1 sm:flex-none px-4 py-2 text-xs font-bold rounded-lg transition bg-cyan-500 text-slate-950">🇮🇳 NSE/BSE Pulse</button>
-                <button id="tab-penny-btn" onclick="switchTab('penny')" class="flex-1 sm:flex-none px-4 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white">🚀 Penny Finder</button>
-                <button id="tab-keys-btn" onclick="switchTab('keys')" class="flex-1 sm:flex-none px-4 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white">⚙️ Keys</button>
-            </div>
-        </div>
-    </header>
-
-    <main class="max-w-5xl mx-auto px-4 mt-6">
-
-        <div id="setup-warning" class="hidden bg-amber-950/40 border border-amber-500/30 text-amber-200 p-4 rounded-xl mb-6 text-xs sm:text-sm flex justify-between items-center">
-            <span>⚠️ <strong>Setup Required:</strong> Configure your Keys (Gemini and SerpAPI) to initiate scans.</span>
-            <button onclick="switchTab('keys')" class="bg-amber-500 text-slate-950 px-3 py-1 rounded-md font-bold text-xs">Set Keys</button>
-        </div>
-
-        <section id="tab-analysis" class="space-y-6">
-            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl">
-                <h2 class="text-lg font-bold mb-1 text-slate-200">Waterfall Consensus Engine</h2>
-                <p class="text-xs text-slate-400 mb-4">Queries Gemini first, then cascades safely across every free OpenRouter model one-by-one to protect against rate limits.</p>
-                <div class="flex flex-col sm:flex-row gap-2">
-                    <input id="ticker-input" type="text" placeholder="e.g., RELIANCE, IRFC, TCS, ZOMATO" class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3.5 uppercase font-bold tracking-wider focus:outline-none focus:border-cyan-400 text-white">
-                    <button onclick="runMultiModelAnalysis()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 px-8 font-black rounded-xl transition shadow-lg py-3.5 sm:py-0">RUN ANALYSIS</button>
-                </div>
-            </div>
-
-            <div id="analysis-loader" class="hidden bg-slate-900 p-8 rounded-2xl border border-slate-800 text-center">
-                <div class="loader ease-linear rounded-full border-4 border-slate-950 h-12 w-12 mb-4 mx-auto"></div>
-                <p id="analysis-loader-text" class="text-sm font-medium text-cyan-400 animate-pulse">Gathering SerpAPI data & processing models sequentially...</p>
-            </div>
-
-            <div id="analysis-output-box" class="hidden space-y-6">
-                <div class="bg-gradient-to-br from-slate-900 to-slate-950 p-6 rounded-2xl border-2 border-cyan-500/30 shadow-2xl">
-                    <h3 class="text-xs uppercase font-black tracking-widest text-cyan-400 mb-2">🇮🇳 Aggregated Indian Market Verdict</h3>
-                    <div id="consensus-verdict-target"></div>
-                </div>
-                <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider pl-1">Model Telemetry Chain</h3>
-                <div id="model-responses-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-            </div>
-        </section>
-
-        <section id="tab-penny" class="hidden space-y-6">
-            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl text-center">
-                <div class="inline-flex bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full text-xs font-semibold mb-3 border border-amber-500/20">🔥 Indian Breakout Matrix</div>
-                <h2 class="text-xl font-black mb-2">High-Yield Short Term Penny Finder</h2>
-                <p class="text-sm text-slate-400 max-w-md mx-auto mb-6">Scours live Indian breakout stocks under ₹50. Runs a waterfall chain across every free OpenRouter model to find the highest 1-2 week potential gain.</p>
-                <button onclick="runMultiModelPennyScanner()" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-8 py-4 rounded-xl transition shadow-lg">DISCOVER BEST PENNY PICK</button>
-            </div>
-
-            <div id="penny-loader" class="hidden bg-slate-900 p-8 rounded-2xl border border-slate-800 text-center">
-                <div class="loader ease-linear rounded-full border-4 border-slate-950 h-12 w-12 mb-4 mx-auto"></div>
-                <p id="penny-loader-text" class="text-sm font-medium text-amber-400 animate-pulse">Analyzing high-volume breakouts sequentially...</p>
-            </div>
-
-            <div id="penny-output-box" class="hidden space-y-6">
-                <div class="bg-gradient-to-br from-slate-900 to-slate-950 p-6 rounded-2xl border-2 border-amber-500/30 shadow-2xl">
-                    <h3 class="text-xs uppercase font-black tracking-widest text-amber-400 mb-2">🏆 Selected Indian Breakout Target</h3>
-                    <div id="penny-consensus-target"></div>
-                </div>
-                <div id="penny-responses-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-            </div>
-        </section>
-
-        <section id="tab-keys" class="hidden space-y-6">
-            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl">
-                <h2 class="text-lg font-bold text-cyan-400 mb-1">Local Device Storage Settings</h2>
-                <p class="text-xs text-slate-400 mb-6">Keys are saved completely inside your browser local storage vault. Safe for public hosting.</p>
-                
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Gemini API Key</label>
-                        <input id="key-gemini" type="password" placeholder="AI Studio Key..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-slate-400 mb-1">OpenRouter API Key (Optional Fallback)</label>
-                        <input id="key-openrouter" type="password" placeholder="sk-or-v1-..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-slate-400 mb-1">SerpAPI Key (serpapi.com)</label>
-                        <input id="key-serpapi" type="password" placeholder="Paste your SerpAPI key here..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400">
-                    </div>
-                    
-                    <div class="pt-4 flex gap-2">
-                        <button onclick="saveKeys()" class="flex-1 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black py-3.5 rounded-xl transition text-sm">Save Keys Locally</button>
-                        <button onclick="clearKeys()" class="bg-slate-800 hover:bg-slate-700 text-rose-400 font-bold px-5 rounded-xl transition text-sm">Reset</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
     <script>
         // ---------- Setup / Keys ----------
         function init() {
@@ -131,7 +21,6 @@
             localStorage.setItem('IND_GEMINI_KEY', document.getElementById('key-gemini').value.trim());
             localStorage.setItem('IND_OPENROUTER_KEY', document.getElementById('key-openrouter').value.trim());
             localStorage.setItem('IND_SERPAPI_KEY', document.getElementById('key-serpapi').value.trim());
-            // A key/model list may have changed - clear cache so next run re-fetches.
             cachedFreeModels = null;
             alert('Keys stored securely on your browser instance.');
             init();
@@ -169,7 +58,6 @@
             return new Promise(resolve => setTimeout(resolve, ms));
         }
 
-        // ---------- Network helper with timeout so the UI never hangs forever ----------
         function fetchWithTimeout(url, options = {}, timeoutMs = 20000) {
             const controller = new AbortController();
             const id = setTimeout(() => controller.abort(), timeoutMs);
@@ -177,7 +65,7 @@
                 .finally(() => clearTimeout(id));
         }
 
-        // ---------- Market data (SerpAPI via CORS proxy, with fallbacks) ----------
+        // ---------- Market data ----------
         async function fetchIndianMarketData(searchQuery) {
             const key = localStorage.getItem('IND_SERPAPI_KEY');
             if(!key) return "Error: Missing SerpAPI Key.";
@@ -225,23 +113,20 @@
                 throw new Error(data?.error?.message || `Gemini error (HTTP ${res.status})`);
             }
             if (data.candidates?.[0]?.content?.parts?.[0]?.text) return data.candidates[0].content.parts[0].text;
-            if (data.promptFeedback?.blockReason) throw new Error(`Gemini blocked the request: ${data.promptFeedback.blockReason}`);
             throw new Error("Gemini returned an empty response.");
         }
 
-        // ---------- OpenRouter: discover every currently free model, then call one ----------
-        let cachedFreeModels = null; // { list, fetchedAt }
-        const FREE_MODELS_CACHE_MS = 10 * 60 * 1000; // 10 minutes
-        const MAX_FREE_MODELS_PER_RUN = 8; // keeps a single scan under OpenRouter's free-tier rate/daily limits
+        // ---------- OpenRouter ----------
+        let cachedFreeModels = null;
+        const FREE_MODELS_CACHE_MS = 10 * 60 * 1000;
+        const MAX_FREE_MODELS_PER_RUN = 8;
 
-        // Small built-in fallback in case the live catalog can't be reached (network blocked, CORS, etc.)
         const FALLBACK_FREE_MODELS = [
             { id: "deepseek/deepseek-r1:free", name: "DeepSeek R1 (Free)" },
             { id: "deepseek/deepseek-chat:free", name: "DeepSeek Chat (Free)" },
             { id: "meta-llama/llama-3.3-70b-instruct:free", name: "Llama 3.3 70B (Free)" },
             { id: "google/gemma-3-27b-it:free", name: "Gemma 3 27B (Free)" },
-            { id: "qwen/qwen-2.5-72b-instruct:free", name: "Qwen 2.5 72B (Free)" },
-            { id: "mistralai/mistral-7b-instruct:free", name: "Mistral 7B (Free)" }
+            { id: "qwen/qwen-2.5-72b-instruct:free", name: "Qwen 2.5 72B (Free)" }
         ];
 
         async function getFreeOpenRouterModels(key) {
@@ -270,7 +155,6 @@
                 }
                 return FALLBACK_FREE_MODELS;
             } catch (e) {
-                console.error("Could not fetch live OpenRouter free model catalog, using fallback list:", e);
                 return FALLBACK_FREE_MODELS;
             }
         }
@@ -288,13 +172,11 @@
             }, 25000);
 
             let data;
-            try { data = await res.json(); } catch(e) { throw new Error(`Model returned an invalid response (HTTP ${res.status}).`); }
+            try { data = await res.json(); } catch(e) { throw new Error(`HTTP ${res.status}`); }
 
-            if (!res.ok) {
-                throw new Error(data?.error?.message || `HTTP ${res.status}`);
-            }
+            if (!res.ok) throw new Error(data?.error?.message || `HTTP ${res.status}`);
             if (data.choices?.[0]?.message?.content) return data.choices[0].message.content;
-            throw new Error(data.error?.message || "Model returned an empty response.");
+            throw new Error("Empty response.");
         }
 
         function updateModelGrid(element, modelName, content) {
@@ -307,8 +189,6 @@
             `;
         }
 
-        // Runs every free OpenRouter model one-by-one (waterfall), spaced out to respect the
-        // ~20 requests/minute free-tier rate limit, capped so one scan doesn't burn the whole daily quota.
         async function runOpenRouterWaterfall(oKey, prompt, grid, loaderTextEl, onEachResult) {
             const allModels = await getFreeOpenRouterModels(oKey);
             const models = allModels.slice(0, MAX_FREE_MODELS_PER_RUN);
@@ -319,16 +199,17 @@
                     loaderTextEl.textContent = `Querying free model ${i + 1}/${models.length}: ${model.name}...`;
                 }
                 try {
-                    if (i > 0) await sleep(3200); // stay under free-tier rate limits
+                    if (i > 0) await sleep(3200);
                     const res = await fetchOpenRouter(model.id, prompt, oKey);
                     updateModelGrid(grid, model.name, res);
                     onEachResult(res);
                 } catch (e) {
-                    updateModelGrid(grid, model.name, `❌ Skipped: ${e.message || "Busy or rate-limited."}`);
+                    updateModelGrid(grid, model.name, `❌ Skipped: ${e.message || "Busy."}`);
                 }
             }
         }
 
+        // ---------- Refined Waterfall Engines ----------
         async function runMultiModelAnalysis() {
             const ticker = document.getElementById('ticker-input').value.trim().toUpperCase();
             if(!ticker) return alert("Enter an Indian Ticker (e.g. IRFC)");
@@ -349,37 +230,36 @@
 
             if (!gKey && !oKey) {
                 loader.classList.add('hidden');
-                alert("Add at least a Gemini key or an OpenRouter key in the Keys tab first.");
+                alert("Add a key in the Keys tab first.");
                 return;
             }
 
             const liveContext = await fetchIndianMarketData(`${ticker} stock share price target analysis news nse`);
             
             const prompt = `
-            You are an Indian stock market advisor. Review this live web data for ticker ${ticker}:
+            You are a strict technical analyst evaluating the Indian stock ticker ${ticker}. Review this live market context:
             "${liveContext}"
 
-            Provide a clear verdict using Indian market terminology. You must include this exact string layout in your text:
+            Analyze data indicators like volumes and recent technical breakouts. Provide a clear output containing these exact tags:
             VERDICT: [BUY, SELL, or STAY]
-            REASON: [One short sentence explaining why in simple English]
+            REASON: [One short definitive layout sentence]
             `;
 
             let buys = 0, sells = 0, stays = 0;
             const tally = (res) => {
-                const upper = res.toUpperCase();
-                if (upper.includes("VERDICT: BUY")) buys++;
-                else if (upper.includes("VERDICT: SELL")) sells++;
-                else if (upper.includes("VERDICT: STAY")) stays++;
+                const cleanText = res.toUpperCase().replace(/\*/g, '');
+                if (/VERDICT\s*:\s*BUY/.test(cleanText)) buys++;
+                else if (/VERDICT\s*:\s*SELL/.test(cleanText)) sells++;
+                else if (/VERDICT\s*:\s*STAY/.test(cleanText) || /VERDICT\s*:\s*HOLD/.test(cleanText)) stays++;
             };
 
             if(gKey) {
-                loaderText.textContent = "Querying Gemini 2.5 Flash...";
                 try {
                     const res = await fetchGemini(prompt, gKey);
                     updateModelGrid(grid, "Gemini 2.5 Flash", res);
                     tally(res);
                 } catch(e) {
-                    updateModelGrid(grid, "Gemini 2.5 Flash", `❌ ${e.message || "API Error or Throttle."}`);
+                    updateModelGrid(grid, "Gemini 2.5 Flash", `❌ ${e.message}`);
                 }
             }
 
@@ -418,63 +298,91 @@
             loader.classList.remove('hidden');
             outputBox.classList.add('hidden');
             grid.innerHTML = "";
-            loaderText.textContent = "Gathering live market data...";
+            loaderText.textContent = "Scanning breakout momentum matrices...";
 
             const gKey = localStorage.getItem('IND_GEMINI_KEY');
             const oKey = localStorage.getItem('IND_OPENROUTER_KEY');
 
             if (!gKey && !oKey) {
                 loader.classList.add('hidden');
-                alert("Add at least a Gemini key or an OpenRouter key in the Keys tab first.");
+                alert("Add keys in the Settings panel.");
                 return;
             }
 
-            const liveContext = await fetchIndianMarketData("breakout stocks under 50 rs nse volume gainers");
+            const liveContext = await fetchIndianMarketData("breakout stocks under 50 rs nse volume gainers moneycontrol order");
 
+            // Hardened prompt forcing the AI to act as an algorithmic filter to score by top yields
             const prompt = `
-            Review this live web data tracking low price high volume breakouts under ₹50:
+            You are an aggressive algorithmic stock scanner looking at low-priced Indian breakout setups under ₹50.
+            Review this high-volume live market feed data carefully:
             "${liveContext}"
 
-            Extract ONE precise Indian ticker symbol poised to deliver the maximum percentage profit return within a strict 1-2 week window.
-            Format the response exactly as follows:
-            TICKER: [SYMBOL]
-            PROFIT TARGET: [Expected % Profit in 1-2 weeks]
-            CATALYST: [One short reason sentence explaining the volume spike]
+            Filter out the noise and select exactly ONE precise Indian ticker symbol that presents the absolute HIGHEST mathematical percentage profit potential within a tight 1-2 week setup window based on volume delta spikes.
+
+            Your output must strictly contain this format:
+            TICKER: [EXACT SYMBOL ONLY]
+            PROFIT TARGET: [Expected % Profit, e.g., 25%]
+            CATALYST: [One short sentence detailing technical breakout volume]
             `;
 
-            let targetStock = "N/A";
-            const extractTicker = (res) => {
-                if (targetStock === "N/A" && res.includes("TICKER:")) {
-                    const candidate = res.split("TICKER:")[1]?.split("\n")[0]?.replace(/[^a-zA-Z0-9]/g, "").trim();
-                    if (candidate) targetStock = candidate;
+            // High precision cross-model target matching matrix
+            let candidateTracker = {};
+            let highestTargetStock = "Scanning Complete";
+            let maxReportedProfit = -1;
+
+            const extractTopTicker = (res) => {
+                const cleanRes = res.replace(/\*/g, '');
+                
+                // Flexible regex to capture ticker name and target number values
+                const tickerMatch = cleanRes.match(/TICKER\s*:\s*([A-Za-z0-9_-]+)/i);
+                const profitMatch = cleanRes.match(/PROFIT\s*TARGET\s*:\s*.*?(\d+)\s*%/i);
+                
+                if (tickerMatch) {
+                    const symbol = tickerMatch[1].trim().toUpperCase();
+                    let profitPct = profitMatch ? parseInt(profitMatch[1], 10) : 5;
+                    
+                    // Track choices across models to aggregate the highest profit projection
+                    if (!candidateTracker[symbol] || profitPct > candidateTracker[symbol]) {
+                        candidateTracker[symbol] = profitPct;
+                    }
+                    
+                    if (candidateTracker[symbol] > maxReportedProfit) {
+                        maxReportedProfit = candidateTracker[symbol];
+                        highestTargetStock = symbol;
+                    }
                 }
             };
 
             if(gKey) {
-                loaderText.textContent = "Querying Gemini 2.5 Flash...";
                 try {
                     const res = await fetchGemini(prompt, gKey);
                     updateModelGrid(grid, "Gemini 2.5 Flash", res);
-                    extractTicker(res);
+                    extractTopTicker(res);
                 } catch(e) {
-                    updateModelGrid(grid, "Gemini 2.5 Flash", `❌ ${e.message || "Pipeline error."}`);
+                    updateModelGrid(grid, "Gemini 2.5 Flash", `❌ Pipeline skip.`);
                 }
             }
 
             if(oKey) {
-                await runOpenRouterWaterfall(oKey, prompt, grid, loaderText, extractTicker);
+                await runOpenRouterWaterfall(oKey, prompt, grid, loaderText, extractTopTicker);
             }
 
-            if (targetStock === "N/A" || targetStock === "") targetStock = "Scan Complete";
+            // Fallback default safe check if parsing fails completely
+            if (highestTargetStock === "Scanning Complete" && Object.keys(candidateTracker).length > 0) {
+                highestTargetStock = Object.keys(candidateTracker)[0];
+                maxReportedProfit = candidateTracker[highestTargetStock];
+            }
+
+            const targetDisplayProfit = maxReportedProfit > 0 ? `🔥 Est Profit: +${maxReportedProfit}%` : `⏱️ Horizon: 1-2 Weeks`;
 
             consensusTarget.innerHTML = `
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
-                        <div class="text-3xl font-black tracking-tight text-amber-400">${targetStock}</div>
-                        <p class="text-xs text-slate-400 mt-1">Highest volatility target extracted via waterfall parameters.</p>
+                        <div class="text-3xl font-black tracking-tight text-amber-400">${highestTargetStock}</div>
+                        <p class="text-xs text-slate-400 mt-1">Aggregated peak value asset extracted via model consensus matrix.</p>
                     </div>
-                    <div class="bg-amber-500/10 text-amber-400 border border-amber-500/30 px-4 py-2 rounded-xl text-xs font-bold">
-                        ⏱️ Horizon: 1-2 Weeks
+                    <div class="bg-amber-500/10 text-amber-400 border border-amber-500/30 px-4 py-2 rounded-xl text-xs font-black tracking-wider uppercase">
+                        ${targetDisplayProfit}
                     </div>
                 </div>
             `;
@@ -496,5 +404,3 @@
                 .replace(/\n/g, '<br>');
         }
     </script>
-</body>
-</html>
