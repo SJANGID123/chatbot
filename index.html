@@ -1,1231 +1,1041 @@
-```html
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AuraTrade Pro India - Indian Stock Intelligence</title>
-  
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            slate: {
-              950: '#030712',
-              900: '#0b0f19',
-              800: '#111827',
-              750: '#1f2937',
-              700: '#374151',
-            }
-          }
-        }
-      }
-    }
-  </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ledger — Stock Watchlist & Research</title>
+<style>
+  :root {
+    --bg: #0a0d12;
+    --panel: #12161d;
+    --panel-2: #171c24;
+    --border: #232a35;
+    --text: #e7ecf2;
+    --text-dim: #8994a3;
+    --up: #4ade80;
+    --down: #f87171;
+    --accent: #eab308;
+    --accent-dim: #7a6415;
+    --mono: 'SF Mono', 'Consolas', monospace;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    padding-bottom: 40px;
+  }
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  header {
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 20;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-mark {
+    width: 26px; height: 26px;
+    background: linear-gradient(135deg, var(--accent), #b8860b);
+    border-radius: 6px;
+    position: relative;
+  }
+  .brand-mark::before {
+    content: '';
+    position: absolute;
+    left: 6px; bottom: 5px;
+    width: 3px; height: 10px;
+    background: #0a0d12;
+  }
+  .brand-mark::after {
+    content: '';
+    position: absolute;
+    left: 12px; bottom: 8px;
+    width: 3px; height: 13px;
+    background: #0a0d12;
+  }
+  .brand-name { font-size: 16px; font-weight: 700; letter-spacing: 0.01em; }
+  .brand-sub { font-size: 10.5px; color: var(--text-dim); font-family: var(--mono); }
 
-  <style>
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #030712;
-      overflow-x: hidden;
-    }
-    
-    /* Elegant Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #0b0f19;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #1f2937;
-      border-radius: 10px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #374151;
-    }
+  #settings-toggle {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: var(--sans);
+  }
+  #settings-toggle:hover { border-color: var(--accent-dim); color: var(--text); }
 
-    /* Premium Animation Framework */
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
+  /* SETTINGS PANEL */
+  #settings-panel {
+    display: none;
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 20px 22px;
+  }
+  #settings-panel.open { display: block; }
+  #settings-panel h3 { font-size: 13px; margin: 0 0 4px; font-weight: 600; }
+  #settings-panel p { font-size: 11.5px; color: var(--text-dim); margin: 0 0 16px; line-height: 1.5; }
+  .key-row { margin-bottom: 12px; }
+  .key-row label {
+    display: block;
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 5px;
+    font-family: var(--mono);
+  }
+  .key-row input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+  }
+  .key-row input:focus { outline: none; border-color: var(--accent-dim); }
+  #save-keys-btn {
+    background: var(--accent);
+    color: #1a1400;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    margin-top: 4px;
+  }
+  #save-keys-btn:hover { background: #f4c430; }
+  #keys-status {
+    font-size: 11px;
+    color: var(--up);
+    margin-left: 10px;
+    font-family: var(--mono);
+  }
 
-    @keyframes pulseGlow {
-      0%, 100% { border-color: rgba(99, 102, 241, 0.2); box-shadow: 0 0 10px rgba(99, 102, 241, 0); }
-      50% { border-color: rgba(99, 102, 241, 0.5); box-shadow: 0 0 20px rgba(99, 102, 241, 0.15); }
-    }
+  /* TABS */
+  #tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    padding: 0 20px;
+    gap: 4px;
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    padding: 14px 16px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    font-family: var(--sans);
+  }
+  .tab-btn.active { color: var(--text); border-bottom-color: var(--accent); }
 
-    @keyframes waveRadar {
-      0% { transform: scale(0.95); opacity: 0.8; }
-      100% { transform: scale(1.6); opacity: 0; }
-    }
+  .tab-content { display: none; padding: 20px; max-width: 720px; margin: 0 auto; }
+  .tab-content.active { display: block; }
 
-    @keyframes shimmerEffect {
-      100% { transform: translateX(100%); }
-    }
+  /* WATCHLIST TAB */
+  .add-stock-form {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+  .form-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+  .form-row input {
+    flex: 1;
+    min-width: 100px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 13.5px;
+  }
+  .form-row input:focus { outline: none; border-color: var(--accent-dim); }
+  .add-btn {
+    width: 100%;
+    background: var(--accent);
+    color: #1a1400;
+    border: none;
+    padding: 11px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 13.5px;
+    cursor: pointer;
+  }
+  .add-btn:hover { background: #f4c430; }
 
-    .animate-slideUp {
-      animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
+  .stock-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .stock-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  .stock-name { font-size: 15px; font-weight: 700; }
+  .stock-meta { font-size: 11.5px; color: var(--text-dim); font-family: var(--mono); margin-top: 2px; }
+  .stock-pct { font-size: 15px; font-weight: 700; font-family: var(--mono); }
+  .stock-pct.up { color: var(--up); }
+  .stock-pct.down { color: var(--down); }
+  .remove-btn {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0 4px;
+  }
+  .remove-btn:hover { color: var(--down); }
+  .analyze-btn {
+    width: 100%;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 9px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    cursor: pointer;
+    margin-top: 4px;
+  }
+  .analyze-btn:hover { border-color: var(--accent-dim); }
+  .analysis-box {
+    margin-top: 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--text-dim);
+    white-space: pre-wrap;
+  }
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    font-family: var(--mono);
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+  .tag.hold { background: rgba(234,179,8,0.15); color: var(--accent); }
+  .tag.watch { background: rgba(96,165,250,0.15); color: #60a5fa; }
+  .tag.review { background: rgba(248,113,113,0.15); color: var(--down); }
 
-    .animate-fadeIn {
-      animation: fadeIn 0.35s ease-out forwards;
-    }
+  /* RESEARCH TAB */
+  #research-input {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    margin-bottom: 10px;
+  }
+  #research-input:focus { outline: none; border-color: var(--accent-dim); }
+  #research-btn {
+    width: 100%;
+    background: var(--accent);
+    color: #1a1400;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 13.5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  #research-btn:hover { background: #f4c430; }
+  #research-btn:disabled { background: var(--border); color: var(--text-dim); cursor: not-allowed; }
 
-    .pulse-glow-card {
-      animation: pulseGlow 4s infinite ease-in-out;
-    }
+  .research-result {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    font-size: 13.5px;
+    line-height: 1.65;
+    white-space: pre-wrap;
+  }
+  .research-result h4 { margin: 0 0 8px; font-size: 13px; color: var(--accent); }
 
-    .radar-pulse-ring {
-      animation: waveRadar 2s cubic-bezier(0.215, 0.610, 0.355, 1) infinite;
-    }
+  .disclaimer {
+    background: rgba(248,113,113,0.06);
+    border: 1px solid rgba(248,113,113,0.25);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 11.5px;
+    color: #f0a8a8;
+    line-height: 1.6;
+    margin-bottom: 18px;
+  }
 
-    .shimmer-mask {
-      position: relative;
-      overflow: hidden;
-    }
-    .shimmer-mask::after {
-      position: absolute;
-      top: 0; right: 0; bottom: 0; left: 0;
-      transform: translateX(-100%);
-      background-image: linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.02) 20%,
-        rgba(255, 255, 255, 0.06) 60%,
-        rgba(255, 255, 255, 0) 100%
-      );
-      animation: shimmerEffect 1.8s infinite;
-      content: '';
-    }
+  .history-strip {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 8px 0 2px;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+  }
+  .history-strip.empty {
+    font-size: 11px;
+    color: var(--text-dim);
+    padding: 8px 0 2px;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+  }
+  .history-point {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 46px;
+    flex-shrink: 0;
+  }
+  .history-date {
+    font-size: 9.5px;
+    color: var(--text-dim);
+    font-family: var(--mono);
+  }
+  .history-price {
+    font-size: 12px;
+    font-family: var(--mono);
+    font-weight: 700;
+    margin-top: 2px;
+  }
+  .history-price.up { color: var(--up); }
+  .history-price.down { color: var(--down); }
 
-    /* Interactive Elevate Mechanics */
-    .interact-card {
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .interact-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 16px 32px -12px rgba(99, 102, 241, 0.25);
-      border-color: rgba(99, 102, 241, 0.4);
-    }
-  </style>
+  .research-divider {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 11.5px;
+    margin: 22px 0 14px;
+    position: relative;
+  }
+  .research-divider::before, .research-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 30%;
+    height: 1px;
+    background: var(--border);
+  }
+  .research-divider::before { left: 0; }
+  .research-divider::after { right: 0; }
+
+  #auto-discover-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--accent), #b8860b);
+    color: #1a1400;
+    border: none;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 16px;
+  }
+  #auto-discover-btn:hover { filter: brightness(1.08); }
+  #auto-discover-btn:disabled { background: var(--border); color: var(--text-dim); cursor: not-allowed; }
+
+  .trend-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .trend-rank {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    background: var(--accent-dim);
+    color: var(--accent);
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: var(--mono);
+    margin-right: 8px;
+  }
+  .trend-name { font-size: 15px; font-weight: 700; display: inline; }
+  .trend-body {
+    margin-top: 10px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-dim);
+    white-space: pre-wrap;
+  }
+
+  #portfolio-summary-btn {
+    width: 100%;
+    background: var(--panel-2);
+    border: 1px solid var(--accent-dim);
+    color: var(--accent);
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    margin-bottom: 16px;
+  }
+  #portfolio-summary-btn:hover { background: rgba(234,179,8,0.08); }
+  #portfolio-summary-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+
+  .loading-dots span {
+    display: inline-block;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--text-dim);
+    margin: 0 2px;
+    animation: bounce 1.2s infinite;
+  }
+  .loading-dots span:nth-child(2) { animation-delay: 0.15s; }
+  .loading-dots span:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes bounce { 0%,60%,100%{transform:translateY(0);opacity:.4} 30%{transform:translateY(-3px);opacity:1} }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+</style>
 </head>
-<body class="text-slate-100 min-h-screen flex flex-col relative">
+<body>
 
-  <!-- Background Glowing Orbs -->
-  <div class="absolute top-0 left-1/4 w-[400px] h-[400px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
-  <div class="absolute bottom-20 right-1/4 w-[400px] h-[400px] bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
+<header>
+  <div class="brand">
+    <div class="brand-mark"></div>
+    <div>
+      <div class="brand-name">Ledger</div>
+      <div class="brand-sub">watchlist & research</div>
+    </div>
+  </div>
+  <button id="settings-toggle">⚙ API Keys</button>
+</header>
 
-  <!-- --- Toast Notification Banner --- -->
-  <div id="toast-banner" class="fixed top-4 right-4 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl border shadow-2xl transition-all duration-300 transform translate-y-[-100px] opacity-0 pointer-events-none">
-    <div id="toast-icon"></div>
-    <span id="toast-message" class="font-semibold text-xs tracking-wide"></span>
+<div id="settings-panel">
+  <h3>Connect your keys</h3>
+  <p>These are saved only in this browser's local storage on this device — never sent to us, only used directly from your browser to each service.</p>
+  <div class="key-row">
+    <label>GEMINI API KEY</label>
+    <input type="password" id="gemini-key" placeholder="AIza...">
+  </div>
+  <div class="key-row">
+    <label>OPENROUTER API KEY</label>
+    <input type="password" id="openrouter-key" placeholder="sk-or-v1-...">
+  </div>
+  <div class="key-row">
+    <label>SERPAPI KEY</label>
+    <input type="password" id="serpapi-key" placeholder="your serpapi key">
+  </div>
+  <button id="save-keys-btn">Save keys</button>
+  <span id="keys-status"></span>
+</div>
+
+<div id="tabs">
+  <button class="tab-btn active" data-tab="watchlist">Watchlist</button>
+  <button class="tab-btn" data-tab="research">Deep Research</button>
+</div>
+
+<div id="watchlist-tab" class="tab-content active">
+  <div class="disclaimer">
+    This tool generates informational summaries from AI models and public news — it is not financial advice, and outputs can be wrong or outdated. Markets are unpredictable; no tool can guarantee returns. Verify independently before acting.
   </div>
 
-  <!-- --- Dynamic Header Workspace --- -->
-  <header class="border-b border-slate-900 bg-slate-950/60 backdrop-blur-2xl sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between py-3">
-      
-      <div class="flex items-center gap-3">
-        <div class="bg-gradient-to-tr from-indigo-500 to-purple-600 p-2.5 rounded-2xl text-white shadow-lg">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-        </div>
-        <div>
-          <h1 class="text-sm font-black tracking-wider text-white uppercase flex items-center gap-1.5">
-            AuraTrade Pro India <span class="text-[9px] bg-gradient-to-r from-emerald-500 to-indigo-500 text-white px-2 py-0.5 rounded font-mono font-bold tracking-normal uppercase">BSE & NSE</span>
-          </h1>
-          <p class="text-[10px] text-slate-500 font-mono tracking-widest uppercase">Dual API Indian Quant Desk</p>
-        </div>
-      </div>
-
-      <!-- Navigation Router -->
-      <nav class="flex gap-1 bg-slate-900/60 p-1 rounded-2xl border border-slate-800/80">
-        <button
-          onclick="switchTab('portfolio')"
-          id="nav-portfolio"
-          class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 bg-slate-800 text-white shadow-lg"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-          <span>My Advisory Desk</span>
-        </button>
-        <button
-          onclick="switchTab('discovery')"
-          id="nav-discovery"
-          class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 text-slate-400 hover:text-slate-200"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
-          <span>1-Week Swing Screener</span>
-        </button>
-      </nav>
-
-      <!-- Configure Panel Button -->
-      <button
-        onclick="toggleSettings()"
-        id="settings-btn"
-        class="p-2.5 rounded-2xl border border-slate-800 text-slate-400 hover:text-white transition-all duration-300 bg-slate-900"
-        title="Configure Workspace Keys"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-      </button>
-
+  <div class="add-stock-form">
+    <div class="form-row">
+      <input type="text" id="stock-name-input" placeholder="Stock name / ticker">
+      <input type="number" id="buy-price-input" placeholder="Your buy price">
     </div>
-  </header>
-
-  <!-- --- Content Body --- -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 z-10">
-
-    <!-- --- Collapsible Credentials Panel --- -->
-    <div id="settings-panel" class="hidden mb-8 p-6 bg-slate-900/80 backdrop-blur-xl border border-indigo-950/60 rounded-3xl relative overflow-hidden shadow-2xl animate-slideUp">
-      <div class="absolute top-0 left-0 h-1 bg-gradient-to-r from-emerald-500 via-indigo-500 to-purple-500 w-full"></div>
-      
-      <div class="flex justify-between items-start mb-6">
-        <div>
-          <h3 class="text-sm font-black text-white flex items-center gap-2 uppercase tracking-wide">
-            ⚙️ Configure India Trading Credentials
-          </h3>
-          <p class="text-xs text-slate-400 mt-1">
-            Both inputs are mandatory. Your credentials evaluate directly in-browser and save to your local database memory.
-          </p>
-        </div>
-        <button 
-          onclick="toggleSettings()"
-          class="text-slate-400 hover:text-white text-xs font-semibold px-2.5 py-1 rounded-xl bg-slate-800 border border-slate-700 transition-colors"
-        >
-          Close
-        </button>
-      </div>
-
-      <form onsubmit="saveConfig(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
-        <div class="space-y-2">
-          <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest">
-            Gemini API Key (using 2.5 model)
-          </label>
-          <div class="relative">
-            <input
-              type="password"
-              id="input-gemini-key"
-              required
-              placeholder="AIzaSy..."
-              class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-3 text-xs text-slate-100 placeholder-slate-700 focus:outline-none font-mono"
-            />
-          </div>
-        </div>
-
-        <div class="space-y-2">
-          <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest">
-            SerpAPI Secret Key
-          </label>
-          <input
-            type="password"
-            id="input-serp-key"
-            required
-            placeholder="Enter SerpAPI secret key..."
-            class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-3 text-xs text-slate-100 placeholder-slate-700 focus:outline-none font-mono"
-          />
-        </div>
-
-        <div class="md:col-span-2 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-t border-slate-800/80 pt-5 mt-2">
-          <span class="text-[10px] text-slate-500 max-w-lg">
-            🛡️ Safe Execution Protocol: The AllOrigins proxy handles SerpAPI requests securely inside GitHub Pages to guarantee CORS error prevention.
-          </span>
-          <button
-            type="submit"
-            class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-6 py-3 rounded-xl transition-all shadow-lg active:scale-95"
-          >
-            Save Configuration
-          </button>
-        </div>
-      </form>
+    <div class="form-row">
+      <input type="number" id="current-price-input" placeholder="Current price (check yourself)">
+      <input type="number" id="qty-input" placeholder="Quantity (optional)">
     </div>
+    <button class="add-btn" id="add-stock-btn">Add to watchlist</button>
+  </div>
 
-    <!-- --- TAB 1: PORTFOLIO SCREEN --- -->
-    <div id="tab-portfolio-content" class="space-y-6">
-      
-      <!-- Metrics overview -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <div class="bg-slate-900/40 backdrop-blur-xl border border-slate-800/80 rounded-2xl p-5 shadow-lg flex items-center justify-between interact-card">
-          <div>
-            <p class="text-[10px] text-slate-500 uppercase font-extrabold tracking-widest font-mono">NSE/BSE Assets</p>
-            <h3 id="stat-positions" class="text-3xl font-black text-white mt-1">0 Positions</h3>
-          </div>
-          <div class="bg-slate-850 p-3 rounded-2xl border border-slate-800 text-indigo-400">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-          </div>
-        </div>
+  <button id="portfolio-summary-btn">Compare all stocks using logged history</button>
+  <div id="portfolio-summary-output"></div>
 
-        <div class="bg-slate-900/40 backdrop-blur-xl border border-slate-800/80 rounded-2xl p-5 shadow-lg flex items-center justify-between interact-card">
-          <div>
-            <p class="text-[10px] text-slate-500 uppercase font-extrabold tracking-widest font-mono">My Portfolio Capital</p>
-            <h3 id="stat-capital" class="text-2xl font-black text-white mt-1 font-mono">₹0.00</h3>
-          </div>
-          <div class="bg-emerald-500/10 p-3 rounded-2xl border border-emerald-500/20 text-emerald-400 text-lg font-black font-mono">₹</div>
-        </div>
+  <div id="stocks-list"></div>
+</div>
 
-        <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-4 shadow-lg flex flex-col justify-center">
-          <button
-            onclick="toggleAddStockForm()"
-            class="bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold py-3.5 px-4 rounded-2xl flex items-center justify-center gap-2 text-xs uppercase tracking-wider transition-all shadow-lg hover:shadow-indigo-500/20"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            <span>Register Ticker Symbol</span>
-          </button>
-        </div>
-      </div>
+<div id="research-tab" class="tab-content">
+  <div class="disclaimer">
+    No tool can reliably predict which stocks will grow the most in a fixed period — if that were possible from public news, it wouldn't be free. This surfaces stocks currently getting the most news attention and summarizes the discussed factors, which is a real, measurable signal — but attention ≠ future returns. Not financial advice.
+  </div>
 
-      <!-- Add stock form container -->
-      <div id="add-stock-container" class="hidden bg-slate-900 border border-indigo-950/80 p-6 rounded-3xl shadow-2xl space-y-4 animate-slideUp">
-        <div class="flex justify-between items-center">
-          <h3 class="text-xs font-black text-white uppercase tracking-wider">➕ Register New Position</h3>
-          <button onclick="toggleAddStockForm()" class="text-slate-400 hover:text-white text-xs font-bold hover:underline">
-            [Cancel]
-          </button>
-        </div>
+  <button id="auto-discover-btn">🔍 Auto-discover today's trending stocks</button>
+  <div id="research-output"></div>
 
-        <form onsubmit="registerStock(event)" class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
-          <div>
-            <label class="block text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-wider">NSE/BSE Symbol</label>
-            <input
-              type="text"
-              id="input-symbol"
-              required
-              placeholder="e.g. RELIANCE, TCS"
-              class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-700 focus:outline-none font-mono font-bold"
-            />
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-wider">Company Name</label>
-            <input
-              type="text"
-              id="input-name"
-              required
-              placeholder="e.g. Tata Motors"
-              class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-700 focus:outline-none"
-            />
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-wider">Shares Owned</label>
-            <input
-              type="number"
-              id="input-shares"
-              required
-              step="any"
-              placeholder="e.g. 15"
-              class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-700 focus:outline-none"
-            />
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-wider">Average buy price (₹)</label>
-            <input
-              type="number"
-              id="input-buyprice"
-              required
-              step="any"
-              placeholder="e.g. 1250.00"
-              class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-700 focus:outline-none font-mono"
-            />
-          </div>
-          <div class="sm:col-span-4 flex justify-end gap-2 mt-2">
-            <button
-              type="submit"
-              class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-6 py-3 rounded-xl transition-all shadow-md active:scale-95"
-            >
-              Confirm & Save Position
-            </button>
-          </div>
-        </form>
-      </div>
+  <div class="research-divider">or search a specific stock/sector yourself</div>
+  <input type="text" id="research-input" placeholder="e.g. 'IT sector' or a specific ticker">
+  <button id="research-btn">Research this</button>
+  <div id="manual-research-output"></div>
+</div>
 
-      <!-- Portfolio Split Desk -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
-        <!-- Left Column: Asset selection desk -->
-        <div class="lg:col-span-1">
-          <div class="bg-slate-900/40 backdrop-blur-xl border border-slate-800/85 rounded-3xl p-5 shadow-lg">
-            <div class="flex justify-between items-center mb-4 border-b border-slate-850 pb-3">
-              <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active Indian Assets</h3>
-              <span id="badge-position-count" class="text-[9px] bg-slate-850 px-2.5 py-1 rounded-full text-indigo-400 font-mono font-bold">
-                0 Positions
-              </span>
-            </div>
-
-            <div id="portfolio-list" class="space-y-3 max-h-[500px] overflow-y-auto pr-1">
-              <!-- Dynamically populated -->
-            </div>
-          </div>
-        </div>
-
-        <!-- Right Column: Quantitative strategy panel -->
-        <div class="lg:col-span-2">
-          <div id="advisory-desk-content">
-            <!-- Dynamically populated with welcome state, loading, or full AI research dashboard -->
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- --- TAB 2: DISCOVERY / MOMENTUM SCREEN --- -->
-    <div id="tab-discovery-content" class="hidden space-y-6">
-      
-      <!-- Discovery Scanner Overview -->
-      <div class="p-6 bg-slate-900/40 border border-slate-800 rounded-3xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative overflow-hidden shadow-xl">
-        <div class="absolute top-0 left-0 h-full w-1.5 bg-indigo-500"></div>
-        <div>
-          <h2 class="text-xs font-black text-white uppercase tracking-wider flex items-center gap-2">
-            🎯 Short-Term 1-Week Breakout momentum engine
-          </h2>
-          <p class="text-xs text-slate-400 mt-1 max-w-2xl leading-relaxed">
-            Runs an exhaustive Google search for breakout stock setups on the NSE/BSE. Gemini 2.5 then cross-references historical trend context to highlight the absolute highest-conviction trade for a 1-week profit window.
-          </p>
-        </div>
-
-        <button
-          onclick="scanIndianBreakoutSwings()"
-          id="btn-scan-breakouts"
-          class="shrink-0 bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-800 text-white font-bold px-6 py-3.5 rounded-2xl text-xs uppercase tracking-widest transition-all shadow-lg hover:shadow-indigo-500/20 flex items-center gap-2 active:scale-95 duration-200"
-        >
-          <svg id="scan-icon-sparkle" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-          <svg id="scan-icon-loader" class="hidden animate-spin" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="6.34" y1="17.66" x2="8.46" y2="15.54"/><line x1="15.54" y1="8.46" x2="17.66" y2="6.34"/></svg>
-          <span id="scan-btn-text">Discover Breakouts (₹)</span>
-        </button>
-      </div>
-
-      <!-- Discovery Container populated via JS -->
-      <div id="discovery-desk-content"></div>
-
-    </div>
-
-  </main>
-
-  <!-- --- Global Footer --- -->
-  <footer class="border-t border-slate-900 mt-auto bg-slate-950 py-6 z-10 text-center">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-      <p class="text-[11px] text-slate-600 font-mono">
-        © 2026 AuraTrade Pro India. Grounded with SerpAPI & Gemini 2.5 Flash.
-      </p>
-      <p class="text-[10px] text-slate-500 font-medium font-mono flex items-center gap-1.5">
-        <span>🇮🇳 Designed in Indian Rupees (INR)</span>
-      </p>
-    </div>
-  </footer>
-
-  <!-- --- CORE VANILLA JS REACTIVE CONTROLLER --- -->
-  <script>
-    // --- Global Application State ---
-    const state = {
-      activeTab: 'portfolio',
-      geminiKey: localStorage.getItem('auraindia_gemini_key') || '',
-      serpKey: localStorage.getItem('auraindia_serp_key') || '',
-      portfolio: [],
-      analysisCache: {},
-      analysisResult: null,
-      discoveryResults: null,
-      isAnalyzing: false,
-      analyzingSymbol: null,
-      isScanning: false,
-      isAddingStock: false,
-      showSettings: false
+<script>
+(function() {
+  // ---------- STORAGE ----------
+  function loadKeys() {
+    return {
+      gemini: localStorage.getItem('ledger_gemini_key') || '',
+      openrouter: localStorage.getItem('ledger_openrouter_key') || '',
+      serpapi: localStorage.getItem('ledger_serpapi_key') || ''
     };
+  }
+  function saveKeys(keys) {
+    localStorage.setItem('ledger_gemini_key', keys.gemini);
+    localStorage.setItem('ledger_openrouter_key', keys.openrouter);
+    localStorage.setItem('ledger_serpapi_key', keys.serpapi);
+  }
+  function loadStocks() {
+    try {
+      return JSON.parse(localStorage.getItem('ledger_stocks') || '[]');
+    } catch { return []; }
+  }
+  function saveStocks(stocks) {
+    localStorage.setItem('ledger_stocks', JSON.stringify(stocks));
+  }
 
-    // --- Bootstrapping Function ---
-    window.onload = function() {
-      // Default blue chip positions
-      const defaultPortfolio = [
-        { id: '1', symbol: 'RELIANCE', name: 'Reliance Industries Ltd.', shares: 10, buyPrice: 2450.00 },
-        { id: '2', symbol: 'TCS', name: 'Tata Consultancy Services Ltd.', shares: 5, buyPrice: 3820.50 }
+  let keys = loadKeys();
+  let stocks = loadStocks();
+
+  // ---------- SETTINGS PANEL ----------
+  const settingsToggle = document.getElementById('settings-toggle');
+  const settingsPanel = document.getElementById('settings-panel');
+  const geminiInput = document.getElementById('gemini-key');
+  const openrouterInput = document.getElementById('openrouter-key');
+  const serpapiInput = document.getElementById('serpapi-key');
+  const saveKeysBtn = document.getElementById('save-keys-btn');
+  const keysStatus = document.getElementById('keys-status');
+
+  geminiInput.value = keys.gemini;
+  openrouterInput.value = keys.openrouter;
+  serpapiInput.value = keys.serpapi;
+
+  settingsToggle.addEventListener('click', () => {
+    settingsPanel.classList.toggle('open');
+  });
+
+  saveKeysBtn.addEventListener('click', () => {
+    keys = {
+      gemini: geminiInput.value.trim(),
+      openrouter: openrouterInput.value.trim(),
+      serpapi: serpapiInput.value.trim()
+    };
+    saveKeys(keys);
+    keysStatus.textContent = 'Saved ✓';
+    setTimeout(() => keysStatus.textContent = '', 2500);
+  });
+
+  // ---------- TABS ----------
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab + '-tab').classList.add('active');
+    });
+  });
+
+  // ---------- AI CALL HELPERS ----------
+  const GEMINI_MODEL_CHAIN = [
+    'gemini-2.0-flash',
+    'gemini-2.0-flash-lite',
+    'gemini-1.5-flash',
+    'gemini-1.5-flash-8b',
+    'gemini-1.5-pro'
+  ];
+
+  let cachedFreeModels = null;
+  let freeModelsFetchedAt = 0;
+
+  async function getFreeOpenRouterModels() {
+    // Cache for 10 minutes so we're not refetching on every call
+    const now = Date.now();
+    if (cachedFreeModels && (now - freeModelsFetchedAt) < 10 * 60 * 1000) {
+      return cachedFreeModels;
+    }
+    try {
+      const res = await fetch('https://openrouter.ai/api/v1/models');
+      if (!res.ok) throw new Error('Could not fetch model list: ' + res.status);
+      const data = await res.json();
+      const free = data.data
+        .filter(m => {
+          const p = m.pricing || {};
+          return parseFloat(p.prompt || '1') === 0 && parseFloat(p.completion || '1') === 0;
+        })
+        .map(m => ({ id: m.id, label: m.name || m.id }));
+
+      if (free.length === 0) throw new Error('No free models returned');
+
+      // Nudge known-strong coding/reasoning models to the front if present
+      const priorityHints = ['qwen3-coder', 'deepseek-r1', 'deepseek-chat', 'llama-3.3', 'gemma-3', 'gpt-oss'];
+      free.sort((a, b) => {
+        const aScore = priorityHints.findIndex(h => a.id.includes(h));
+        const bScore = priorityHints.findIndex(h => b.id.includes(h));
+        const aRank = aScore === -1 ? 999 : aScore;
+        const bRank = bScore === -1 ? 999 : bScore;
+        return aRank - bRank;
+      });
+
+      cachedFreeModels = free;
+      freeModelsFetchedAt = now;
+      return free;
+    } catch (e) {
+      console.warn('Dynamic free model fetch failed, using fallback list:', e.message);
+      // Static fallback only used if the live model list fetch itself fails
+      return [
+        { id: 'qwen/qwen3-coder:free', label: 'Qwen3 Coder' },
+        { id: 'deepseek/deepseek-r1:free', label: 'DeepSeek R1' },
+        { id: 'deepseek/deepseek-chat-v3.1:free', label: 'DeepSeek V3.1' },
+        { id: 'meta-llama/llama-3.3-70b-instruct:free', label: 'Llama 3.3 70B' },
+        { id: 'google/gemma-3-27b-it:free', label: 'Gemma 3 27B' }
       ];
+    }
+  }
 
-      // Safe parse
-      state.portfolio = safeJsonParse('auraindia_portfolio', defaultPortfolio);
-      state.analysisCache = safeJsonParse('auraindia_analysis_cache', {});
-      state.discoveryResults = safeJsonParse('auraindia_discovery_results', null);
-
-      // Prepopulate config input tags
-      document.getElementById('input-gemini-key').value = state.geminiKey;
-      document.getElementById('input-serp-key').value = state.serpKey;
-
-      if (!state.geminiKey || !state.serpKey) {
-        state.showSettings = true;
-        document.getElementById('settings-panel').classList.remove('hidden');
-      }
-
-      // Initial Render
-      render();
-    };
-
-    // --- Safety Parsers ---
-    function safeJsonParse(key, defaultValue) {
+  async function callGemini(prompt) {
+    if (!keys.gemini) throw new Error('No Gemini key set');
+    let lastErr;
+    for (const modelName of GEMINI_MODEL_CHAIN) {
       try {
-        const item = localStorage.getItem(key);
-        if (!item) return defaultValue;
-        return JSON.parse(item);
-      } catch (err) {
-        console.error("Local storage corruption parsed. Defaulting safely.", err);
-        return defaultValue;
-      }
-    }
-
-    // --- Reactive Toast Engine ---
-    function showToast(message, type = 'success') {
-      const banner = document.getElementById('toast-banner');
-      const text = document.getElementById('toast-message');
-      const icon = document.getElementById('toast-icon');
-
-      text.innerText = message;
-      if (type === 'error') {
-        banner.className = "fixed top-4 right-4 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl border shadow-2xl transition-all duration-300 transform translate-y-0 opacity-100 bg-slate-900 border-rose-800 text-rose-400";
-        icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
-      } else {
-        banner.className = "fixed top-4 right-4 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl border shadow-2xl transition-all duration-300 transform translate-y-0 opacity-100 bg-slate-900 border-indigo-500 text-indigo-400 shadow-indigo-500/10";
-        icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
-      }
-
-      setTimeout(() => {
-        banner.style.transform = 'translateY(-100px)';
-        banner.style.opacity = '0';
-      }, 4000);
-    }
-
-    // --- Navigation Routing Controls ---
-    function switchTab(tabId) {
-      state.activeTab = tabId;
-      
-      const navPort = document.getElementById('nav-portfolio');
-      const navDisc = document.getElementById('nav-discovery');
-      const contentPort = document.getElementById('tab-portfolio-content');
-      const contentDisc = document.getElementById('tab-discovery-content');
-
-      if (tabId === 'portfolio') {
-        navPort.className = "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 bg-slate-800 text-white shadow-lg";
-        navDisc.className = "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 text-slate-400 hover:text-slate-200";
-        contentPort.classList.remove('hidden');
-        contentDisc.classList.add('hidden');
-      } else {
-        navPort.className = "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 text-slate-400 hover:text-slate-200";
-        navDisc.className = "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 bg-slate-800 text-white shadow-lg";
-        contentPort.classList.add('hidden');
-        contentDisc.classList.remove('hidden');
-      }
-      render();
-    }
-
-    // --- Toggle Drawers ---
-    function toggleSettings() {
-      state.showSettings = !state.showSettings;
-      const panel = document.getElementById('settings-panel');
-      const btn = document.getElementById('settings-btn');
-      if (state.showSettings) {
-        panel.classList.remove('hidden');
-        btn.className = "p-2.5 rounded-2xl border transition-all duration-300 bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-500/25";
-      } else {
-        panel.classList.add('hidden');
-        btn.className = "p-2.5 rounded-2xl border border-slate-800 text-slate-400 hover:text-white transition-all duration-300 bg-slate-900";
-      }
-    }
-
-    function toggleAddStockForm() {
-      state.isAddingStock = !state.isAddingStock;
-      const form = document.getElementById('add-stock-container');
-      if (state.isAddingStock) {
-        form.classList.remove('hidden');
-      } else {
-        form.classList.add('hidden');
-      }
-    }
-
-    // --- Save Credentials ---
-    function saveConfig(e) {
-      e.preventDefault();
-      state.geminiKey = document.getElementById('input-gemini-key').value.trim();
-      state.serpKey = document.getElementById('input-serp-key').value.trim();
-
-      localStorage.setItem('auraindia_gemini_key', state.geminiKey);
-      localStorage.setItem('auraindia_serp_key', state.serpKey);
-      
-      showToast('Configurations successfully saved locally.');
-      state.showSettings = false;
-      document.getElementById('settings-panel').classList.add('hidden');
-      render();
-    }
-
-    // --- Register manual assets ---
-    function registerStock(e) {
-      e.preventDefault();
-      const symbol = document.getElementById('input-symbol').value.toUpperCase().trim();
-      const name = document.getElementById('input-name').value.trim();
-      const shares = parseFloat(document.getElementById('input-shares').value);
-      const buyPrice = parseFloat(document.getElementById('input-buyprice').value);
-
-      if (!symbol || !name || isNaN(shares) || isNaN(buyPrice)) {
-        showToast('Please correctly enter all asset values.', 'error');
-        return;
-      }
-
-      const position = {
-        id: Date.now().toString(),
-        symbol,
-        name,
-        shares,
-        buyPrice
-      };
-
-      state.portfolio.push(position);
-      localStorage.setItem('auraindia_portfolio', JSON.stringify(state.portfolio));
-
-      // Reset form fields
-      document.getElementById('input-symbol').value = '';
-      document.getElementById('input-name').value = '';
-      document.getElementById('input-shares').value = '';
-      document.getElementById('input-buyprice').value = '';
-
-      state.isAddingStock = false;
-      document.getElementById('add-stock-container').classList.add('hidden');
-      
-      showToast(`Position ${symbol} registered in portfolio.`);
-      render();
-    }
-
-    // --- Remove Positions ---
-    function removeStock(id, symbol) {
-      state.portfolio = state.portfolio.filter(item => item.id !== id);
-      localStorage.setItem('auraindia_portfolio', JSON.stringify(state.portfolio));
-
-      delete state.analysisCache[symbol];
-      localStorage.setItem('auraindia_analysis_cache', JSON.stringify(state.analysisCache));
-
-      if (state.analysisResult && state.analysisResult.symbol === symbol) {
-        state.analysisResult = null;
-      }
-
-      showToast(`Removed asset ${symbol} from tracker.`);
-      render();
-    }
-
-    // --- Network Requests wrapper with Exponential backoff ---
-    async function fetchWithBackoff(url, options, retries = 5, delay = 1000) {
-      try {
-        const response = await fetch(url, options);
-        if (!response.ok) {
-          const text = await response.text();
-          throw new Error(`HTTP ${response.status}: ${text || response.statusText}`);
-        }
-        return await response.json();
-      } catch (error) {
-        if (retries <= 1) throw error;
-        await new Promise(res => setTimeout(res, delay));
-        return fetchWithBackoff(url, options, retries - 1, delay * 2);
-      }
-    }
-
-    // --- CORS Free SerpAPI Scraper Gateway ---
-    async function makeSerpSearch(query) {
-      if (!state.serpKey) {
-        throw new Error("Missing SerpAPI workspace credentials.");
-      }
-      const target = `https://serpapi.com/search.json?q=${encodeURIComponent(query)}&api_key=${state.serpKey}`;
-      const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(target)}`;
-      return await fetchWithBackoff(proxy, { method: 'GET' });
-    }
-
-    // --- Execute Indian Advisory ---
-    async function executeIndianAdvisoryCheck(symbol, name, buyPrice, shares) {
-      if (!state.geminiKey || !state.serpKey) {
-        showToast('Both SerpAPI and Gemini credentials are required.', 'error');
-        state.showSettings = true;
-        document.getElementById('settings-panel').classList.remove('hidden');
-        return;
-      }
-
-      state.isAnalyzing = true;
-      state.analyzingSymbol = symbol;
-      state.analysisResult = null;
-      render();
-
-      try {
-        const queryTerm = `${symbol} share price live stock market news NSE BSE history target today`;
-        const searchData = await makeSerpSearch(queryTerm);
-
-        const organic = (searchData.organic_results || []).slice(0, 5).map(res => ({
-          title: res.title,
-          snippet: res.snippet,
-          link: res.link
-        }));
-
-        const systemPrompt = `You are an elite Indian market analyst. Analyze live Indian market performance (NSE/BSE) for the specified stock.
-
-All currency calculations and display metrics MUST be formatted strictly in Indian Rupees (₹).
-Compare the user's purchase price of ₹${buyPrice} to the current researched value.
-
-Your response must be a single, raw, validated JSON object matching this schema. Avoid any trailing text, markdown formatting or conversation.
-
-{
-  "symbol": "${symbol}",
-  "name": "${name}",
-  "currentPriceINR": "Current market price per share as a number in Indian Rupees (e.g., 2510.50) (number)",
-  "priceChangePercent": "24h change percentage (e.g. '+2.41%' or '-1.25%') (string)",
-  "advisorAction": "Must be: 'BUY_EXTRA' | 'HOLD' | 'REDUCE' | 'SELL_PROFIT' (string)",
-  "decisionReason": "Deep strategic argument in Rupees ₹ explaining why they should Buy, Hold, or Sell/Reduce given their average buy price of ₹${buyPrice} and current market outlook. Citing targets.",
-  "recentHistoryAndVolume": "A check on the stock's recent 1-week/1-month trading volumes, chart trends, and key financial results on BSE/NSE (string)",
-  "sentimentScore": "0 (highly bearish) to 100 (highly bullish) (number)",
-  "detailedTechnicalOutlook": "Comprehensive analyst report in clean markdown paragraphs detailing support/resistance zones, Indian macro triggers, and a short-term 30-day target expectation."
-}`;
-
-        const payload = {
-          contents: [{ parts: [{ text: `Evaluate India stock ${symbol} (${name}). Web scrap results: ${JSON.stringify(organic)}` }] }],
-          systemInstruction: { parts: [{ text: systemPrompt }] },
-          generationConfig: { responseMimeType: "application/json" }
-        };
-
-        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${state.geminiKey}`;
-        const res = await fetchWithBackoff(geminiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        const resText = res.candidates?.[0]?.content?.parts?.[0]?.text;
-        const parsed = JSON.parse(resText);
-
-        parsed.sources = organic;
-        parsed.calculatedAt = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) + " IST";
-
-        state.analysisCache[symbol] = parsed;
-        localStorage.setItem('auraindia_analysis_cache', JSON.stringify(state.analysisCache));
-        state.analysisResult = parsed;
-
-        showToast(`${symbol} strategic advisor update completed.`);
-      } catch (err) {
-        console.error(err);
-        showToast('Error analyzing stock. Check credentials and connection.', 'error');
-      } finally {
-        state.isAnalyzing = false;
-        state.analyzingSymbol = null;
-        render();
-      }
-    }
-
-    // --- Discover high momentum 1-Week Swings ---
-    async function scanIndianBreakoutSwings() {
-      if (!state.geminiKey || !state.serpKey) {
-        showToast('Both SerpAPI and Gemini keys are mandatory to evaluate actions.', 'error');
-        state.showSettings = true;
-        document.getElementById('settings-panel').classList.remove('hidden');
-        return;
-      }
-
-      state.isScanning = true;
-      state.discoveryResults = null;
-      render();
-
-      try {
-        const queryTerm = "best breakout stocks NSE India volume momentum 1-week swing trade recommendations today news bse";
-        const searchData = await makeSerpSearch(queryTerm);
-
-        const organic = (searchData.organic_results || []).slice(0, 6).map(res => ({
-          title: res.title,
-          snippet: res.snippet,
-          link: res.link
-        }));
-
-        const systemPrompt = `You are an elite Indian swing trading quantitative strategist. Analyze raw search snippets to discover stocks with high-volume breakout setups poised for growth in a 1-week horizon.
-
-Your primary objective is to select the absolute NO. 1 BEST PICK for the week by rigorously vetting historical breakouts, support/resistance zones, and market news to avoid pump-and-dump traps. Provide additional runners-up.
-
-ALL metrics, prices, entries, target limits, and stop losses MUST be structured in Indian Rupees (₹).
-
-Return a valid raw JSON object matching the schema below. Do not wrap in markdown tags outside.
-
-{
-  "scannedAt": "Current execution date",
-  "marketPulse": "Overview of major Nifty / Sensex sectors spearheading volume breakouts (string)",
-  "absoluteBestPick": {
-    "symbol": "Ticker (e.g. TATASTEEL) (string)",
-    "name": "Indian Company Name (string)",
-    "recentGain": "Recent percentage swing (e.g. '+15.2%') (string)",
-    "entryZone": "Optimal entry value in Indian Rupees (e.g. '₹210 - ₹215') (string)",
-    "target1Week": "1-Week profit target in Indian Rupees (e.g. '₹240') (string)",
-    "stopLoss": "Safety stop-loss in Indian Rupees (e.g. '₹195') (string)",
-    "historicalBackground": "Deep analysis checking 7-day, 14-day, and 50-day volume charts verifying this breakout is structurally sound and has solid historic supports rather than just hype (string)",
-    "breakoutCatalyst": "Fundamental event causing this trigger (e.g., strong earnings beat, massive infrastructure order win) (string)"
-  },
-  "highMomentumSwings": [
-    {
-      "symbol": "Ticker symbol (e.g. ZOMATO) (string)",
-      "name": "Indian Company Name (string)",
-      "recentMomentumGain": "Percentage swing in past 3-5 days (e.g. '+12.5%') (string)",
-      "buyEntryZone": "Optimal entry value range in Indian Rupees (e.g. '₹260 - ₹268') (string)",
-      "oneWeekTargetINR": "Calculated exit range target in Indian Rupees with profit target (e.g. '₹295 (+11%)') (string)",
-      "stopLossINR": "Safety stop-loss limit value in Indian Rupees (e.g. '₹245') (string)",
-      "historicalTrendVerification": "A quick historical check over past weeks confirming volume breakout validity (string)",
-      "breakoutTrigger": "The key driver causing this swing (string)"
-    }
-  ]
-}`;
-
-        const payload = {
-          contents: [{ parts: [{ text: `Calculate 1-week swing breakout targets using live stock feeds: ${JSON.stringify(organic)}` }] }],
-          systemInstruction: { parts: [{ text: systemPrompt }] },
-          generationConfig: { responseMimeType: "application/json" }
-        };
-
-        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${state.geminiKey}`;
-        const res = await fetchWithBackoff(geminiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        const resText = res.candidates?.[0]?.content?.parts?.[0]?.text;
-        const parsed = JSON.parse(resText);
-
-        state.discoveryResults = parsed;
-        localStorage.setItem('auraindia_discovery_results', JSON.stringify(parsed));
-        showToast('Breakout swing scans evaluated successfully.');
-      } catch (err) {
-        console.error(err);
-        showToast('Breakout scan failed. Review credentials.', 'error');
-      } finally {
-        state.isScanning = false;
-        render();
-      }
-    }
-
-    // --- Import recommended stocks directly ---
-    function importDirect(symbol, name, entry) {
-      const priceVal = parseFloat(entry.split('-')[0].replace(/[^0-9.]/g, '')) || 100.0;
-      
-      const newPos = {
-        id: Date.now().toString(),
-        symbol: symbol.toUpperCase(),
-        name,
-        shares: 10,
-        buyPrice: priceVal
-      };
-
-      state.portfolio.push(newPos);
-      localStorage.setItem('auraindia_portfolio', JSON.stringify(state.portfolio));
-
-      showToast(`Position ${symbol} registered in portfolio in Indian Rupees ₹.`);
-      switchTab('portfolio');
-    }
-
-    // --- Render System engine (Updates dynamic state) ---
-    function render() {
-      // 1. Update general stats
-      document.getElementById('stat-positions').innerText = `${state.portfolio.length} Positions`;
-      document.getElementById('badge-position-count').innerText = `${state.portfolio.length} Positions`;
-
-      const totalCap = state.portfolio.reduce((sum, s) => sum + (s.shares * s.buyPrice), 0);
-      document.getElementById('stat-capital').innerText = "₹" + totalCap.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-      // 2. Render Left Portfolio List
-      const portList = document.getElementById('portfolio-list');
-      if (state.portfolio.length === 0) {
-        portList.innerHTML = `
-          <div class="text-center py-12 px-4 border border-dashed border-slate-850 rounded-2xl bg-slate-950/40">
-            <p class="text-slate-500 text-xs">No assets registered yet.</p>
-          </div>
-        `;
-      } else {
-        portList.innerHTML = state.portfolio.map(stock => {
-          const cached = state.analysisCache[stock.symbol];
-          const isBeingAnalyzed = state.isAnalyzing && state.analyzingSymbol === stock.symbol;
-
-          let badgeHTML = '';
-          if (cached) {
-            const adviceStyle = getActionStyles(cached.advisorAction);
-            badgeHTML = `<span class="text-[8px] px-2 py-0.5 rounded font-extrabold tracking-wide font-mono ${adviceStyle.badge}">${adviceStyle.text}</span>`;
+        const res = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${keys.gemini}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
           }
-
-          return `
-            <div 
-              class="p-4 rounded-2xl border transition-all duration-300 cursor-pointer ${
-                state.analysisResult && state.analysisResult.symbol === stock.symbol
-                  ? 'bg-slate-900 border-indigo-500/80 shadow-lg shadow-indigo-500/5'
-                  : 'bg-slate-900/20 border-slate-800/80 hover:border-slate-750 hover:bg-slate-900/50'
-              }"
-              onclick="selectCachedStock('${stock.symbol}')"
-            >
-              <div class="flex justify-between items-start">
-                <div>
-                  <div class="flex items-center gap-2">
-                    <span class="font-mono text-xs font-black text-white tracking-wide">${stock.symbol}</span>
-                    ${badgeHTML}
-                  </div>
-                  <h4 class="text-[10px] text-slate-500 truncate max-w-[155px] font-medium mt-1">${stock.name}</h4>
-                </div>
-
-                <div class="text-right">
-                  <p class="text-[9px] text-slate-500 font-medium">${stock.shares} Shares</p>
-                  <p class="text-xs font-bold text-slate-300 font-mono mt-0.5">₹${stock.buyPrice.toFixed(2)}</p>
-                </div>
-              </div>
-
-              <div class="mt-4 flex items-center justify-between border-t border-slate-850 pt-2.5">
-                <button
-                  onclick="event.stopPropagation(); executeIndianAdvisoryCheck('${stock.symbol}', '${stock.name}', ${stock.buyPrice}, ${stock.shares})"
-                  ${state.isAnalyzing ? 'disabled' : ''}
-                  class="text-[9px] uppercase font-bold tracking-widest py-1.5 px-3 rounded-xl border flex items-center gap-1.5 transition-all ${
-                    isBeingAnalyzed 
-                      ? 'bg-slate-950 border-indigo-500 text-indigo-400 cursor-not-allowed'
-                      : 'bg-indigo-600/10 border-indigo-500/20 text-indigo-400 hover:bg-indigo-600 hover:text-white'
-                  }"
-                >
-                  ${isBeingAnalyzed 
-                    ? `<svg class="animate-spin w-3 h-3 text-indigo-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`
-                    : `<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>`
-                  }
-                  <span>Run Advisory</span>
-                </button>
-
-                <button
-                  onclick="event.stopPropagation(); removeStock('${stock.id}', '${stock.symbol}')"
-                  class="p-1.5 text-slate-600 hover:text-rose-400 hover:bg-rose-950/20 rounded-xl transition-colors"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
-                </button>
-              </div>
-            </div>
-          `;
-        }).join('');
-      }
-
-      // 3. Render Right Advisory Desk View
-      const advisoryContainer = document.getElementById('advisory-desk-content');
-      if (state.isAnalyzing) {
-        advisoryContainer.innerHTML = `
-          <div class="bg-slate-900/40 border border-slate-800 rounded-3xl p-10 shadow-2xl text-center space-y-6 shimmer-mask">
-            <div class="flex flex-col items-center justify-center space-y-4">
-              <div class="relative">
-                <div class="absolute inset-0 radar-pulse-ring bg-indigo-500/10 rounded-full w-14 h-14"></div>
-                <div class="bg-indigo-600 p-4 rounded-full text-white relative z-10 animate-bounce">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-                </div>
-              </div>
-              <div>
-                <h3 class="text-sm font-black text-white uppercase tracking-wider">Accessing live market feeds...</h3>
-                <p class="text-xs text-slate-400 max-w-sm mx-auto mt-1 leading-relaxed">
-                  Scraping BSE/NSE tickers via SerpAPI and formatting advice in Indian Rupees (₹) using Gemini 2.5...
-                </p>
-              </div>
-            </div>
-          </div>
-        `;
-      } else if (state.analysisResult) {
-        const ar = state.analysisResult;
-        const styles = getActionStyles(ar.advisorAction);
-        
-        advisoryContainer.innerHTML = `
-          <div class="bg-slate-900/40 backdrop-blur-xl border border-slate-850 rounded-3xl shadow-2xl overflow-hidden animate-slideUp pulse-glow-card">
-            
-            <div class="p-6 bg-gradient-to-r ${styles.gradient} border-b border-slate-850 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <div>
-                <div class="flex items-center gap-2">
-                  <span class="font-mono text-lg font-black text-white">${ar.symbol}</span>
-                  <span class="text-slate-600">|</span>
-                  <h2 class="text-xs font-bold text-slate-300">${ar.name}</h2>
-                </div>
-                <p class="text-[9px] text-slate-500 font-mono tracking-wider uppercase mt-1">Calculated at ${ar.calculatedAt}</p>
-              </div>
-
-              <span class="text-[10px] font-black tracking-widest px-3.5 py-2 rounded-xl font-mono ${styles.badge}">
-                ${styles.text}
-              </span>
-            </div>
-
-            <div class="p-6 space-y-6">
-              
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div class="bg-slate-950 p-4 rounded-2xl border border-slate-850/60 flex flex-col justify-between">
-                  <span class="text-[9px] text-slate-500 uppercase font-bold tracking-widest">Researched Price</span>
-                  <div class="mt-2 flex items-baseline gap-2">
-                    <span class="text-base font-black font-mono text-white">₹${ar.currentPriceINR}</span>
-                    <span class="text-[9px] font-bold font-mono ${ar.priceChangePercent.startsWith('+') ? 'text-emerald-400' : 'text-rose-400'}">
-                      ${ar.priceChangePercent}
-                    </span>
-                  </div>
-                </div>
-
-                <div class="bg-slate-950 p-4 rounded-2xl border border-slate-850/60 flex flex-col justify-between">
-                  <span class="text-[9px] text-slate-500 uppercase font-bold tracking-widest">Bullish Sentiment</span>
-                  <div class="mt-2 flex items-center gap-2">
-                    <span class="text-base font-black font-mono text-indigo-400">${ar.sentimentScore}</span>
-                    <span class="text-xs text-slate-400 font-mono">/ 100</span>
-                  </div>
-                </div>
-
-                <div class="bg-slate-950 p-4 rounded-2xl border border-slate-850/60 flex flex-col justify-between">
-                  <span class="text-[9px] text-slate-500 uppercase font-bold tracking-widest">1-Week Outlook</span>
-                  <div class="mt-2 flex items-center gap-1.5">
-                    <span class="text-xs font-bold text-slate-200 uppercase tracking-wider">
-                      ${ar.sentimentScore >= 50 ? '🟢 Breakout Ready' : '🔴 Overbought Risk'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="bg-indigo-950/10 border border-indigo-950/80 p-5 rounded-2xl">
-                <p class="text-[9px] text-indigo-400 uppercase font-extrabold tracking-widest font-mono">AI Action Recommendation (Rupees ₹)</p>
-                <p class="text-xs text-slate-200 mt-1.5 leading-relaxed font-semibold">${ar.decisionReason}</p>
-              </div>
-
-              <div class="bg-slate-950 p-4 rounded-2xl border border-slate-850">
-                <p class="text-[9px] text-slate-500 uppercase font-extrabold tracking-widest">BSE/NSE Volume & History status</p>
-                <p class="text-xs text-slate-300 mt-1.5 leading-relaxed">${ar.recentHistoryAndVolume}</p>
-              </div>
-
-              <div class="space-y-2">
-                <h3 class="text-[10px] uppercase font-bold tracking-wider text-slate-400">Technical Report</h3>
-                <div class="bg-slate-950 p-4 rounded-2xl border border-slate-850 text-xs text-slate-300 leading-relaxed max-h-[220px] overflow-y-auto font-mono">
-                  ${ar.detailedTechnicalOutlook.replace(/\n/g, '<br/>')}
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-        `;
-      } else {
-        advisoryContainer.innerHTML = `
-          <div class="bg-slate-900/10 border border-dashed border-slate-800 rounded-3xl p-16 text-center space-y-4">
-            <div class="mx-auto bg-slate-900 p-3.5 rounded-full w-12 h-12 flex items-center justify-center text-indigo-400 border border-slate-800">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-            </div>
-            <div>
-              <h3 class="text-xs font-black text-white uppercase tracking-wider">Trading Advisory Deck</h3>
-              <p class="text-xs text-slate-400 max-w-sm mx-auto mt-1 leading-relaxed">
-                Pick an asset from your monitored NSE/BSE list on the left and click **Run Advisory** to trigger live search scans and plan strategy.
-              </p>
-            </div>
-          </div>
-        `;
-      }
-
-      // 4. Render Discovery content Tab
-      const discoveryContainer = document.getElementById('discovery-desk-content');
-      const btnScan = document.getElementById('btn-scan-breakouts');
-      const textScan = document.getElementById('scan-btn-text');
-      const iconScanSparkle = document.getElementById('scan-icon-sparkle');
-      const iconScanLoader = document.getElementById('scan-icon-loader');
-
-      if (state.isScanning) {
-        btnScan.disabled = true;
-        textScan.innerText = "Analyzing live volume breakouts...";
-        iconScanSparkle.classList.add('hidden');
-        iconScanLoader.classList.remove('hidden');
-      } else {
-        btnScan.disabled = false;
-        textScan.innerText = "Discover Breakouts (₹)";
-        iconScanSparkle.classList.remove('hidden');
-        iconScanLoader.classList.add('hidden');
-      }
-
-      if (state.discoveryResults) {
-        const dr = state.discoveryResults;
-        
-        let swingsHTML = '';
-        if (dr.highMomentumSwings && dr.highMomentumSwings.length > 0) {
-          swingsHTML = dr.highMomentumSwings.map(stock => `
-            <div class="bg-slate-900/40 border border-slate-850 hover:border-slate-800 rounded-3xl p-5 flex flex-col justify-between transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-indigo-500/5 duration-300">
-              <div class="space-y-4">
-                <div class="flex justify-between items-start">
-                  <div>
-                    <span class="font-mono text-base font-black text-white">${stock.symbol}</span>
-                    <h3 class="text-xs font-semibold text-slate-500 mt-1 truncate max-w-[150px]">${stock.name}</h3>
-                  </div>
-                  <span class="text-[10px] font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800/40 font-mono">
-                    ${stock.recentMomentumGain}
-                  </span>
-                </div>
-
-                <div class="grid grid-cols-2 gap-2 bg-slate-950 p-3.5 rounded-2xl border border-slate-850 font-mono text-xs">
-                  <div>
-                    <p class="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Buy Entry Zone</p>
-                    <p class="text-xs text-white font-black mt-0.5">${stock.buyEntryZone}</p>
-                  </div>
-                  <div>
-                    <p class="text-[9px] text-indigo-400 font-bold uppercase tracking-wider">1-Week Target</p>
-                    <p class="text-xs text-indigo-300 font-black mt-0.5">${stock.oneWeekTargetINR}</p>
-                  </div>
-                </div>
-
-                <div class="flex justify-between items-center text-[10px] text-slate-400 bg-slate-950/50 px-3 py-2 rounded-xl border border-slate-900 font-mono">
-                  <span>🛡️ Safety Stop Loss (INR):</span>
-                  <span class="font-bold text-rose-400">${stock.stopLossINR}</span>
-                </div>
-
-                <div class="space-y-1">
-                  <span class="text-[9px] text-slate-500 uppercase font-bold tracking-widest block">History Check</span>
-                  <p class="text-[11px] text-slate-300 leading-relaxed">${stock.historicalTrendVerification}</p>
-                </div>
-
-                <div class="space-y-1">
-                  <span class="text-[9px] text-indigo-400 uppercase font-bold tracking-widest block">Trigger Catalyst</span>
-                  <p class="text-[11px] text-slate-300 leading-relaxed font-semibold">${stock.breakoutTrigger}</p>
-                </div>
-              </div>
-
-              <button
-                onclick="importDirect('${stock.symbol}', '${stock.name}', '${stock.buyEntryZone || stock.entryZone || '100'}')"
-                class="mt-6 w-full bg-slate-800 hover:bg-indigo-600 text-white text-[10px] font-bold uppercase tracking-wider py-3 px-4 rounded-2xl transition-all flex items-center justify-center gap-1.5 active:scale-95 duration-300"
-              >
-                Import to Portfolio Tracker
-              </button>
-            </div>
-          `).join('');
+        );
+        if (!res.ok) {
+          lastErr = new Error(`Gemini ${modelName} error: ${res.status}`);
+          continue;
         }
+        const data = await res.json();
+        if (!data.candidates || !data.candidates[0]) {
+          lastErr = new Error(`Gemini ${modelName} returned no candidates`);
+          continue;
+        }
+        return data.candidates[0].content.parts[0].text;
+      } catch (e) {
+        lastErr = e;
+        continue;
+      }
+    }
+    throw lastErr || new Error('All Gemini models failed');
+  }
 
-        discoveryContainer.innerHTML = `
-          <div class="space-y-6">
-            
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 bg-slate-900/20 border border-slate-850 px-4 py-3 rounded-xl">
-              <span class="text-[10px] text-slate-500 font-mono tracking-wider">
-                📅 Scanned on: <strong class="text-slate-300">${dr.scannedAt}</strong>
-              </span>
-              <span class="text-xs text-slate-400">
-                Nifty Pulse: <strong class="text-indigo-400 font-semibold">${dr.marketPulse}</strong>
-              </span>
-            </div>
+  async function callOpenRouter(prompt) {
+    if (!keys.openrouter) throw new Error('No OpenRouter key set');
+    const models = await getFreeOpenRouterModels();
+    let lastErr;
+    for (const model of models) {
+      try {
+        const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + keys.openrouter,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model: model.id,
+            messages: [{ role: 'user', content: prompt }]
+          })
+        });
+        if (!res.ok) {
+          lastErr = new Error(model.label + ' failed: ' + res.status);
+          continue;
+        }
+        const data = await res.json();
+        if (!data.choices || !data.choices[0]) {
+          lastErr = new Error(model.label + ' returned empty response');
+          continue;
+        }
+        return data.choices[0].message.content;
+      } catch (e) {
+        lastErr = e;
+        continue;
+      }
+    }
+    throw lastErr || new Error('All OpenRouter free models failed');
+  }
 
-            <!-- Absolute Best Pick Highlight -->
-            <div class="bg-gradient-to-br from-indigo-950/40 via-slate-900/40 to-emerald-950/20 border-2 border-indigo-500/40 rounded-3xl p-6 relative overflow-hidden shadow-2xl animate-slideUp pulse-glow-card">
-              <div class="absolute top-0 right-0 bg-gradient-to-l from-emerald-500 to-indigo-500 text-white font-mono font-black text-[9px] px-4 py-1 rounded-bl-xl tracking-widest uppercase">
-                No.1 High Conviction Breakout Pick
-              </div>
-              
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
-                <div class="space-y-4 md:col-span-2">
-                  <div>
-                    <span class="font-mono text-2xl font-black text-white tracking-wide">${dr.absoluteBestPick.symbol}</span>
-                    <h3 class="text-sm font-bold text-slate-400 mt-1">${dr.absoluteBestPick.name}</h3>
-                  </div>
+  async function callAnyAI(prompt) {
+    // Try every Gemini free-tier model first, then every free OpenRouter model
+    try {
+      return await callGemini(prompt);
+    } catch (e) {
+      console.warn('All Gemini models failed, trying OpenRouter free chain:', e.message);
+      try {
+        return await callOpenRouter(prompt);
+      } catch (e2) {
+        throw new Error('Every available free model (Gemini + OpenRouter) failed. This usually means daily quotas are exhausted across the board, or no API keys are set — check Settings.');
+      }
+    }
+  }
 
-                  <div class="grid grid-cols-3 gap-4">
-                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-850 font-mono">
-                      <p class="text-[8px] text-slate-500 font-bold uppercase">Optimal Entry</p>
-                      <p class="text-xs text-white font-extrabold mt-0.5">${dr.absoluteBestPick.entryZone}</p>
-                    </div>
-                    <div class="bg-slate-950 p-3 rounded-xl border border-indigo-900/40 font-mono">
-                      <p class="text-[8px] text-indigo-400 font-bold uppercase">1-Week Target</p>
-                      <p class="text-xs text-indigo-300 font-extrabold mt-0.5">${dr.absoluteBestPick.target1Week}</p>
-                    </div>
-                    <div class="bg-slate-950 p-3 rounded-xl border border-rose-900/40 font-mono">
-                      <p class="text-[8px] text-rose-400 font-bold uppercase">Safety Stop Loss</p>
-                      <p class="text-xs text-rose-300 font-extrabold mt-0.5">${dr.absoluteBestPick.stopLoss}</p>
-                    </div>
-                  </div>
+  async function fetchNews(query) {
+    if (!keys.serpapi) return null;
+    try {
+      const res = await fetch(
+        `https://serpapi.com/search.json?engine=google_news&q=${encodeURIComponent(query)}&api_key=${keys.serpapi}`
+      );
+      if (!res.ok) throw new Error('SerpAPI error: ' + res.status);
+      const data = await res.json();
+      return data.news_results ? data.news_results.slice(0, 5) : null;
+    } catch (e) {
+      console.warn('SerpAPI fetch failed (likely CORS or browser restriction):', e.message);
+      return null;
+    }
+  }
 
-                  <div class="space-y-1">
-                    <span class="text-[9px] text-slate-500 uppercase font-black tracking-widest block">Core catalyst driver</span>
-                    <p class="text-xs text-slate-200 leading-relaxed font-semibold">
-                      ${dr.absoluteBestPick.breakoutCatalyst}
-                    </p>
-                  </div>
-                </div>
+  // ---------- WATCHLIST ----------
+  const stockNameInput = document.getElementById('stock-name-input');
+  const buyPriceInput = document.getElementById('buy-price-input');
+  const currentPriceInput = document.getElementById('current-price-input');
+  const qtyInput = document.getElementById('qty-input');
+  const addStockBtn = document.getElementById('add-stock-btn');
+  const stocksList = document.getElementById('stocks-list');
 
-                <div class="bg-slate-950/80 border border-slate-850 p-5 rounded-2xl flex flex-col justify-between">
-                  <div class="space-y-2">
-                    <span class="text-[9px] text-indigo-400 uppercase font-extrabold tracking-widest flex items-center gap-1">
-                      📈 Verified Historical Context
-                    </span>
-                    <p class="text-[11px] text-slate-300 leading-relaxed leading-normal">
-                      ${dr.absoluteBestPick.historicalBackground}
-                    </p>
-                  </div>
+  function renderStocks() {
+    stocksList.innerHTML = '';
+    if (stocks.length === 0) {
+      stocksList.innerHTML = '<div class="empty-state">No stocks added yet. Add one above to track it.</div>';
+      return;
+    }
+    stocks.forEach((stock, idx) => {
+      const pct = stock.currentPrice && stock.buyPrice
+        ? (((stock.currentPrice - stock.buyPrice) / stock.buyPrice) * 100).toFixed(2)
+        : null;
+      const isUp = pct !== null && parseFloat(pct) >= 0;
 
-                  <button
-                    onclick="importDirect('${dr.absoluteBestPick.symbol}', '${dr.absoluteBestPick.name}', '${dr.absoluteBestPick.entryZone || '100'}')"
-                    class="mt-4 w-full bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] font-bold uppercase tracking-wider py-2.5 rounded-xl transition-all shadow-md active:scale-95"
-                  >
-                    Add directly to advisory tracker
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Runner up breakouts -->
-            <div class="space-y-3">
-              <h3 class="text-[10px] uppercase font-black text-slate-400 tracking-wider">Alternative Breakout candidates</h3>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                ${swingsHTML}
-              </div>
-            </div>
-
+      const card = document.createElement('div');
+      card.className = 'stock-card';
+      card.innerHTML = `
+        <div class="stock-card-top">
+          <div>
+            <div class="stock-name">${escapeHtml(stock.name)}</div>
+            <div class="stock-meta">Buy: ${stock.buyPrice} ${stock.qty ? '× ' + stock.qty : ''} ${stock.currentPrice ? '→ Now: ' + stock.currentPrice : ''}</div>
           </div>
-        `;
-      } else {
-        discoveryContainer.innerHTML = `
-          <div class="bg-slate-900/20 border border-dashed border-slate-800 rounded-3xl p-16 text-center space-y-4">
-            <div class="mx-auto bg-slate-900 p-3.5 rounded-full w-12 h-12 flex items-center justify-center text-indigo-400 border border-slate-800">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
-            </div>
-            <div>
-              <h3 class="text-xs font-black text-white uppercase tracking-wider">No Active Discoveries Scanned</h3>
-              <p class="text-xs text-slate-400 max-w-sm mx-auto mt-1 leading-relaxed">
-                Click **Discover Breakouts** to run high-volume momentum scans and extract active breakouts on BSE/NSE.
-              </p>
-            </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            ${pct !== null ? `<div class="stock-pct ${isUp ? 'up' : 'down'}">${isUp ? '+' : ''}${pct}%</div>` : ''}
+            <button class="remove-btn" data-idx="${idx}">×</button>
           </div>
-        `;
-      }
+        </div>
+        ${renderHistoryStrip(stock.history)}
+        <div style="display:flex; gap:8px; margin-top:8px;">
+          <button class="update-price-btn" data-idx="${idx}" style="flex:1;">Update price</button>
+          <button class="analyze-btn" data-idx="${idx}" style="flex:1; margin-top:0;">Get AI summary</button>
+        </div>
+        <div class="analysis-box-container"></div>
+      `;
+      stocksList.appendChild(card);
+    });
+
+    // wire up remove buttons
+    stocksList.querySelectorAll('.remove-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        stocks.splice(parseInt(btn.dataset.idx), 1);
+        saveStocks(stocks);
+        renderStocks();
+      });
+    });
+
+    // wire up analyze buttons
+    stocksList.querySelectorAll('.analyze-btn').forEach(btn => {
+      btn.addEventListener('click', () => analyzeStock(parseInt(btn.dataset.idx), btn));
+    });
+
+    // wire up update-price buttons
+    stocksList.querySelectorAll('.update-price-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.idx);
+        const newPrice = parseFloat(prompt('Enter today\'s price for ' + stocks[idx].name + ':'));
+        if (!newPrice || isNaN(newPrice)) return;
+
+        const stock = stocks[idx];
+        if (!stock.history) stock.history = [];
+        // log the previous current price into history before overwriting, with today's date
+        stock.history.push({ date: new Date().toISOString().slice(0, 10), price: newPrice });
+        // keep only last 20 entries
+        if (stock.history.length > 20) stock.history = stock.history.slice(-20);
+        stock.currentPrice = newPrice;
+
+        saveStocks(stocks);
+        renderStocks();
+      });
+    });
+  }
+
+  function renderHistoryStrip(history) {
+    if (!history || history.length === 0) {
+      return `<div class="history-strip empty">No price history yet — tap "Update price" over time to build a trend.</div>`;
+    }
+    const recent = history.slice(-6);
+    const items = recent.map((h, i) => {
+      const prevPrice = i > 0 ? recent[i-1].price : recent[0].price;
+      const changeClass = h.price >= prevPrice ? 'up' : 'down';
+      return `<div class="history-point"><span class="history-date">${h.date.slice(5)}</span><span class="history-price ${changeClass}">${h.price}</span></div>`;
+    }).join('');
+    return `<div class="history-strip">${items}</div>`;
+  }
+
+  async function analyzeStock(idx, btnEl) {
+    const stock = stocks[idx];
+    const container = btnEl.nextElementSibling;
+    btnEl.disabled = true;
+    container.innerHTML = '<div class="analysis-box"><span class="loading-dots"><span></span><span></span><span></span></span></div>';
+
+    const pct = stock.currentPrice && stock.buyPrice
+      ? (((stock.currentPrice - stock.buyPrice) / stock.buyPrice) * 100).toFixed(2)
+      : 'unknown';
+
+    let historyLine = 'No price history logged yet — only a single snapshot is available.';
+    let trendNote = '';
+    if (stock.history && stock.history.length >= 2) {
+      historyLine = 'Price history (oldest to most recent): ' +
+        stock.history.map(h => `${h.date}: ${h.price}`).join(', ');
+      const first = stock.history[0].price;
+      const last = stock.history[stock.history.length - 1].price;
+      const trendPct = (((last - first) / first) * 100).toFixed(2);
+      trendNote = `Trend across logged history: ${trendPct}% ${trendPct >= 0 ? 'up' : 'down'} over ${stock.history.length} logged points.`;
     }
 
-    // --- Retrieve state-driven color structures ---
-    function getActionStyles(action) {
-      switch (action) {
-        case 'BUY_EXTRA':
-          return {
-            text: '🎯 BUY EXTRA',
-            badge: 'bg-emerald-950/80 text-emerald-400 border border-emerald-500/30',
-            gradient: 'from-emerald-950/20 to-slate-900/60 border-emerald-500/20'
-          };
-        case 'SELL_PROFIT':
-          return {
-            text: '💰 TAKE PROFIT',
-            badge: 'bg-indigo-950/80 text-indigo-400 border border-indigo-500/30',
-            gradient: 'from-indigo-950/20 to-slate-900/60 border-indigo-500/20'
-          };
-        case 'REDUCE':
-          return {
-            text: '⚠️ REDUCE POSITION',
-            badge: 'bg-rose-950/80 text-rose-400 border border-rose-500/30',
-            gradient: 'from-rose-950/20 to-slate-900/60 border-rose-500/20'
-          };
-        default:
-          return {
-            text: '⏸️ HOLD POSITION',
-            badge: 'bg-amber-950/80 text-amber-400 border border-amber-500/30',
-            gradient: 'from-amber-950/20 to-slate-900/60 border-amber-500/20'
-          };
-      }
+    const promptText = `A retail investor holds ${stock.name}, bought at ${stock.buyPrice}, currently at ${stock.currentPrice || 'unknown'} (${pct}% change from buy price).
+
+${historyLine}
+${trendNote}
+
+Using this trend data (not just the single current price), give a short, balanced, informational summary (max 130 words) covering:
+1. What the logged trend suggests directionally (momentum building, stalling, reversing, or too little data yet)
+2. General considerations for a position at this change level (holding period, conviction, diversification)
+3. 2-3 questions the investor should ask themselves next
+
+Do NOT give a definitive buy/sell/hold instruction — frame everything as considerations, not a directive. If there's insufficient history, say so plainly rather than inventing a trend. End with a one-line reminder that this isn't financial advice.`;
+
+    try {
+      const result = await callAnyAI(promptText);
+      container.innerHTML = `<div class="analysis-box"><span class="tag hold">CONSIDERATIONS</span><br>${escapeHtml(result)}</div>`;
+    } catch (e) {
+      container.innerHTML = `<div class="analysis-box">Couldn't generate a summary right now (${escapeHtml(e.message)}). Check your API keys in settings.</div>`;
+    } finally {
+      btnEl.disabled = false;
+    }
+  }
+
+  addStockBtn.addEventListener('click', () => {
+    const name = stockNameInput.value.trim();
+    const buyPrice = parseFloat(buyPriceInput.value);
+    const currentPrice = parseFloat(currentPriceInput.value) || null;
+    const qty = parseFloat(qtyInput.value) || null;
+
+    if (!name || !buyPrice) return;
+
+    stocks.push({ name, buyPrice, currentPrice, qty });
+    saveStocks(stocks);
+    renderStocks();
+
+    stockNameInput.value = '';
+    buyPriceInput.value = '';
+    currentPriceInput.value = '';
+    qtyInput.value = '';
+  });
+
+  function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  renderStocks();
+
+  // ---------- PORTFOLIO-WIDE COMPARISON ----------
+  const portfolioBtn = document.getElementById('portfolio-summary-btn');
+  const portfolioOutput = document.getElementById('portfolio-summary-output');
+
+  portfolioBtn.addEventListener('click', async () => {
+    if (stocks.length === 0) {
+      portfolioOutput.innerHTML = `<div class="analysis-box">Add at least one stock first.</div>`;
+      return;
     }
 
-    // --- Handle local stock selection ---
-    function selectCachedStock(symbol) {
-      if (state.analysisCache[symbol]) {
-        state.analysisResult = state.analysisCache[symbol];
-        render();
-      }
+    portfolioBtn.disabled = true;
+    portfolioOutput.innerHTML = `<div class="analysis-box"><span class="loading-dots"><span></span><span></span><span></span></span> Comparing your watchlist...</div>`;
+
+    const stocksSummary = stocks.map(s => {
+      const pct = s.currentPrice && s.buyPrice
+        ? (((s.currentPrice - s.buyPrice) / s.buyPrice) * 100).toFixed(2)
+        : 'unknown';
+      const histCount = s.history ? s.history.length : 0;
+      const histTrend = (s.history && s.history.length >= 2)
+        ? `trend: ${s.history.map(h => h.price).join(' → ')}`
+        : 'no logged trend yet';
+      return `${s.name}: bought ${s.buyPrice}, now ${s.currentPrice || 'unknown'} (${pct}%), ${histCount} history points, ${histTrend}`;
+    }).join('\n');
+
+    const promptText = `Here is a retail investor's full watchlist with logged price history:
+
+${stocksSummary}
+
+Write an informational comparison (max 200 words) that:
+1. Notes which entries have enough logged history to actually show a trend vs. which are single-snapshot only
+2. Describes the relative momentum differences between entries (without predicting future returns)
+3. Suggests what additional data points would make this comparison more reliable
+
+Do NOT rank these as "best" investments or give buy/sell instructions — this is about describing the data, not directing action. End with a one-line reminder this isn't financial advice.`;
+
+    try {
+      const result = await callAnyAI(promptText);
+      portfolioOutput.innerHTML = `<div class="research-result"><h4>Watchlist comparison</h4>${escapeHtml(result)}</div>`;
+    } catch (e) {
+      portfolioOutput.innerHTML = `<div class="analysis-box">Couldn't generate comparison (${escapeHtml(e.message)}). Check your API keys.</div>`;
+    } finally {
+      portfolioBtn.disabled = false;
     }
-  </script>
+  });
+
+  // ---------- RESEARCH TAB ----------
+  const autoDiscoverBtn = document.getElementById('auto-discover-btn');
+  const researchOutput = document.getElementById('research-output');
+  const researchInput = document.getElementById('research-input');
+  const researchBtn = document.getElementById('research-btn');
+  const manualResearchOutput = document.getElementById('manual-research-output');
+
+  async function fetchTrendingHeadlines() {
+    if (!keys.serpapi) return null;
+    try {
+      const res = await fetch(
+        `https://serpapi.com/search.json?engine=google_news&q=${encodeURIComponent('India stock market top movers today')}&api_key=${keys.serpapi}`
+      );
+      if (!res.ok) throw new Error('SerpAPI error: ' + res.status);
+      const data = await res.json();
+      return data.news_results ? data.news_results.slice(0, 10) : null;
+    } catch (e) {
+      console.warn('SerpAPI trending fetch failed (likely CORS/browser restriction):', e.message);
+      return null;
+    }
+  }
+
+  autoDiscoverBtn.addEventListener('click', async () => {
+    autoDiscoverBtn.disabled = true;
+    researchOutput.innerHTML = `<div class="research-result"><span class="loading-dots"><span></span><span></span><span></span></span> Scanning today's financial news for what's getting attention...</div>`;
+
+    const headlines = await fetchTrendingHeadlines();
+    let newsContext;
+    if (headlines && headlines.length > 0) {
+      newsContext = 'Recent Indian market headlines:\n' + headlines.map(n => `- ${n.title}`).join('\n');
+    } else {
+      newsContext = '(Live news unavailable — SerpAPI may not work directly from browser, or no key set. Falling back to general model knowledge, which will be less current. Add a SerpAPI key in Settings for live headlines.)';
+    }
+
+    const promptText = `You are scanning Indian stock market news to identify which 5 stocks are currently getting the most news attention/discussion.
+
+${newsContext}
+
+For each of the 5 stocks you identify, respond in this exact format for each:
+
+STOCK: [name/ticker]
+WHY TRENDING: [1-2 sentences on what news/event is driving attention]
+FACTORS: [2-3 factors people are discussing - could be positive or negative]
+
+Rules:
+- Base this on the news context given, or general sector knowledge if news is unavailable
+- Do NOT claim any of these will grow the most, or give a price target, or promise returns in any timeframe
+- If you're genuinely uncertain about current headlines, say so rather than inventing specifics
+- Order by how much attention/discussion volume they appear to have, not by predicted performance
+- This is about what's newsworthy right now, not a prediction of future gains`;
+
+    try {
+      const result = await callAnyAI(promptText);
+      researchOutput.innerHTML = `<div class="research-result"><h4>Today's most-discussed stocks</h4>${formatTrendResult(result)}</div>`;
+    } catch (e) {
+      researchOutput.innerHTML = `<div class="research-result">Couldn't complete discovery (${escapeHtml(e.message)}). Check your API keys in Settings, or free quotas may be exhausted right now — try again shortly.</div>`;
+    } finally {
+      autoDiscoverBtn.disabled = false;
+    }
+  });
+
+  function formatTrendResult(text) {
+    // Light formatting: turn STOCK: lines into visual cards
+    const blocks = text.split(/(?=STOCK:)/g).filter(b => b.trim().startsWith('STOCK:'));
+    if (blocks.length === 0) {
+      return `<div class="trend-body">${escapeHtml(text)}</div>`;
+    }
+    return blocks.map((block, i) => {
+      const nameMatch = block.match(/STOCK:\s*(.+)/);
+      const name = nameMatch ? nameMatch[1].trim() : `Entry ${i+1}`;
+      const rest = block.replace(/STOCK:\s*.+/, '').trim();
+      return `<div class="trend-card"><span class="trend-rank">${i+1}</span><span class="trend-name">${escapeHtml(name)}</span><div class="trend-body">${escapeHtml(rest)}</div></div>`;
+    }).join('');
+  }
+
+  researchBtn.addEventListener('click', async () => {
+    const query = researchInput.value.trim();
+    if (!query) return;
+
+    researchBtn.disabled = true;
+    manualResearchOutput.innerHTML = `<div class="research-result"><span class="loading-dots"><span></span><span></span><span></span></span> Researching...</div>`;
+
+    let newsContext = '';
+    const news = await fetchNews(query + ' stock news India');
+    if (news && news.length > 0) {
+      newsContext = 'Recent headlines found:\n' + news.map(n => `- ${n.title}`).join('\n');
+    } else {
+      newsContext = '(No live news fetched — SerpAPI may be unavailable in-browser, or no key set. Using general knowledge only — treat as less current.)';
+    }
+
+    const promptText = `A retail investor is researching: "${query}"
+
+${newsContext}
+
+Write an informational research summary (200-250 words) covering:
+1. Key factors currently being discussed for this sector/stock
+2. General risks and considerations
+3. What kind of further research the person should do before any decision
+
+Do NOT claim any stock will produce guaranteed or fast returns. Do NOT give a directive buy/sell instruction. Be balanced and note uncertainty clearly. End with one line noting this isn't financial advice and markets are unpredictable.`;
+
+    try {
+      const result = await callAnyAI(promptText);
+      manualResearchOutput.innerHTML = `<div class="research-result"><h4>Research summary</h4>${escapeHtml(result)}</div>`;
+    } catch (e) {
+      manualResearchOutput.innerHTML = `<div class="research-result">Couldn't complete research (${escapeHtml(e.message)}). Check your API keys in settings, or try again — free model quotas may be temporarily exhausted.</div>`;
+    } finally {
+      researchBtn.disabled = false;
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
-
-```
